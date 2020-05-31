@@ -26,6 +26,8 @@ app.get("/", (req, res) => {
     res.json({ msg: "Hello" })
 })
 app.use("/api/users", require('./routes/userRouter'));
+app.use("/api/products", require('./routes/productRouter'));
+app.use("/api/categories", require('./routes/categoryRouter'));
 
 //ERROR MIDDLEWARES
 app.use(notFound);

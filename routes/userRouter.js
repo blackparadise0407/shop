@@ -23,7 +23,7 @@ router.get('/', auth, async (req, res) => {
         const user = await UserModel.findById(req.user.id).select('-password');
         return res.status(200).send(user)
     } catch (error) {
-        return res.status(400).send(error);
+        next(error)
     }
 })
 //METHOD: POST
@@ -53,15 +53,19 @@ router.post('/register', async (req, res) => {
             },
             process.env.JWT_SECRET,
             { expiresIn: 7200 })
-        return res.status(200).send(token);
+        return res.status(200).json({
+            msg: "Register success",
+            token: token
+        });
     } catch (error) {
-        return res.status(400).send("Register failed");
+        res.status(400).send("Register failed");
+        next(error)
     }
 })
 //METHOD: POST
 //PATH: api/users/login
 //FUCN: LOGIN USER
-router.post("/login", async (req, res) => {
+router.post("/login", async (req, res, next) => {
     const { email, password } = req.body;
     //VALIDATE BEFORE LOGIN
     const { error } = validate.logValidation(req.body);
@@ -89,7 +93,7 @@ router.post("/login", async (req, res) => {
             token: token
         });
     } catch (error) {
-        return res.status(400).send(error.message);
+        next(error)
 
     }
 })
