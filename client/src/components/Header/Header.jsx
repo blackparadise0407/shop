@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import styles from './Header.module.css'
 
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => { setIsOpen(!isOpen) }
+    const cc = () => {
+        alert("cc");
+    }
     return (
         <header className={isOpen ? `${styles.open}` : ""}>
             <div className="container">
@@ -25,8 +29,11 @@ const Header = () => {
                             <a href="/" className={styles.navLink}>About</a>
                         </li>
                         <li className={styles.navItem}>
-                            <a href="/" className={styles.navLink}>Contact</a>
+                            <Link className={styles.navLink}>Contact</Link>
                         </li>
+                        <Link to="/login" className={styles.navItem}>
+                            <a className={styles.navLink}>Login</a>
+                        </Link>
                     </ul>
                 </div>
             </div>

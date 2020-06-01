@@ -98,6 +98,7 @@
   font-size: 2rem;
   line-height: 2;
   letter-spacing: 1.4px;
+  z-index: 1255;
   transition: color 0.65s;
 }
 
@@ -127,6 +128,7 @@
 
   .navLink {
     color: #fff;
+    z-index: 1500;
     font-size: 1.4rem;
   }
 

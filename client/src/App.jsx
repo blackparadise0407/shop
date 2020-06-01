@@ -1,11 +1,16 @@
 import React from 'react';
-import { HomePage } from './pages';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { HomePage, LoginPage, ErrorPage } from './pages';
 
 const App = () => {
   return (
-    <div>
-      <HomePage />
-    </div>
+    <Router>
+      <Switch>
+        <Route path="/" exact component={HomePage} />
+        <Route path="/login" exact component={LoginPage} />
+        <Route path="*" component={ErrorPage} />
+      </Switch>
+    </Router>
   );
 }
 
