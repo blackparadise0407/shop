@@ -1,10 +1,9 @@
 const mongoose = require('mongoose');
+const autoIncrement = require('mongoose-sequence')(mongoose);
 
 const CategorySchema = new mongoose.Schema({
     catID: {
         type: Number,
-        unique: true,
-        required: true,
     },
     name: {
         type: String,
@@ -15,5 +14,5 @@ const CategorySchema = new mongoose.Schema({
         ref: "products"
     }]
 })
-
+CategorySchema.plugin(autoIncrement, { id: 'cat_secq', inc_field: 'catID' });
 module.exports = mongoose.model("Categories", CategorySchema);

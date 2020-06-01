@@ -15,13 +15,13 @@ const auth = async (req, res, next) => {
 
 const notFound = (req, res, next) => {
     const error = new Error(`Not found: ${req.originalURL}`);
-    res.status(404).json({ msg: "Not found" });
+    res.status(404).json({ msg: "Not found", status: res.statusCode });
     next(error);
 }
 
 const errorHandler = (err, req, res, next) => {
     const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
-    res.status(statusCode).json({ msg: err.message });
+    res.status(statusCode).json({ msg: err.message, status: res.statusCode });
 }
 
 module.exports = {

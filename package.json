@@ -25,7 +25,10 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.16",
     "mongoose-sequence": "^5.2.2",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "reactstrap": "^8.4.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"

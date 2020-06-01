@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 const UserModel = require('../model/userModel');
-const validate = require('../validation/userValidation');
+const validate = require('../hapiValidation');
 const { auth } = require('../middlewares');
 
 
@@ -84,12 +84,14 @@ router.post("/login", async (req, res, next) => {
             process.env.JWT_SECRET,
             { expiresIn: 7200 })
         return res.status(200).json({
-            msg: "Success",
+
             user: {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email
             },
+            msg: "Success",
+            status: res.statusCode,
             token: token
         });
     } catch (error) {
