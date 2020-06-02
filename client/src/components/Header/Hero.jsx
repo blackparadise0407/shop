@@ -22,11 +22,11 @@ const Hero = () => {
                 <h2 className={styles.subHeadline}>
                     Jorlux
                 </h2>
-                <h1 className={styles.headline}>Slogan here</h1>
+                <h1 className={styles.headline}>Living your dream</h1>
                 <div className={styles.headlineDescription}>
                     <h5>Stylish, modern, trendy</h5>
                     <Form onSubmit={handleSubmit}>
-                        <FormGroup>
+                        <FormGroup className={styles.formContainer}>
                             <Input
                                 id="name"
                                 name="name"

@@ -5,9 +5,6 @@ import styles from './Header.module.css'
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => { setIsOpen(!isOpen) }
-    const cc = () => {
-        alert("cc");
-    }
     return (
         <header className={isOpen ? `${styles.open}` : ""}>
             <div className="container">
@@ -15,13 +12,13 @@ const Header = () => {
                     <div className={styles.menuToggle}>
                         <i className={`fas fa-bars ${styles.faBars} ${styles.navIconToggle}`} onClick={toggle}></i>
                     </div>
-                    <a href="#"><img src="/images/logo.svg" width="100px"
-                        height="100px" alt="logo" /></a>
+                    <Link to="/"><img src="/images/logo.svg" width="100px"
+                        height="100px" alt="logo" /></Link>
                     <ul className={styles.navList} >
                         <i className={`fas fa-times ${styles.faTimes} ${styles.navIconToggle}`} onClick={toggle}></i>
-                        <li className={styles.navItem}>
-                            <a href="/" className={styles.navLink}>Home</a>
-                        </li>
+                        <Link to="/" className={styles.navItem}>
+                            <div className={styles.navLink}>Home</div>
+                        </Link>
                         <li className={styles.navItem}>
                             <a href="/" className={styles.navLink}>Store</a>
                         </li>
@@ -29,10 +26,10 @@ const Header = () => {
                             <a href="/" className={styles.navLink}>About</a>
                         </li>
                         <li className={styles.navItem}>
-                            <Link className={styles.navLink}>Contact</Link>
+                            <a className={styles.navLink}>Contact</a>
                         </li>
                         <Link to="/login" className={styles.navItem}>
-                            <a className={styles.navLink}>Login</a>
+                            <div className={styles.navLink}>Login</div>
                         </Link>
                     </ul>
                 </div>

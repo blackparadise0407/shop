@@ -1,13 +1,194 @@
 .container {
   width: 100%;
   height: auto;
-  max-width: 45rem;
+  max-width: 39rem;
   font-size: 1.4rem;
   font-family: var(--main-font);
   position: relative;
   left: 50%;
   padding: 2.4rem 2.8rem;
   transform: translateX(-50%);
-  border: 1px solid #121212;
+  border: 2px solid #121212;
   border-radius: 1px;
+  letter-spacing: 0.6px;
+  box-shadow: -5px 5px 3px rgba(19, 19, 19, 0.5);
+  background-color: #fff;
+  margin: 16rem 0;
+}
+
+.containerRegister {
+  width: 100%;
+  height: auto;
+  max-width: 39rem;
+  font-size: 1.4rem;
+  font-family: var(--main-font);
+  position: relative;
+  left: 50%;
+  padding: 2rem 2.8rem;
+  transform: translateX(-50%);
+  border: 2px solid #121212;
+  border-radius: 1px;
+  letter-spacing: 0.6px;
+  box-shadow: -5px 5px 3px rgba(19, 19, 19, 0.5);
+  background-color: #fff;
+  margin: 12rem 0;
+}
+
+.containerHead {
+  width: 100%;
+  height: auto;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 3rem;
+  font-family: var(--secondary-font);
+  font-weight: 600;
+}
+
+.input {
+  border-radius: 0;
+  font-size: 1.4rem;
+  font-family: var(--secondary-font);
+  letter-spacing: 0.7px;
+}
+
+.container::before,
+.container::after,
+.containerRegister::before,
+.containerRegister::after {
+  content: "";
+  width: 4rem;
+  height: 6rem;
+  position: absolute;
+  transition: all 0.65s;
+  z-index: -1;
+  animation: grow infinite 10s;
+  animation-delay: 0.2s;
+}
+
+.container::before,
+.containerRegister::before {
+  top: -1rem;
+  left: -1rem;
+  border: solid #121212;
+  border-width: 2px 0 0 2px;
+}
+
+.container::after,
+.containerRegister::after {
+  bottom: -1rem;
+  right: -1rem;
+  border: solid #121212;
+  border-width: 0 2px 2px 0;
+}
+
+.link {
+  color: #d40202;
+  transition: color 0.5s;
+}
+
+.link:hover {
+  color: #ff7575;
+}
+
+.button {
+  color: #fff;
+  font-size: 1.4rem;
+  float: right;
+  font-family: var(--secondary-font);
+  background-color: #141414d3;
+  padding: 0.7rem 1.6rem;
+  border: none;
+  text-transform: uppercase;
+  transition: color 0.5s;
+  position: relative;
+  overflow: hidden;
+}
+
+.button:visited {
+  color: #fff;
+}
+
+.button:hover {
+  color: #ffffff;
+}
+
+.button::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: -100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(216, 216, 216, 0.562),
+    transparent
+  );
+  transition: all 0.5s;
+}
+
+.button:hover::before {
+  left: 0;
+}
+
+.section {
+  position: relative;
+  background: url(/images/background5.jpg) center no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 100vh;
+}
+
+@media screen and (min-width: 900px) {
+  .container {
+    max-width: 60rem;
+    height: auto;
+    font-size: 2.2rem;
+    font-family: var(--main-font);
+    margin: 8rem 0;
+  }
+  .containerRegister {
+    max-width: 60rem;
+    height: 60vh;
+    font-size: 2.2rem;
+    font-family: var(--main-font);
+    margin: 8rem 0;
+  }
+  .containerHead {
+    width: 100%;
+    height: auto;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 5rem;
+    font-family: var(--secondary-font);
+    font-weight: 600;
+  }
+
+  .button {
+    font-size: 2.2rem;
+  }
+
+  .input {
+    font-size: 2.2rem;
+    padding: 2.4rem 2.2rem;
+  }
+}
+
+@keyframes grow {
+  0% {
+    width: 4rem;
+    height: 6rem;
+  }
+
+  50% {
+    width: calc(100% + 2rem);
+    height: calc(100% + 2rem);
+  }
+
+  100% {
+    width: 4rem;
+    height: 6rem;
+  }
 }

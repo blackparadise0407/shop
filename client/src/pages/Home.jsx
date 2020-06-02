@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { Header } from '../components';
 import { Hero } from '../components';
 import { makeRequest } from '../utils/api';
-import axios from 'axios';
 const Home = () => {
     const fetchData = async () => {
         try {
@@ -20,7 +19,7 @@ const Home = () => {
     }
     useEffect(() => {
         fetchData();
-    }, [fetchData])
+    }, [])
     return (
         <div>
             <Header />
