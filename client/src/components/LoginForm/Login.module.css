@@ -45,6 +45,17 @@
   font-weight: 600;
 }
 
+.alert {
+  margin-top: 0.8rem;
+  font-size: 1.2rem;
+  font-family: var(--secondary-font);
+  text-align: center;
+  color: #121212;
+  opacity: 1;
+  transition: all 0.5s;
+  padding: 1rem 1rem;
+}
+
 .input {
   border-radius: 0;
   font-size: 1.4rem;

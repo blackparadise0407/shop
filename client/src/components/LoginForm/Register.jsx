@@ -1,36 +1,61 @@
-import React, { useState } from 'react';
-import { Form, FormGroup, Label, Row, Col, Input, Button } from 'reactstrap';
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { Form, FormGroup, Label, Row, Col, Input, Button, Alert } from 'reactstrap';
 import { Link } from 'react-router-dom'
 import styles from './Login.module.css'
 
-const Register = () => {
+import { registerUser } from '../../redux/actions/authAction';
+import { clearErr } from '../../redux/actions/errorAction';
+const Register = ({
+    isAuthenticated,
+    isLoading,
+    registerUser,
+    error,
+    authMsg
+}) => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [errMsg, setErrMsg] = useState(null);
 
     const handleFirstNameChange = (e) => {
+        setErrMsg(null);
         setFirstName(e.target.value);
     }
     const handleLastNameChange = (e) => {
+        setErrMsg(null);
         setLastName(e.target.value);
     }
     const handleEmailChange = (e) => {
+        setErrMsg(null);
         setEmail(e.target.value);
     }
     const handlePasswordChange = (e) => {
+        setErrMsg(null);
         setPassword(e.target.value);
     }
 
     const handleSubmit = e => {
-        const user = { firstName, lastName, email, password };
         e.preventDefault();
-        alert(user);
-
+        const user = { firstName, lastName, email, password };
+        //attemp to register user
+        registerUser(user);
     }
+    useEffect(() => {
+        if (error.msg) {
+            setErrMsg(error.msg);
+        } else {
+            setErrMsg(null);
+        }
+    }, [error]);
+
+    if (isLoading) return (<div>Is loading...</div>)
     return (
         <div className={styles.containerRegister}>
             <div className={styles.containerHead}>Register</div>
+            {errMsg ? <Alert className={styles.alert}>{errMsg}</Alert> : null}
             <Form onSubmit={handleSubmit}>
                 <Row form className={styles.row}>
                     <Col xs="12" sm="6">
@@ -97,4 +122,21 @@ const Register = () => {
     );
 }
 
-export default Register;
+Register.propTypes = {
+    isAuthenticated: PropTypes.bool,
+    isLoading: PropTypes.bool,
+    registerUser: PropTypes.func.isRequired,
+    clearErr: PropTypes.func.isRequired
+}
+
+const mapStateToProps = state => ({
+    isAuthenticated: state.auth.isAuthenticated,
+    isLoading: state.product.isLoading,
+    authMsg: state.auth.msg,
+    error: state.error
+})
+
+export default connect(
+    mapStateToProps,
+    { registerUser, clearErr }
+)(Register);
