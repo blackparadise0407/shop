@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Form, FormGroup, Label, Row, Col, Input, Button, Alert } from 'reactstrap';
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import styles from './Login.module.css'
 
 import { registerUser } from '../../redux/actions/authAction';
@@ -12,7 +12,8 @@ const Register = ({
     isLoading,
     registerUser,
     error,
-    authMsg
+    authMsg,
+    clearErr
 }) => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -49,7 +50,7 @@ const Register = ({
         } else {
             setErrMsg(null);
         }
-    }, [error]);
+    }, [error, isAuthenticated]);
 
     if (isLoading) return (<div>Is loading...</div>)
     return (

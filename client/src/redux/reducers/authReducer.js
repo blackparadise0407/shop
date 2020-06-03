@@ -10,7 +10,7 @@ import {
 } from '../actions/types';
 
 const initialState = {
-    isAuthenticated: false,
+    isAuthenticated: null,
     isLoading: false,
     token: localStorage.getItem('token'),
     user: null

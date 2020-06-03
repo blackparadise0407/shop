@@ -1,14 +1,13 @@
 import React from 'react';
-import { Register, Header } from '../components'
+import { Register } from '../components'
 import styles from '../components/LoginForm/Login.module.css';
 
-const LoginPage = () => {
+const RegisterPage = () => {
     return (
         <section className={styles.section}>
-            <Header />
             <Register />
         </section>
     );
 }
 
-export default LoginPage;
+export default RegisterPage;

@@ -1,10 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import styles from './Header.module.css'
 
-const Header = () => {
+import Logout from '../LoginForm/Logout';
+
+const Header = ({ auth: { isAuthenticated, user } }) => {
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => { setIsOpen(!isOpen) }
+
+    const guessLink = (
+        <Fragment>
+            <Link to="/register" className={styles.navItem}>
+                <div className={styles.navLink}>Regsiter</div>
+            </Link>
+            <Link to="/login" className={styles.navItem}>
+                <div className={styles.navLink}>Login</div>
+            </Link>
+        </Fragment>
+    )
+
+    const authLink = (
+        <Fragment>
+            <Link to="/" className={styles.navItem}>
+                <div className={styles.navLink}>{user ? `Welcome, ${user.firstName}` : null}</div>
+            </Link>
+
+            <Logout />
+
+
+
+
+        </Fragment>
+    )
+
     return (
         <header className={isOpen ? `${styles.open}` : ""}>
             <div className="container">
@@ -22,15 +52,10 @@ const Header = () => {
                         <li className={styles.navItem}>
                             <a href="/" className={styles.navLink}>Store</a>
                         </li>
-                        <li className={styles.navItem}>
-                            <a href="/" className={styles.navLink}>About</a>
-                        </li>
-                        <li className={styles.navItem}>
-                            <a className={styles.navLink}>Contact</a>
-                        </li>
-                        <Link to="/login" className={styles.navItem}>
+                        {/* <Link to="/login" className={styles.navItem}>
                             <div className={styles.navLink}>Login</div>
-                        </Link>
+                        </Link> */}
+                        {isAuthenticated ? authLink : guessLink}
                     </ul>
                 </div>
             </div>
@@ -38,4 +63,15 @@ const Header = () => {
     );
 }
 
-export default Header;
+Header.propTypes = {
+    auth: PropTypes.object,
+}
+
+const mapStateToProps = state => ({
+    auth: state.auth
+})
+
+export default connect(
+    mapStateToProps,
+    null,
+)(Header);

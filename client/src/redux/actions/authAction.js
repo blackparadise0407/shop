@@ -1,3 +1,4 @@
+import axios from 'axios';
 import {
     USER_LOADED,
     USER_LOADING,
@@ -9,16 +10,15 @@ import {
     AUTH_ERROR
 } from './types';
 import { returnErr } from './errorAction'
-import axios from 'axios';
-import { makeRequest } from '../../utils/api'
+
 
 export const loadUser = () => (dispatch, getState) => {
     dispatch({ type: USER_LOADING })
 
     axios.get("/api/users", tokenConfig(getState))
-        .then(user => dispatch({
+        .then(res => dispatch({
             type: USER_LOADED,
-            payload: user
+            payload: res.data
         }))
         .catch(err => {
             dispatch(returnErr(err.response.data, err.response.status));
@@ -44,8 +44,29 @@ export const registerUser = ({ firstName, lastName, email, password }) => dispat
         })
 }
 
+export const loginUser = ({ email, password }) => dispatch => {
+    const config = {
+        headers: {
+            'Content-type': 'application/json'
+        }
+    }
+    const body = JSON.stringify({ email, password })
+    axios.post("/api/users/login", body, config)
+        .then(res => dispatch({ type: LOGIN_SUCCESS, payload: res.data }))
+        .catch(err => {
+            dispatch(returnErr(err.response.data, err.response.status));
+            dispatch({ type: LOGIN_FAIL })
+        })
+}
+
+export const logout = () => {
+    return {
+        type: LOGOUT_SUCCESS
+    }
+}
+
 export const tokenConfig = getState => {
-    const token = getState().auth.token || localStorage.getItem('token');
+    const token = getState().auth.token;
     const config = {
         headers: {
             'Content-type': 'application/json'
