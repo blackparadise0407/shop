@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Form, FormGroup, Label, Row, Col, Input, Button, Alert } from 'reactstrap';
-import { Link, Redirect, useLocation } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import styles from './Login.module.css'
 
 import { loginUser } from '../../redux/actions/authAction';
@@ -15,7 +15,7 @@ const Login = ({
     clearErr,
     error
 }) => {
-    const location = useLocation();
+    const history = useHistory();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errMsg, setErrMsg] = useState(null);
@@ -36,12 +36,16 @@ const Login = ({
         loginUser(user);
     }
     useEffect(() => {
+        if (isAuthenticated) {
+            history.push("/");
+        }
         if (error.msg) {
             setErrMsg(error.msg);
         } else {
             setErrMsg(null);
         }
-    }, [isAuthenticated, error])
+    }, [isAuthenticated, error, history])
+    if (isLoading) return (<div>Loading ...</div>)
     return (
         <div className={styles.container}>
             <div className={styles.containerHead}>Login</div>

@@ -1,0 +1,73 @@
+.store {
+  width: 100%;
+  height: auto;
+  background: url(/images/background.jpg) center no-repeat;
+  background-size: cover;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: center;
+  text-align: left;
+  font-family: var(--secondary-font);
+}
+.container {
+  width: 100%;
+  max-width: 122.5rem;
+  margin: 4rem auto 0;
+  padding: 3rem 1rem 0;
+}
+
+.headline {
+  font-size: 4.2rem;
+  font-weight: 600;
+  letter-spacing: 1.6px;
+  line-height: 1;
+  margin-bottom: 2rem;
+}
+
+.headlineDescription {
+  font-size: 1.6rem;
+}
+
+/*CARD*/
+
+.card {
+  position: relative;
+  letter-spacing: 0.2px;
+  margin: 0 auto;
+  text-align: left;
+  max-width: 22rem;
+}
+
+.cardImg {
+  max-width: 100%;
+}
+
+.title {
+  font-size: 2.2rem;
+  line-height: 0.8;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+}
+
+.price {
+  font-size: 1.6rem;
+}
+
+.description {
+  font-size: 1.2rem;
+  color: #777;
+}
+
+/*CARD*/
+
+.col {
+  padding: 1.2rem 0;
+}
+
+@media screen and (min-width: 900px) {
+  .card {
+    max-width: 24rem;
+  }
+}

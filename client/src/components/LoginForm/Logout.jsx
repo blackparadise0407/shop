@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { useHistory, Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { logout } from '../../redux/actions/authAction';
 import { NavLink } from 'reactstrap';
 import styles from '../Header/Header.module.css';
 
-const Logout = ({ logout, className1, className2 }) => {
+const Logout = ({ logout }) => {
     const history = useHistory();
     const handleLogout = () => {
         logout();

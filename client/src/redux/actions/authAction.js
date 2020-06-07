@@ -9,7 +9,7 @@ import {
     LOGOUT_SUCCESS,
     AUTH_ERROR
 } from './types';
-import { returnErr } from './errorAction'
+import { returnErr } from './errorAction';
 
 
 export const loadUser = () => (dispatch, getState) => {

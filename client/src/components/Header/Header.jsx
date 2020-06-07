@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styles from './Header.module.css'
+//eslint-disable-next-line no-unused-vars
+import AuthRoute from '../../utils/AuthRoute'
 
 import Logout from '../LoginForm/Logout';
 
@@ -49,9 +51,9 @@ const Header = ({ auth: { isAuthenticated, user } }) => {
                         <Link to="/" className={styles.navItem}>
                             <div className={styles.navLink}>Home</div>
                         </Link>
-                        <li className={styles.navItem}>
-                            <a href="/" className={styles.navLink}>Store</a>
-                        </li>
+                        <Link to="/store" className={styles.navItem}>
+                            <div className={styles.navLink}>Store</div>
+                        </Link>
                         {/* <Link to="/login" className={styles.navItem}>
                             <div className={styles.navLink}>Login</div>
                         </Link> */}
