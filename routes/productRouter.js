@@ -14,13 +14,15 @@ router.get('/', async (req, res, next) => {
     const page = parseInt(req.query.page) || 0;
     const total = await ProductModel.find().countDocuments();
     const startIndex = (page - 1) * limit;
+    const totalPage = Math.ceil(total / limit);
     try {
+        if (page > totalPage) return res.status(400).json({ msg: "Current page exceed total page", status: res.statusCode })
         if (page <= 0) {
             const products = await ProductModel.find();
             return res.status(200).json({ results: products, msg: "Success", status: res.statusCode, total })
         } else {
             const products = await ProductModel.find().skip(startIndex).limit(limit).exec();
-            return res.status(200).json({ results: products, msg: "Success", status: res.statusCode, page, limit, total })
+            return res.status(200).json({ results: products, msg: "Success", status: res.statusCode, page, limit, total, totalPage })
         }
     } catch (error) {
         next(error);
@@ -52,6 +54,90 @@ router.post('/', auth, async (req, res, next) => {
         })
         await newProduct.save();
         return res.status(200).send("Add product success");
+    } catch (error) {
+        next(error)
+    }
+})
+
+//METHOD: GET
+//ROUTE: /api/product/search?q=""
+//FUCN: SEARCH BY NAME
+
+
+//METHOD: GET
+//ROUTE: /api/product/filter
+//FUCN: FILTER SEARCH
+router.get('/search', async (req, res, next) => {
+    try {
+        const filter = req.query.filterBy;
+        const limit = parseInt(req.query.limit) || 6;
+        const page = parseInt(req.query.page) || 1;
+        const startIndex = (page - 1) * limit;
+        const total = await ProductModel.countDocuments();
+        const totalPage = Math.ceil(total / limit);
+        if (filter === "default") {
+            try {
+                const q = req.query.q;
+                const products = await ProductModel.find({ $text: { $search: q } }).limit(limit);
+                return res.status(200).json({
+                    results: products,
+                    msg: "Success",
+                    status: res.statusCode
+
+                })
+            } catch (error) {
+                next(error);
+            }
+        } else {
+            if (filter === 'priceAsc') {
+                const products = await ProductModel.find().sort({ price: "asc" }).skip(startIndex).limit(limit).exec();
+                return res.status(200).json({
+                    results: products,
+                    msg: "Success",
+                    status: res.statusCode,
+                    limit,
+                    page,
+                    total,
+                    totalPage
+                })
+            }
+            if (filter === 'priceDesc') {
+                const products = await ProductModel.find().sort({ price: "desc" }).skip(startIndex).limit(limit).exec();
+                return res.status(200).json({
+                    results: products,
+                    msg: "Success",
+                    status: res.statusCode,
+                    limit,
+                    page,
+                    total,
+                    totalPage
+                })
+            }
+            if (filter === 'nameAsc') {
+                const products = await ProductModel.find().sort({ name: "asc" }).skip(startIndex).limit(limit).exec();
+                return res.status(200).json({
+                    results: products,
+                    msg: "Success",
+                    status: res.statusCode,
+                    limit,
+                    page,
+                    total,
+                    totalPage
+                })
+            }
+            if (filter === 'nameDesc') {
+                const products = await ProductModel.find().sort({ name: "Desc" }).skip(startIndex).limit(limit).exec();
+                return res.status(200).json({
+                    results: products,
+                    msg: "Success",
+                    status: res.statusCode,
+                    limit,
+                    page,
+                    total,
+                    totalPage
+                })
+            }
+        }
     } catch (error) {
         next(error)
     }

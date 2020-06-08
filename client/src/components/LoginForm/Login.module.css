@@ -90,8 +90,30 @@
 } */
 
 .link {
+  font-family: var(--main-font);
   color: #d40202;
-  transition: color 0.5s;
+  transition: color 0.3s;
+  position: relative;
+}
+
+.link::before {
+  content: "";
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  background-color: #d40202;
+  bottom: -15%;
+  left: 50%;
+  opacity: 0;
+  transition: all 0.5s;
+  transform: scale(0);
+}
+
+.link:hover::before {
+  left: 0;
+  opacity: 1;
+  width: 100%;
+  transform: scale(1);
 }
 
 .link:hover {
@@ -133,11 +155,11 @@
     rgba(216, 216, 216, 0.562),
     transparent
   );
-  transition: all 0.5s;
+  transition: all 0.7s;
 }
 
 .button:hover::before {
-  left: 0;
+  left: 100%;
 }
 
 .section {

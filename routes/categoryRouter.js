@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const CategoryModel = require('../model/categoryModel');
 const validate = require('../hapiValidation');
+const middleware = require('../middlewares');
 
 
 //METHOD: GET
@@ -19,7 +20,7 @@ router.get("/", async (req, res, next) => {
 //METHOD: POST
 //ROUTE: /api/category/
 //FUNC: ADD A CATEGORY
-router.post('/', async (req, res, next) => {
+router.post('/', middleware.auth, async (req, res, next) => {
     const { name } = req.body;
     const { error } = validate.addCatValidation(req.body);
     if (error) return res.status(400).send(error.details[0].message);

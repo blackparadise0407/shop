@@ -13,19 +13,20 @@ const StorePage = ({
 }) => {
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(3);
-    const totalPage = products.totalPage;
 
-
-    const nextPage = () => {
-        if (page > totalPage) setPage(0);
-        setPage(page + 1);
+    const range = [];
+    if (products) {
+        for (let i = 0; i < products.totalPage; i++)
+            range.push(i);
     }
-    const previousPage = () => {
-        setPage(page - 1);
+
+    const paginate = (e, nextPage) => {
+        e.preventDefault();
+        setPage(nextPage);
     }
 
     useEffect(() => {
-        getProducts(page, limit);
+        getProducts({ page, limit });
     }, [page, limit])
     if (isLoading) return (<div>Loading...</div>)
     return (
@@ -49,19 +50,14 @@ const StorePage = ({
                     </Row>
                 </div>
             </div>
-            <Pagination aria-label="Store pagination">
-                <PaginationItem>
-                    <PaginationLink first href="#" />
-                </PaginationItem>
-                <PaginationItem>
-                    <PaginationLink previous href="#" onClick={previousPage} />
-                </PaginationItem>
-                <PaginationItem>
-                    <PaginationLink next href="#" onClick={nextPage} />
-                </PaginationItem>
-                <PaginationItem>
-                    <PaginationLink last href="#" />
-                </PaginationItem>
+            <Pagination className={styles.pagination} aria-label="Store pagination">
+                {range ? range.map(v => (
+                    <PaginationItem className={styles.paginationItem}>
+                        {products.page === v + 1
+                            ? <PaginationLink className={`${styles.paginationLink} ${styles.active}`} onClick={e => paginate(e, v + 1)}>{v + 1}</PaginationLink>
+                            : <PaginationLink className={styles.paginationLink} onClick={e => paginate(e, v + 1)}>{v + 1}</PaginationLink>}
+                    </PaginationItem>
+                )) : null}
             </Pagination>
         </section>
     );

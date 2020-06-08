@@ -29,7 +29,7 @@
   font-size: 1.6rem;
 }
 
-/*CARD*/
+/*CARD START*/
 
 .card {
   position: relative;
@@ -58,16 +58,67 @@
 .description {
   font-size: 1.2rem;
   color: #777;
+  line-height: 3;
 }
 
-/*CARD*/
+/*CARD ENDS*/
 
 .col {
   padding: 1.2rem 0;
 }
 
+/*PAGINATION STARTS*/
+.pagination {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+}
+
+.pagination > ul {
+  display: flex;
+  justify-content: center;
+  justify-content: space-around;
+}
+
+.paginationItem {
+  border: none;
+  padding: 0.2rem 0.1rem;
+  position: relative;
+  font-size: 1.6rem;
+  font-family: var(--main-font);
+}
+
+.paginationLink {
+  padding: 0.4rem 1rem;
+  background-color: rgba(221, 221, 221, 0.637);
+  border: none;
+  transition: all 0.5s;
+}
+
+.active {
+  border-radius: 50%;
+  background-color: #ddd;
+}
+
+.paginationLink:hover,
+.paginationLink:active,
+.paginationLink:focus {
+  background-color: rgba(255, 255, 255, 0.884);
+  border: none;
+}
+
+/*PAGINATION ENDS*/
 @media screen and (min-width: 900px) {
   .card {
     max-width: 24rem;
+  }
+
+  .paginationItem {
+    font-size: 1.8rem;
+  }
+
+  .active {
+    border-radius: 4rem;
   }
 }

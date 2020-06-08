@@ -23,12 +23,6 @@ export default (state = initialState, action) => {
                 payload: null,
                 isLoading: false
             }
-        // case ADD_PRODUCT:
-        //     return {
-        //         ...state
-        //     }
-
-
         default:
             return state;
     }

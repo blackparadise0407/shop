@@ -54,9 +54,6 @@ const Header = ({ auth: { isAuthenticated, user } }) => {
                         <Link to="/store" className={styles.navItem}>
                             <div className={styles.navLink}>Store</div>
                         </Link>
-                        {/* <Link to="/login" className={styles.navItem}>
-                            <div className={styles.navLink}>Login</div>
-                        </Link> */}
                         {isAuthenticated ? authLink : guessLink}
                     </ul>
                 </div>
