@@ -8,7 +8,7 @@ import { loadUser } from './redux/actions/authAction';
 const App = () => {
   useEffect(() => {
     store.dispatch(loadUser())
-  }, [loadUser])
+  }, [])
   return (
     <Provider store={store} >
       <Router>

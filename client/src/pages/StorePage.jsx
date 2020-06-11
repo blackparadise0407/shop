@@ -3,16 +3,23 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Row, Col, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { ProductCard } from '../components';
-import { getProducts } from '../redux/actions/productAction';
+import { getProducts, getFilterProducts } from '../redux/actions/productAction';
 import styles from '../components/Store/Store.module.css';
+import { Filter } from '../components';
 
 const StorePage = ({
     isLoading,
     getProducts,
-    products
+    products,
+    getFilterProducts
 }) => {
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(3);
+    const [filter, setFilter] = useState("");
+
+    const handleOnChange = e => {
+        setFilter(e.target.value);
+    }
 
     const range = [];
     if (products) {
@@ -23,6 +30,14 @@ const StorePage = ({
     const paginate = (e, nextPage) => {
         e.preventDefault();
         setPage(nextPage);
+    }
+
+    const handleOnSubmit = e => {
+        e.preventDefault();
+        console.log("Heloo");
+        //Attemp to apply filter
+        getFilterProducts({ filterBy: filter, page, limit });
+
     }
 
     useEffect(() => {
@@ -40,10 +55,11 @@ const StorePage = ({
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia pariatur libero natus voluptatibus, sapiente modi ipsam nesciunt unde in numquam.
                     </div>
                 </div>
+                <Filter onChange={handleOnChange} onSubmit={e => handleOnSubmit(e)} />
                 <div className={styles.productContainer}>
                     <Row className={styles.row}>
                         {products ? products.results.map(product => (
-                            <Col className={styles.col} xs="6" md="4" lg="3">
+                            <Col key={product.productID} className={styles.col} xs="6" md="4" lg="3">
                                 <ProductCard key={product.productID} stock={product.stock} name={product.name} price={product.price} description={product.description} />
                             </Col>
                         )) : null}
@@ -52,7 +68,7 @@ const StorePage = ({
             </div>
             <Pagination className={styles.pagination} aria-label="Store pagination">
                 {range ? range.map(v => (
-                    <PaginationItem className={styles.paginationItem}>
+                    <PaginationItem key={v + 1} className={styles.paginationItem}>
                         {products.page === v + 1
                             ? <PaginationLink className={`${styles.paginationLink} ${styles.active}`} onClick={e => paginate(e, v + 1)}>{v + 1}</PaginationLink>
                             : <PaginationLink className={styles.paginationLink} onClick={e => paginate(e, v + 1)}>{v + 1}</PaginationLink>}
@@ -65,8 +81,9 @@ const StorePage = ({
 
 StorePage.propTypes = {
     isLoading: PropTypes.bool.isRequired,
-    products: PropTypes.object.isRequired,
+    products: PropTypes.object,
     getProducts: PropTypes.func.isRequired,
+    getFilterProducts: PropTypes.func
 }
 
 const mapStateToProps = state => ({
@@ -76,5 +93,5 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { getProducts }
+    { getProducts, getFilterProducts }
 )(StorePage);

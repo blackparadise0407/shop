@@ -65,7 +65,7 @@ router.post('/', auth, async (req, res, next) => {
 
 
 //METHOD: GET
-//ROUTE: /api/product/filter
+//ROUTE: /api/product/search
 //FUCN: FILTER SEARCH
 router.get('/search', async (req, res, next) => {
     try {
@@ -75,6 +75,7 @@ router.get('/search', async (req, res, next) => {
         const startIndex = (page - 1) * limit;
         const total = await ProductModel.countDocuments();
         const totalPage = Math.ceil(total / limit);
+        if (!filter) return res.status(400).send("No filter applied");
         if (filter === "default") {
             try {
                 const q = req.query.q;
