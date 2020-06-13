@@ -3,19 +3,42 @@ import { Form, Label, Input, FormGroup, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import styles from './Filter.module.css';
 
-const Filter = ({ onChange, onSubmit }) => {
+const Filter = ({ onChange, onSubmit, isSelected }) => {
+    const options = [
+        {
+            label: "--Sort option--",
+            value: "default"
+        },
+        {
+            label: "Price ascending",
+            value: "priceAsc"
+        },
+        {
+            label: "Price descending",
+            value: "priceDesc"
+        },
+        {
+            label: "Name ascending",
+            value: "nameAsc"
+        },
+        {
+            label: "Name descending",
+            value: "nameDesc"
+        },
+    ]
     return (
         <Form form className={styles.container} onSubmit={onSubmit}>
-            <FormGroup>
-                <Label for="exampleSelect">Sort by</Label>
-                <Input type="select" name="filterBy" id="filterBy" onChange={onChange}>
+            <FormGroup className={styles.formContainer}>
+                <Input className={styles.input} type="select" name="filterBy" id="filterBy" onChange={onChange}>
+                    {/* <option selected hidden value="default">--Sort option--</option>
                     <option value="priceAsc" >Price ascending</option>
                     <option value="priceDesc" >Price descending</option>
                     <option value="nameAsc" >Name ascending</option>
-                    <option value="nameDesc">Name descending</option>
+                    <option value="nameDesc">Name descending</option> */}
+                    {options ? options.map(option => <option value={option.value} >{option.label}</option>) : null}
                 </Input>
             </FormGroup>
-            <Button>Click me for magic</Button>
+            <Button className={styles.btn}>Sort</Button>
         </Form>
 
     );

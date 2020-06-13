@@ -18,6 +18,7 @@ const Register = ({
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [errMsg, setErrMsg] = useState(null);
 
     const handleFirstNameChange = (e) => {
@@ -37,9 +38,14 @@ const Register = ({
         setPassword(e.target.value);
     }
 
+    const handleConfirmPasswordChange = (e) => {
+        setErrMsg(null);
+        setConfirmPassword(e.target.value);
+    }
+
     const handleSubmit = e => {
         e.preventDefault();
-        const user = { firstName, lastName, email, password };
+        const user = { firstName, lastName, email, password, repPassword: confirmPassword };
         //attemp to register user
         registerUser(user);
 
@@ -55,7 +61,7 @@ const Register = ({
         }
     }, [error, isAuthenticated, history]);
 
-    if (isLoading) return (<div>Is loading...</div>)
+    //if (isLoading) return (<div>Is loading...</div>) :: it caused bug somehow @@
     return (
         <div className={styles.containerRegister}>
             <div className={styles.containerHead}>Register</div>
@@ -114,6 +120,20 @@ const Register = ({
                                 type="password"
                                 value={password}
                                 onChange={handlePasswordChange}
+                                placeholder="******"
+                            ></Input>
+                        </FormGroup>
+                    </Col>
+                    <Col xs="12">
+                        <FormGroup>
+                            <Label htmlFor="confirmPassword">Confirm password</Label>
+                            <Input
+                                className={styles.input}
+                                id="confirmPassword"
+                                name="confirmPassword"
+                                type="password"
+                                value={confirmPassword}
+                                onChange={handleConfirmPasswordChange}
                                 placeholder="******"
                             ></Input>
                         </FormGroup>

@@ -30,21 +30,21 @@ router.get('/', auth, async (req, res) => {
 //PATH: api/users/register
 //FUCN: REGISTER USER
 router.post('/register', async (req, res) => {
-    const { firstName, lastName, email, password } = req.body;
+    const { firstName, lastName, email, password, repPassword } = req.body;
 
     //VALIDATE BEFORE REGISTER
     const { error } = validate.regValidation(req.body);
     if (error) return res.status(400).send(error.details[0].message)
     //CHECK EMAIL EXISTS OR NOT
     const existedEmail = await UserModel.findOne({ email: email });
-    if (existedEmail) return res.status(400).send("Email already exists")
+    if (existedEmail) return res.status(400).send("Email already exists");
+    if (password !== repPassword) return res.status(400).send("Entered passwords do not match");
     const newUser = new UserModel({
         firstName, lastName, email, password
     })
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     newUser.password = hashedPassword;
-
     try {
         const user = await newUser.save();
         const token = jwt.sign(

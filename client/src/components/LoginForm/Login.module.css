@@ -170,22 +170,23 @@
   background-size: cover;
   width: 100%;
   height: 100vh;
+  overflow: hidden;
 }
 
 @media screen and (min-width: 900px) {
   .container {
     max-width: 60rem;
     height: auto;
-    font-size: 2.2rem;
+    font-size: 1.8rem;
     font-family: var(--main-font);
     margin: 8rem 0;
   }
   .containerRegister {
     max-width: 60rem;
     height: auto;
-    font-size: 2.2rem;
+    font-size: 1.8rem;
     font-family: var(--main-font);
-    margin: 8rem 0;
+    margin: auto 0;
   }
   .containerHead {
     width: 100%;

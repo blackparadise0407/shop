@@ -75,8 +75,7 @@ router.get('/search', async (req, res, next) => {
         const startIndex = (page - 1) * limit;
         const total = await ProductModel.countDocuments();
         const totalPage = Math.ceil(total / limit);
-        if (!filter) return res.status(400).send("No filter applied");
-        if (filter === "default") {
+        if (!filter) {
             try {
                 const q = req.query.q;
                 const products = await ProductModel.find({ $text: { $search: q } }).limit(limit);
@@ -85,6 +84,22 @@ router.get('/search', async (req, res, next) => {
                     msg: "Success",
                     status: res.statusCode
 
+                })
+            } catch (error) {
+                next(error);
+            }
+        }
+        if (filter === "default") {
+            try {
+                const products = await ProductModel.find().skip(startIndex).limit(limit).exec();
+                return res.status(200).json({
+                    results: products,
+                    msg: "Success",
+                    status: res.statusCode,
+                    limit,
+                    page,
+                    total,
+                    totalPage
                 })
             } catch (error) {
                 next(error);

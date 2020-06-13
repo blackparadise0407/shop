@@ -34,7 +34,6 @@ export const getFilterProducts = ({ filterBy = null, page = 1, limit = 6 }) => a
                 limit
             }
         });
-        console.log(results);
         dispatch({ type: GET_PRODUCTS, payload: results.data })
     } catch (err) {
         dispatch(returnErr(err.response.data, err.response.status));

@@ -27,14 +27,14 @@ export const loadUser = () => (dispatch, getState) => {
 
 }
 
-export const registerUser = ({ firstName, lastName, email, password }) => dispatch => {
+export const registerUser = ({ firstName, lastName, email, password, repPassword }) => dispatch => {
     //ATTEMP TO REGISTER USER
     const config = {
         headers: {
             'Content-Type': 'application/json'
         }
     }
-    const body = JSON.stringify({ firstName, lastName, email, password });
+    const body = JSON.stringify({ firstName, lastName, email, password, repPassword });
 
     axios.post("/api/users/register", body, config)
         .then(res => dispatch({ type: REGISTER_SUCCESS, payload: res.data }))

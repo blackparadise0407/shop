@@ -45,7 +45,6 @@ const Login = ({
             setErrMsg(null);
         }
     }, [isAuthenticated, error, history])
-    if (isLoading) return (<div>Loading ...</div>)
     return (
         <div className={styles.container}>
             <div className={styles.containerHead}>Login</div>

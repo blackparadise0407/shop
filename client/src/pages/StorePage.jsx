@@ -7,6 +7,8 @@ import { getProducts, getFilterProducts } from '../redux/actions/productAction';
 import styles from '../components/Store/Store.module.css';
 import { Filter } from '../components';
 
+import { PropagateSpinner } from '../utils/Loader';
+
 const StorePage = ({
     isLoading,
     getProducts,
@@ -15,8 +17,7 @@ const StorePage = ({
 }) => {
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(3);
-    const [filter, setFilter] = useState("");
-
+    const [filter, setFilter] = useState("default");
     const handleOnChange = e => {
         setFilter(e.target.value);
     }
@@ -34,16 +35,15 @@ const StorePage = ({
 
     const handleOnSubmit = e => {
         e.preventDefault();
-        console.log("Heloo");
         //Attemp to apply filter
         getFilterProducts({ filterBy: filter, page, limit });
 
     }
 
     useEffect(() => {
-        getProducts({ page, limit });
-    }, [page, limit])
-    if (isLoading) return (<div>Loading...</div>)
+        getFilterProducts({ filterBy: filter, page, limit });
+    }, [filter, page, limit])
+    if (isLoading) return (<PropagateSpinner />)
     return (
         <section className={styles.store}>
             <div className={styles.container}>
