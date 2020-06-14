@@ -55,7 +55,6 @@ const Hero = () => {
     if (isErr) return (<div>An loz</div>);
     return (
         <section className={styles.hero}>
-            {data ? console.log(data) : null}
             <div className="container">
                 <h2 className={styles.subHeadline}>
                     Jorlux

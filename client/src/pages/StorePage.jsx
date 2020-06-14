@@ -11,11 +11,11 @@ import { PropagateSpinner } from '../utils/Loader';
 
 const StorePage = ({
     isLoading,
-    getProducts,
     products,
     getFilterProducts
 }) => {
     const [page, setPage] = useState(1);
+    //eslint-disable-next-line no-unused-vars
     const [limit, setLimit] = useState(8);
     const [filter, setFilter] = useState("default");
     const handleOnChange = e => {
@@ -42,7 +42,7 @@ const StorePage = ({
 
     useEffect(() => {
         getFilterProducts({ filterBy: filter, page, limit });
-    }, [filter, page, limit])
+    }, [getFilterProducts, filter, page, limit])
     if (isLoading) return (<PropagateSpinner />)
     return (
         <section className={styles.store}>
@@ -67,6 +67,9 @@ const StorePage = ({
                 </div>
             </div>
             <Pagination className={styles.pagination} aria-label="Store pagination">
+                <PaginationItem className={styles.paginationItem}>
+                    <PaginationLink className={styles.paginationLink} ><i className="fas fa-chevron-left"></i></PaginationLink>
+                </PaginationItem>
                 {range ? range.map(v => (
                     <PaginationItem key={v + 1} className={styles.paginationItem}>
                         {products.page === v + 1
@@ -74,6 +77,9 @@ const StorePage = ({
                             : <PaginationLink className={styles.paginationLink} onClick={e => paginate(e, v + 1)}>{v + 1}</PaginationLink>}
                     </PaginationItem>
                 )) : null}
+                <PaginationItem className={styles.paginationItem}>
+                    <PaginationLink className={styles.paginationLink} ><i className="fas fa-chevron-right"></i></PaginationLink>
+                </PaginationItem>
             </Pagination>
         </section>
     );
@@ -82,7 +88,6 @@ const StorePage = ({
 StorePage.propTypes = {
     isLoading: PropTypes.bool.isRequired,
     products: PropTypes.object,
-    getProducts: PropTypes.func.isRequired,
     getFilterProducts: PropTypes.func
 }
 
@@ -93,5 +98,5 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { getProducts, getFilterProducts }
+    { getFilterProducts }
 )(StorePage);

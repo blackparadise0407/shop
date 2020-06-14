@@ -21,9 +21,9 @@ const makeRequestCreator = () => {
             return results;
         } catch (err) {
             if (axios.isCancel(err)) {
-                console.log("Request was canceled");
+                // console.log("Request was canceled");
             } else {
-                console.log(err);
+                // console.log(err);
             }
         }
     }
