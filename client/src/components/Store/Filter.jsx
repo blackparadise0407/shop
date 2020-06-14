@@ -6,15 +6,15 @@ import styles from './Filter.module.css';
 const Filter = ({ onChange, onSubmit, isSelected }) => {
     const options = [
         {
-            label: "--Sort option--",
+            label: "---Sort option---",
             value: "default"
         },
         {
-            label: "Price ascending",
+            label: "Price (low - high)",
             value: "priceAsc"
         },
         {
-            label: "Price descending",
+            label: "Price (high - low)",
             value: "priceDesc"
         },
         {

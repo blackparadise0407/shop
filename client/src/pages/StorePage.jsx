@@ -16,7 +16,7 @@ const StorePage = ({
     getFilterProducts
 }) => {
     const [page, setPage] = useState(1);
-    const [limit, setLimit] = useState(3);
+    const [limit, setLimit] = useState(8);
     const [filter, setFilter] = useState("default");
     const handleOnChange = e => {
         setFilter(e.target.value);

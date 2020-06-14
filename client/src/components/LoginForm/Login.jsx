@@ -80,7 +80,7 @@ const Login = ({
                         </FormGroup>
                     </Col>
                     <Col xs="12" className="mx-auto"><Button className={styles.button}>Login</Button></Col>
-                    <Col xs="12"><div className="loginDes">Doesn't have an account?<Link to="/register" className={styles.link}>Register here</Link></div></Col>
+                    <Col xs="12"><div className="loginDes">Doesn't have an account? <Link to="/register" className={styles.link}>Register here</Link></div></Col>
                 </Row>
             </Form>
         </div>

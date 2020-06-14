@@ -41,6 +41,7 @@
 
 .cardImg {
   max-width: 100%;
+  width: 100%;
 }
 
 .title {
@@ -58,7 +59,7 @@
 .description {
   font-size: 1.2rem;
   color: #777;
-  line-height: 3;
+  line-height: 1.6;
 }
 
 /*CARD ENDS*/
@@ -91,7 +92,7 @@
 
 .paginationLink {
   padding: 0.4rem 1rem;
-  background-color: rgba(221, 221, 221, 0.637);
+  background-color: rgba(199, 199, 199, 0.637);
   border: none;
   transition: all 0.5s;
 }
@@ -116,9 +117,10 @@
 
   .paginationItem {
     font-size: 1.8rem;
+    padding: 0 0.3rem;
   }
 
-  .active {
-    border-radius: 4rem;
+  .paginationLink {
+    padding: 0.4rem 1.1rem;
   }
 }

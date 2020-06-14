@@ -19,6 +19,7 @@ const Register = ({
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [checkbox, setCheckbox] = useState(false);
     const [errMsg, setErrMsg] = useState(null);
 
     const handleFirstNameChange = (e) => {
@@ -41,6 +42,10 @@ const Register = ({
     const handleConfirmPasswordChange = (e) => {
         setErrMsg(null);
         setConfirmPassword(e.target.value);
+    }
+
+    const handleCheckBoxChange = () => {
+        setCheckbox(!checkbox);
     }
 
     const handleSubmit = e => {
@@ -138,7 +143,13 @@ const Register = ({
                             ></Input>
                         </FormGroup>
                     </Col>
-                    <Col xs="12" className="mx-auto"><Button className={styles.button}>Register</Button></Col>
+                    <Col xs="12"><FormGroup check>
+                        <Label check>
+                            <Input onChange={handleCheckBoxChange} type="checkbox" />{' '}
+                            I agree to the Jorlux terms and conditions
+                         </Label>
+                    </FormGroup></Col>
+                    <Col xs="12" className="mx-auto">{checkbox ? <Button className={styles.button}>Register</Button> : <Button disabled className={styles.button}>Register</Button>}</Col>
                     <Col xs="12"><div className="registerDes">Already have an account? <Link to="/login" className={styles.link}>Login here</Link></div></Col>
                 </Row>
             </Form>
