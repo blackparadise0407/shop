@@ -2,7 +2,8 @@ import {
     GET_PRODUCTS,
     ADD_PRODUCT,
     PRODUCTS_LOADING,
-    PRODUCTS_FAIL
+    PRODUCTS_FAIL,
+    GET_SINGLE_PRODUCT
 } from './types';
 import { returnErr } from './errorAction'
 import axios from 'axios';
@@ -35,6 +36,17 @@ export const getFilterProducts = ({ filterBy = null, page = 1, limit = 6 }) => a
             }
         });
         dispatch({ type: GET_PRODUCTS, payload: results.data })
+    } catch (err) {
+        dispatch(returnErr(err.response.data, err.response.status));
+        dispatch({ type: PRODUCTS_FAIL });
+    }
+}
+
+export const getProductById = ({ productID }) => async dispatch => {
+    dispatch({ type: PRODUCTS_LOADING })
+    try {
+        const res = await axios.get(`/api/products/${productID}`)
+        dispatch({ type: GET_SINGLE_PRODUCT, payload: res.data.results })
     } catch (err) {
         dispatch(returnErr(err.response.data, err.response.status));
         dispatch({ type: PRODUCTS_FAIL });

@@ -4,7 +4,7 @@ import authReducer from './authReducer';
 import errorReducer from './errorReducer';
 
 export default combineReducers({
-    product: productReducer,
+    products: productReducer,
     auth: authReducer,
     error: errorReducer
 })

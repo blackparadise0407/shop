@@ -3,11 +3,12 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Row, Col, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { ProductCard } from '../components';
-import { getProducts, getFilterProducts } from '../redux/actions/productAction';
+import { getFilterProducts } from '../redux/actions/productAction';
 import styles from '../components/Store/Store.module.css';
 import { Filter } from '../components';
 
 import { PropagateSpinner } from '../utils/Loader';
+import { Link } from 'react-router-dom';
 
 const StorePage = ({
     isLoading,
@@ -59,9 +60,13 @@ const StorePage = ({
                 <div className={styles.productContainer}>
                     <Row className={styles.row}>
                         {products ? products.results.map(product => (
-                            <Col key={product.productID} className={styles.col} xs="6" md="4" lg="3">
-                                <ProductCard key={product.productID} stock={product.stock} name={product.name} price={product.price} description={product.description} />
-                            </Col>
+                            <Link key={product.productID} className={styles.link} to={{
+                                pathname: `/products/${product.productID}`
+                            }}>
+                                <Col className={styles.col} xs="6" md="4" lg="3">
+                                    <ProductCard key={product.productID} stock={product.stock} name={product.name} price={product.price} description={product.description} />
+                                </Col>
+                            </Link>
                         )) : null}
                     </Row>
                 </div>
@@ -92,8 +97,8 @@ StorePage.propTypes = {
 }
 
 const mapStateToProps = state => ({
-    isLoading: state.product.isLoading,
-    products: state.product.payload,
+    isLoading: state.products.isLoading,
+    products: state.products.payload.products,
 })
 
 export default connect(

@@ -59,9 +59,6 @@ router.post('/', auth, async (req, res, next) => {
     }
 })
 
-//METHOD: GET
-//ROUTE: /api/product/search?q=""
-//FUCN: SEARCH BY NAME
 
 
 //METHOD: GET
@@ -157,6 +154,25 @@ router.get('/search', async (req, res, next) => {
     } catch (error) {
         next(error)
     }
+})
+
+
+//METHOD: GET
+//ROUTE: /api/products/:productID
+//FUNC: GET SINGLE PRODUCT BY PRODUCT ID
+router.get("/:productID", async (req, res, next) => {
+    const productID = req.params.productID;
+    try {
+        const product = await ProductModel.find({ productID });
+        return res.status(200).json({
+            results: product,
+            status: res.statusCode,
+            msg: "Success"
+        })
+    } catch (err) {
+        next(err);
+    }
+
 })
 
 module.exports = router;

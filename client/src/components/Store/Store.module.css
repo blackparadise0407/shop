@@ -37,6 +37,9 @@
   margin: 0 auto;
   text-align: left;
   max-width: 22rem;
+  border: none;
+  transform: scale(1);
+  transition: all 0.4s;
 }
 
 .cardImg {
@@ -107,6 +110,19 @@
 .paginationLink:focus {
   background-color: rgba(255, 255, 255, 0.884);
   border: none;
+}
+
+.link {
+  color: rgb(0, 0, 0);
+  transition: color 0.3s;
+}
+
+.link:hover {
+  color: #777;
+}
+
+.link:hover .card {
+  transform: scale(1.1);
 }
 
 /*PAGINATION ENDS*/

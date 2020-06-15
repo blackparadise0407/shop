@@ -33,21 +33,22 @@ const Hero = () => {
     }
     const handleSubmit = (e) => {
         e.preventDefault();
-        alert(value);
     }
 
     const clearQuery = () => {
-        if (value) setValue("");
+        if (value) {
+            setValue("");
+            setIsLoading(false);
+        }
     }
 
     const RenderSearch = () => {
         if (!value) {
-            setIsLoading(false)
             return <div></div>
         }
         else return (
             <ul className={styles.ul}>
-                {data ? data.map(datum => <Searchbox key={datum._id} _id={datum._id} name={datum.name} />) : null}
+                {data ? data.map(datum => <Searchbox key={datum._id} productID={datum.productID} name={datum.name} />) : null}
             </ul>
         )
     }

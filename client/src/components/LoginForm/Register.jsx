@@ -166,7 +166,7 @@ Register.propTypes = {
 
 const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated,
-    isLoading: state.product.isLoading,
+    isLoading: state.products.isLoading,
     authMsg: state.auth.msg,
     error: state.error
 })

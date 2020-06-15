@@ -16,7 +16,7 @@ mongoose.connect(process.env.DB_URL, {
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 
-app.use(morgan('common'));
+app.use(morgan('dev'));
 app.use(cors({
     origin: process.env.CORS_ORIGIN,
 }))
