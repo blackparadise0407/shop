@@ -6,19 +6,19 @@ import { Link, useHistory } from 'react-router-dom'
 import styles from './Login.module.css'
 
 import { loginUser } from '../../redux/actions/authAction';
-import { clearErr } from '../../redux/actions/errorAction';
+//import { clearErr } from '../../redux/actions/errorAction';
 
 const Login = ({
     isAuthenticated,
     isLoading,
     loginUser,
-    clearErr,
     error
 }) => {
     const history = useHistory();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errMsg, setErrMsg] = useState(null);
+    const [subCount, setSubCount] = useState(0);
 
     const handleEmailChange = (e) => {
         setErrMsg(null);
@@ -34,9 +34,11 @@ const Login = ({
         const user = { email, password };
         //Attemp to login
         loginUser(user);
+        setSubCount(subCount + 1);
     }
     useEffect(() => {
         if (isAuthenticated) {
+            setSubCount(0);
             history.push("/");
         }
         if (error.msg) {
@@ -80,6 +82,8 @@ const Login = ({
                         </FormGroup>
                     </Col>
                     <Col xs="12" className="mx-auto"><Button className={styles.button}>Login</Button></Col>
+                    {/* {error.msg === "Invalid credentials" ? <Col xs="12" className="mx-auto">Forgot password?</Col> : null} */}
+                    {subCount >= 5 ? <Col xs="12" className="mx-auto">Forgot password?</Col> : null}
                     <Col xs="12"><div className="loginDes">Doesn't have an account? <Link to="/register" className={styles.link}>Register here</Link></div></Col>
                 </Row>
             </Form>
@@ -101,5 +105,5 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { loginUser, clearErr }
+    { loginUser }
 )(Login);

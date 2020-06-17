@@ -163,7 +163,7 @@ router.get('/search', async (req, res, next) => {
 router.get("/:productID", async (req, res, next) => {
     const productID = req.params.productID;
     try {
-        const product = await ProductModel.find({ productID });
+        const product = await ProductModel.findOne({ productID });
         return res.status(200).json({
             results: product,
             status: res.statusCode,

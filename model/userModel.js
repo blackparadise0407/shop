@@ -18,9 +18,9 @@ const UserSchema = new Schema({
         type: Date,
         default: Date.now()
     },
-    wallet: {
-        type: Number,
-        default: 0
+    confirm: {
+        type: Boolean,
+        default: false
     }
 })
 

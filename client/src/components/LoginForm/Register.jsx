@@ -5,13 +5,20 @@ import { Form, FormGroup, Label, Row, Col, Input, Button, Alert } from 'reactstr
 import { Link, useHistory } from 'react-router-dom'
 import styles from './Login.module.css'
 
-import { registerUser } from '../../redux/actions/authAction';
+import { registerUser, clearRegMsg } from '../../redux/actions/authAction';
 import { clearErr } from '../../redux/actions/errorAction';
+
+//import { ClipSpinner } from '../../utils/Loader'
+
 const Register = ({
     isAuthenticated,
     isLoading,
     registerUser,
     error,
+    authMsg,
+    clearRegMsg,
+    id,
+    clearErr
 }) => {
     const history = useHistory();
     const [firstName, setFirstName] = useState("");
@@ -56,15 +63,18 @@ const Register = ({
 
     }
     useEffect(() => {
-        if (isAuthenticated) {
-            history.push("/");
+        if (authMsg) {
+            if (authMsg === "Register success") {
+                history.push(`/confirm/${id}`);
+                clearRegMsg();
+            }
         }
         if (error.msg) {
             setErrMsg(error.msg);
         } else {
             setErrMsg(null);
         }
-    }, [error, isAuthenticated, history]);
+    }, [error, isAuthenticated, history, authMsg, clearRegMsg, id]);
 
     //if (isLoading) return (<div>Is loading...</div>) :: it caused bug somehow @@
     return (
@@ -161,17 +171,20 @@ Register.propTypes = {
     isAuthenticated: PropTypes.bool,
     isLoading: PropTypes.bool,
     registerUser: PropTypes.func.isRequired,
-    clearErr: PropTypes.func.isRequired
+    clearErr: PropTypes.func.isRequired,
+    clearRegMsg: PropTypes.func,
+    id: PropTypes.string
 }
 
 const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated,
-    isLoading: state.products.isLoading,
+    isLoading: state.auth.isLoading,
     authMsg: state.auth.msg,
-    error: state.error
+    error: state.error,
+    id: state.auth.id
 })
 
 export default connect(
     mapStateToProps,
-    { registerUser, clearErr }
+    { registerUser, clearErr, clearRegMsg }
 )(Register);

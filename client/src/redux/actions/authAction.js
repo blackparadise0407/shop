@@ -7,9 +7,14 @@ import {
     LOGIN_FAIL,
     LOGIN_SUCCESS,
     LOGOUT_SUCCESS,
-    AUTH_ERROR
+    AUTH_ERROR,
+    CLEAR_REGISTER_MSG
 } from './types';
 import { returnErr } from './errorAction';
+
+export const clearRegMsg = () => {
+    return ({ type: CLEAR_REGISTER_MSG });
+}
 
 
 export const loadUser = () => (dispatch, getState) => {

@@ -1,6 +1,6 @@
 import { GET_ERROR, CLEAR_ERROR } from '../actions/types';
 const initialState = {
-    msg: "",
+    msg: {},
     status: null,
 }
 

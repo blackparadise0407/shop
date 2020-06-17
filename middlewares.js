@@ -1,3 +1,5 @@
+const nodemailer = require('nodemailer');
+
 const jwt = require('jsonwebtoken');
 
 const auth = async (req, res, next) => {
@@ -24,8 +26,42 @@ const errorHandler = (err, req, res, next) => {
     res.status(statusCode).json({ msg: err.message, status: res.statusCode });
 }
 
+const mailer = async ({ email, id }) => {
+    let transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 587,
+        secure: false,
+        auth: {
+            user: process.env.GMAIL_USERNAME,
+            pass: process.env.GMAIL_PASSWORD,
+        },
+    });
+
+    // send mail with defined transport object
+    let info = await transporter.sendMail({
+        from: `"React Shop " <${process.env.EMAIL}>`, // sender address
+        to: `${email}`, // list of receivers
+        subject: "React Shop Email confirmation", // Subject line
+        text: `Hello world?`, // plain text body
+        html: `<div class="container" style="font-family:Arial, Helvetica, sans-serif">
+                    <p style="font-size: 1rem;">React Shop Email confirmation</p>
+                    <p>Click the following link or the button below to confirm your account:
+                    <a style="text-decoration: none; color: rgb(255, 0, 0)" href="http://localhost:5000/api/users/confirm/${id}"
+                        >http://localhost:5000/api/users/confirm/${id}</a>
+                    </p>
+                    <strong>Please do not reply to this email.</strong>
+                </div >`, // html body
+    });
+    // console.log("Receivers: ", email)
+    // console.log("Message sent: %s", info.messageId);
+
+    // console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+
+}
+
 module.exports = {
     notFound,
     errorHandler,
-    auth
+    auth,
+    mailer
 }

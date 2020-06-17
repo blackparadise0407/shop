@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
 import styles from '../components/Store/Detail.module.css';
 import { getProductById } from '../redux/actions/productAction';
+import { DetailCard } from '../components';
+
 
 const DetailProductPage = ({
     isLoading,
@@ -18,7 +20,7 @@ const DetailProductPage = ({
     return (
         <section className={styles.detailSection}>
             <div className={styles.container}>
-                hihi
+                {product ? <DetailCard name={product.name} price={product.price} stock={product.stock} description={product.description} catName={product.category.name} /> : null}
             </div>
         </section>
     );
@@ -32,7 +34,7 @@ DetailProductPage.propTypes = {
 
 const mapStateToProps = state => ({
     isLoading: state.products.isLoading,
-    product: state.products.product
+    product: state.products.payload.product
 })
 
 export default connect(

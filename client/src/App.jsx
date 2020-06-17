@@ -1,17 +1,21 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import store from './redux/store.js';
-import { HomePage, LoginPage, ErrorPage, RegisterPage, StorePage, DetailProductPage } from './pages';
+import { HomePage, LoginPage, ErrorPage, RegisterPage, StorePage, DetailProductPage, ConfirmPage } from './pages';
 import { Header } from './components';
 import { Provider } from 'react-redux'
 import { loadUser } from './redux/actions/authAction';
 import { clearErr } from './redux/actions/errorAction';
+
+import { ClipSpinner } from './utils/Loader';
 const App = () => {
   const isAuthenticated = store.getState().auth.isAuthenticated;
+  const isLoading = store.getState().auth.isLoading;
   useEffect(() => {
     store.dispatch(loadUser())
     if (isAuthenticated) clearErr();
   }, [isAuthenticated])
+  if (isLoading) return (<ClipSpinner />)
   return (
     <Provider store={store} >
       <Router>
@@ -22,6 +26,7 @@ const App = () => {
           <Route path="/register" exact component={RegisterPage} />
           <Route path="/store" exact component={StorePage} />
           <Route path="/products/:productID" exact component={DetailProductPage} />
+          <Route path="/confirm/:id" exact component={ConfirmPage} />
           <Route path="*" component={ErrorPage} />
         </Switch>
       </Router>

@@ -4,13 +4,14 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 const UserModel = require('../model/userModel');
 const validate = require('../hapiValidation');
-const { auth } = require('../middlewares');
+const { auth, mailer } = require('../middlewares');
+const userModel = require('../model/userModel');
 
 
 //METHOD: GET
 //PATH: API/USERS/
 //FUCN: GET USER BY ID
-router.get('/:id', auth, async (req, res) => {
+router.get('/:id', auth, async (req, res, next) => {
     const user = await UserModel.findById(req.params.id).select("-password")
     return res.status(200).send(user)
 })
@@ -18,7 +19,7 @@ router.get('/:id', auth, async (req, res) => {
 //METHOD: GET
 //PATH: API/USERS/
 //FUCN: GET USER WITH TOKEN
-router.get('/', auth, async (req, res) => {
+router.get('/', auth, async (req, res, next) => {
     try {
         const user = await UserModel.findById(req.user.id).select('-password');
         return res.status(200).send(user)
@@ -29,7 +30,7 @@ router.get('/', auth, async (req, res) => {
 //METHOD: POST
 //PATH: api/users/register
 //FUCN: REGISTER USER
-router.post('/register', async (req, res) => {
+router.post('/register', async (req, res, next) => {
     const { firstName, lastName, email, password, repPassword } = req.body;
 
     //VALIDATE BEFORE REGISTER
@@ -47,21 +48,43 @@ router.post('/register', async (req, res) => {
     newUser.password = hashedPassword;
     try {
         const user = await newUser.save();
-        const token = jwt.sign(
-            {
-                id: user.id
-            },
-            process.env.JWT_SECRET,
-            { expiresIn: 7200 })
+        // const token = jwt.sign(
+        //     {
+        //         id: user.id
+        //     },
+        //     process.env.JWT_SECRET,
+        //     { expiresIn: 7200 })
+        mailer({ email: user.email, id: user.id });
         return res.status(200).json({
             msg: "Register success",
-            token: token
+            id: user.id,
+            // token: token
         });
     } catch (error) {
-        res.status(400).send("Register failed");
         next(error)
     }
 })
+
+//METHOD: GET
+//PATH: api/users/confirm/:id
+//FUCN: CONFIRM USER EMAIL
+
+router.get('/confirm/:id', async (req, res, next) => {
+    const { id } = req.params;
+    try {
+        const confirmUser = await userModel.findById(id);
+        if (!confirmUser) return res.status(400).send("Invalid token");
+        if (id === confirmUser.id) {
+            if (confirmUser.confirm) return res.status(400).send("Email is already confirmed");
+            confirmUser.confirm = true;
+        }
+        await confirmUser.save();
+        return res.status(200).redirect("http://localhost:3000");
+    } catch (error) {
+        next(error);
+    }
+})
+
 //METHOD: POST
 //PATH: api/users/login
 //FUCN: LOGIN USER
@@ -88,7 +111,8 @@ router.post("/login", async (req, res, next) => {
             user: {
                 firstName: user.firstName,
                 lastName: user.lastName,
-                email: user.email
+                email: user.email,
+                confirm: user.confirm
             },
             msg: "Success",
             status: res.statusCode,
