@@ -1,39 +1,42 @@
-import React, { useState } from 'react';
-import { Modal, ModalHeader, ModalBody, FormGroup, Label, Form, Input, Button } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import React, { Fragment, useState } from 'react';
+import { Form, Alert, Row, Col, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Link } from 'react-router-dom'
+import styles from './ForgotPassword.module.css';
 
 const ForgotPassword = () => {
-    const [modal, setModal] = useState(false);
     const [email, setEmail] = useState("");
-    const toggle = () => { setModal(!modal); }
-    const handleEmailChange = e => {
+    const [errMsg, setErrMsg] = useState(null);
+    const handleEmailChange = (e) => {
         setEmail(e.target.value);
     }
     const handleSubmit = e => {
         e.preventDefault();
-        alert("Submit");
+        alert("hehe");
     }
     return (
-        <div style={{ zIndex: 25000, opacit: 1 }}>
-            <Link to="#" onClick={toggle}>Forgot password</Link>
-            <Modal isOpen={modal} toggle={toggle}>
-                <ModalHeader toggle={toggle}>Reset password</ModalHeader>
-                <ModalBody>
-                    <Form onSubmit={handleSubmit}>
+        <div className={styles.container}>
+            <div className={styles.containerHead}>Reset password</div>
+            {errMsg ? <Alert className={styles.alert}>{errMsg}</Alert> : null}
+            <Form onSubmit={handleSubmit}>
+                <Row form className={styles.row}>
+                    <Col xs="12">
                         <FormGroup>
                             <Label htmlFor="email">Email</Label>
                             <Input
-                                className="email"
+                                className={styles.input}
+                                id="email"
                                 name="email"
-                                placeholder="Email"
+                                type="email"
                                 value={email}
                                 onChange={handleEmailChange}
-                            />
+                                placeholder="example@abc.xyz"
+                            ></Input>
                         </FormGroup>
-                        <Button>Reset password</Button>
-                    </Form>
-                </ModalBody>
-            </Modal>
+                    </Col>
+                    <Col xs="12" className="mx-auto"><Button className={styles.button}>Reset password</Button></Col>
+                    <Col xs="12"><div className="loginDes">Doesn't have an account? <Link to="/register" className={styles.link}>Register here</Link></div></Col>
+                </Row>
+            </Form>
         </div>
     );
 }

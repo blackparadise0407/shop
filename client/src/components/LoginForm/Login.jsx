@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Form, FormGroup, Label, Row, Col, Input, Button, Alert } from 'reactstrap';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import styles from './Login.module.css'
 
 import { loginUser } from '../../redux/actions/authAction';
@@ -13,6 +13,7 @@ const Login = ({
     loginUser,
     error
 }) => {
+    const location = useLocation();
     const history = useHistory();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -78,7 +79,11 @@ const Login = ({
                         </FormGroup>
                     </Col>
                     <Col xs="12" className="mx-auto"><Button className={styles.button}>Login</Button></Col>
-                    {error.msg === "Invalid credentials" ? <Col xs="12" className="mx-auto">Forgot password?</Col> : null}
+                    {/* {error.msg === "Invalid credentials" ? <Col xs="12" className="mx-auto"><Link to={{
+                        pathname: `${location.pathname}/reset`,
+                        state: { from: location }
+                    }}>Forgot password?</Link></Col> : null} */}
+                    <Col xs="12" className="mx-auto"><Link to="/login/reset">Forgot password?</Link></Col>
                     <Col xs="12"><div className="loginDes">Doesn't have an account? <Link to="/register" className={styles.link}>Register here</Link></div></Col>
                 </Row>
             </Form>
