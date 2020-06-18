@@ -54,7 +54,7 @@ router.post('/register', async (req, res, next) => {
         //     },
         //     process.env.JWT_SECRET,
         //     { expiresIn: 7200 })
-        mailer({ email: user.email, id: user.id });
+        mailer({ email: user.email, value: user.id }, "Confirm");
         return res.status(200).json({
             msg: "Register success",
             id: user.id,
@@ -121,6 +121,64 @@ router.post("/login", async (req, res, next) => {
     } catch (error) {
         next(error)
 
+    }
+})
+
+//METHOD: POST 
+//ROUTE: /api/users/reset/:id
+//FUNC: reset user password by email
+
+// router.post('/reset', async (req, res, next) => {
+//     const { email } = req.body;
+//     try {
+//         const resetPassword = Math.random().toString().slice(2, 8);
+//         const salt = await bcrypt.genSalt(10);
+//         const hashedPassword = await bcrypt.hash(resetPassword, salt);
+//         const resetUser = await userModel.findOneAndUpdate({ "email": email }, { "password": hashedPassword });
+//         if (!resetUser) return res.status(400).json({ msg: "Email does not exist" });
+//         mailer({ email, id: resetPassword }, "Reset");
+//         return res.status(200).json({ msg: "Your password has been reset" });
+//     } catch (error) {
+//         next(error)
+//     }
+// })
+//METHOD: POST
+//ROUTE: /api/users/reset 
+//FUNC: user request reset password link
+router.post('/reset', async (req, res, next) => {
+    const { email } = req.body;
+    try {
+        const user = await UserModel.findOne({ email });
+        if (!user) return res.status(400).json({ msg: "Email does not exist" });
+        const token = await jwt.sign(
+            {
+                id: user.id,
+            },
+            process.env.JWT_SECRET,
+            { expiresIn: 7200 })
+        mailer({ email, value: token }, "ResetPost")
+        return res.status(200).json({ msg: "Email sent" });
+    } catch (error) {
+        next(error);
+    }
+})
+
+//METHOD: GET
+//ROUTE: /api/users/reset/token 
+//FUNC: Reset user's password
+
+router.get('/reset/:token', async (req, res, next) => {
+    const token = req.params.token;
+    try {
+        const decode = await jwt.verify(token, process.env.JWT_SECRET);
+        const newPass = Date.now().toString();
+        const salt = await bcrypt.genSalt(10);
+        const hashedPass = await bcrypt.hash(newPass, salt);
+        const user = await userModel.findByIdAndUpdate(decode.id, { password: hashedPass });
+        mailer({ email: user.email, value: newPass }, "ResetGet")
+        return res.status(200).redirect("http://localhost:3000");
+    } catch (error) {
+        next(error)
     }
 })
 
