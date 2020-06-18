@@ -61,6 +61,7 @@ router.post('/register', async (req, res, next) => {
             // token: token
         });
     } catch (error) {
+        res.status(400).send("Register failed");
         next(error)
     }
 })
