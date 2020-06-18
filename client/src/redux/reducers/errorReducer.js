@@ -8,7 +8,7 @@ export default (state = initialState, action) => {
     switch (action.type) {
         case GET_ERROR:
             return {
-                msg: action.payload.msg,
+                msg: action.payload.msg.msg,
                 status: action.payload.status
             }
         case CLEAR_ERROR:

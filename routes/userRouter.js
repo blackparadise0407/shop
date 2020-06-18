@@ -35,11 +35,11 @@ router.post('/register', async (req, res, next) => {
 
     //VALIDATE BEFORE REGISTER
     const { error } = validate.regValidation(req.body);
-    if (error) return res.status(400).send(error.details[0].message)
+    if (error) return res.status(400).json({ msg: error.details[0].message });
     //CHECK EMAIL EXISTS OR NOT
     const existedEmail = await UserModel.findOne({ email: email });
-    if (existedEmail) return res.status(400).send("Email already exists");
-    if (password !== repPassword) return res.status(400).send("Entered passwords do not match");
+    if (existedEmail) return res.status(400).json({ msg: "Email already exists" });
+    if (password !== repPassword) return res.status(400).json({ msg: "Entered passwords do not match" });
     const newUser = new UserModel({
         firstName, lastName, email, password
     })
@@ -61,7 +61,7 @@ router.post('/register', async (req, res, next) => {
             // token: token
         });
     } catch (error) {
-        res.status(400).send("Register failed");
+        res.status(400).json({ msg: "Register failed" });
         next(error)
     }
 })
@@ -74,13 +74,13 @@ router.get('/confirm/:id', async (req, res, next) => {
     const { id } = req.params;
     try {
         const confirmUser = await userModel.findById(id);
-        if (!confirmUser) return res.status(400).send("Invalid token");
+        if (!confirmUser) return res.status(400).json({ msg: "Invalid token" });
         if (id === confirmUser.id) {
-            if (confirmUser.confirm) return res.status(400).send("Email is already confirmed");
+            if (confirmUser.confirm) return res.status(400).json({ msg: "Email is already confirmed" });
             confirmUser.confirm = true;
         }
         await confirmUser.save();
-        return res.status(200).redirect("http://localhost:3000");
+        return res.status(200).redirect("http://localhost:3000/login");
     } catch (error) {
         next(error);
     }
@@ -93,14 +93,14 @@ router.post("/login", async (req, res, next) => {
     const { email, password } = req.body;
     //VALIDATE BEFORE LOGIN
     const { error } = validate.logValidation(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+    if (error) return res.status(400).json({ msg: error.details[0].message });
 
     const user = await UserModel.findOne({ email: email });
-    if (!user) return res.status(400).send("Invalid credentials");
+    if (!user) return res.status(400).json({ msg: "Invalid credentials" });
 
     try {
         const valid = await bcrypt.compare(password, user.password);
-        if (!valid) return res.status(400).send("Invalid credentials");
+        if (!valid) return res.status(400).json({ msg: "Invalid credentials" });
         const token = jwt.sign(
             {
                 id: user.id
@@ -108,7 +108,6 @@ router.post("/login", async (req, res, next) => {
             process.env.JWT_SECRET,
             { expiresIn: 7200 })
         return res.status(200).json({
-
             user: {
                 firstName: user.firstName,
                 lastName: user.lastName,

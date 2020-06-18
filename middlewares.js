@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 const auth = async (req, res, next) => {
     const token = req.header('auth-token');
-    if (!token) return res.status(401).send("Unauthorized, you are not logged in.");
+    if (!token) return res.status(401).json({ msg: "Unauthorized, you are not logged in" });
     try {
         const decoded = await jwt.verify(token, process.env.JWT_SECRET);
         req.user = decoded;

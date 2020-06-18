@@ -6,7 +6,6 @@ import { Link, useHistory } from 'react-router-dom';
 import styles from './Login.module.css'
 
 import { loginUser } from '../../redux/actions/authAction';
-//import { clearErr } from '../../redux/actions/errorAction';
 
 const Login = ({
     isAuthenticated,
@@ -91,7 +90,7 @@ Login.propsType = {
     isAuthenticated: PropTypes.bool,
     isLoading: PropTypes.bool,
     loginUser: PropTypes.func.isRequired,
-    error: PropTypes.object
+    error: PropTypes.object,
 }
 
 const mapStateToProps = state => ({

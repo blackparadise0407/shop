@@ -23,15 +23,15 @@ router.get("/", async (req, res, next) => {
 router.post('/', middleware.auth, async (req, res, next) => {
     const { name } = req.body;
     const { error } = validate.addCatValidation(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+    if (error) return res.status(400).json({ msg: error.details[0].message });
     const existCat = await CategoryModel.findOne({ name: name });
-    if (existCat) return res.status(400).send("Category already exists");
+    if (existCat) return res.status(400).json({ msg: "Category already exists" });
     try {
         const newCat = new CategoryModel({
             name
         })
         await newCat.save();
-        return res.status(200).send("Add category success");
+        return res.status(200).json({ msg: "Add category success" });
     } catch (error) {
         next(error);
     }

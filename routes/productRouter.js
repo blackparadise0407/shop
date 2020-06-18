@@ -38,9 +38,9 @@ router.post('/', auth, async (req, res, next) => {
     if (error) next(error);
     try {
         const cat = await CategoryModel.findOne({ name: category });
-        if (!cat) return res.status(400).send("Category does not exist");
+        if (!cat) return res.status(400).json({ msg: "Category does not exist" });
         const existProduct = await ProductModel.findOne({ name })
-        if (existProduct) return res.status(400).send("Product already exists");
+        if (existProduct) return res.status(400).json({ msg: "Product already exists" });
         const newProduct = new ProductModel({
             productID,
             name,
@@ -53,7 +53,7 @@ router.post('/', auth, async (req, res, next) => {
             description
         })
         await newProduct.save();
-        return res.status(200).send("Add product success");
+        return res.status(200).json({ msg: "Add product success" });
     } catch (error) {
         next(error)
     }
