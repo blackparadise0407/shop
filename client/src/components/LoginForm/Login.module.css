@@ -96,26 +96,6 @@
   position: relative;
 }
 
-.link::before {
-  content: "";
-  position: absolute;
-  width: 0%;
-  height: 2px;
-  background-color: #d40202;
-  bottom: -15%;
-  left: 50%;
-  opacity: 0;
-  transition: all 0.5s;
-  transform: scale(0);
-}
-
-.link:hover::before {
-  left: 0;
-  opacity: 1;
-  width: 100%;
-  transform: scale(1);
-}
-
 .link:hover {
   color: #ff7575;
 }

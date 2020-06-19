@@ -5,3 +5,5 @@ export { default as RegisterPage } from './RegisterPage';
 export { default as StorePage } from './StorePage';
 export { default as DetailProductPage } from './DetailProductPage';
 export { default as ConfirmPage } from './ConfirmPage';
+export { default as ResetPage } from './ResetPage';
+export { default as ProductPage } from './ProductPage';

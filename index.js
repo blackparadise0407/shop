@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const morgan = require('morgan');
@@ -21,6 +22,8 @@ app.use(cors({
     origin: process.env.CORS_ORIGIN,
 }))
 app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/uploads', express.static('uploads'));
 app.use(express.urlencoded({ extended: false }));
 app.get("/", (req, res) => {
     res.json({ msg: "Hello" })

@@ -27,10 +27,11 @@ const ProductSchema = new mongoose.Schema({
     description: {
         type: String,
         required: true
-    }
+    },
+    images: String,
 })
 
 ProductSchema.plugin(autoIncrement, { id: 'product_secq', inc_field: 'productID' });
 ProductSchema.index({ name: 'text', 'category.name': 'text' });
 
-module.exports = mongoose.model("Products", ProductSchema);
+module.exports = mongoose.model("products", ProductSchema);

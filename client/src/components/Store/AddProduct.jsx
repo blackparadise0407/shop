@@ -1,0 +1,203 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Form, FormGroup, Input, Label, Col, Row, Button, Alert, Progress } from 'reactstrap';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { storage } from '../../firebase';
+import styles from './Product.module.css';
+
+import { addProduct } from '../../redux/actions/productAction';
+import { useHistory } from 'react-router-dom';
+
+
+const AddProduct = ({
+    addProduct,
+    error,
+    isAuthenticated
+}) => {
+    const history = useHistory();
+    const [errMsg, setErrMsg] = useState(null);
+    const [avaiCat, setAvaiCat] = useState([]);
+    const [image, setImage] = useState(null);
+    const [url, setUrl] = useState("");
+    const [name, setName] = useState("");
+    const [category, setCategory] = useState("");
+    const [stock, setStock] = useState("");
+    const [price, setPrice] = useState("");
+    const [description, setDescription] = useState("");
+    const [progress, setProgress] = useState(null);
+    const handleNameChange = e => { setName(e.target.value); }
+    const handleCategoryChange = e => { setCategory(e.target.value); }
+    const handleStockChange = e => { setStock(e.target.value); }
+    const handlePriceChange = e => { setPrice(e.target.value); }
+    const handleDescriptionChange = e => { setDescription(e.target.value); }
+
+    const configCat = async () => {
+        try {
+            const res = await axios.get('/api/categories');
+            setAvaiCat(res.data.results);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleFileChange = e => {
+        if (e.target.files[0]) {
+            const img = e.target.files[0];
+            if (img.type !== "image/jpeg" && img.type !== "image/png") {
+                alert("Invalid file");
+            } else
+                setImage(e.target.files[0]);
+        }
+    }
+    const handleUpload = ({ name }) => {
+        if (image) {
+            const storageRef = storage.ref();
+            const uploadTask = storageRef.child(name + '/uploads').put(image);
+            uploadTask.on('state_changed',
+                (snapshot) => {
+                    // Observe state change events such as progress, pause, and resume
+                    // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                    var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    setProgress(progress);
+                },
+                (err) => {
+                    console.log(err);
+                },
+                () => {
+                    storageRef.child(name + '/uploads').getDownloadURL()
+                        .then(url => {
+                            console.log(name);
+                            setUrl(url)
+                            setErrMsg("Upload image success");
+                        })
+                        .catch(err => console.log(err))
+                }
+            )
+        } else setErrMsg("No image chosen");
+    }
+
+    const handleOnSubmit = e => {
+        e.preventDefault();
+        const newProduct = { name, category, price, stock, description, images: url };
+        addProduct(newProduct);
+    }
+
+    useEffect(() => {
+        configCat();
+        if (isAuthenticated != null) {
+            if (!isAuthenticated) {
+                history.push("/");
+            }
+        }
+        if (error.msg) {
+            setErrMsg(error.msg);
+        } else {
+            setErrMsg(null);
+        }
+    }, [isAuthenticated, error, history])
+    return (
+        <div className={styles.container}>
+            {errMsg ? <Alert className={styles.alert}>{errMsg}</Alert> : null}
+            <Form onSubmit={handleOnSubmit}>
+                <Row>
+                    <Col xs="12">
+                        <FormGroup>
+                            <Label htmlFor="name">Product name</Label>
+                            <Input
+                                className={styles.input}
+                                id="name"
+                                name="name"
+                                type="text"
+                                value={name}
+                                onChange={handleNameChange}
+                                placeholder="..."
+                            ></Input>
+                        </FormGroup>
+                    </Col>
+                    <Col xs="12">
+                        <FormGroup>
+                            <Label htmlFor="category">Category</Label>
+                            <Input
+                                className={styles.input}
+                                id="category"
+                                name="category"
+                                type="select"
+                                onChange={handleCategoryChange}
+                            >
+                                <option value="">---Select a category---</option>
+                                {avaiCat ? avaiCat.map(cat => (<option key={cat._id} value={cat.name}>{cat.name}</option>)) : null}
+                            </Input>
+                        </FormGroup>
+                    </Col>
+                    <Col xs="12">
+                        <FormGroup>
+                            <Label htmlFor="price">Price</Label>
+                            <Input
+                                className={styles.input}
+                                id="price"
+                                name="price"
+                                type="number"
+                                value={price}
+                                onChange={handlePriceChange}
+                            ></Input>
+                        </FormGroup>
+                    </Col>
+                    <Col xs="12">
+                        <FormGroup>
+                            <Label htmlFor="stock">Stock</Label>
+                            <Input
+                                className={styles.input}
+                                id="stock"
+                                name="stock"
+                                type="number"
+                                value={stock}
+                                onChange={handleStockChange}
+                            ></Input>
+                        </FormGroup>
+                    </Col>
+                    <Col xs="12">
+                        <FormGroup>
+                            <Label htmlFor="description">Description</Label>
+                            <Input
+                                className={`${styles.input} ${styles.textarea}`}
+                                id="description"
+                                name="description"
+                                type="textarea"
+                                value={description}
+                                onChange={handleDescriptionChange}
+                            ></Input>
+                        </FormGroup>
+                    </Col>
+                    <Col xs="12">
+                        <FormGroup>
+                            <Label>Image</Label>
+                            <Input
+                                className={styles.inputUpload}
+                                type="file"
+                                onChange={handleFileChange}
+                            />
+                            {progress ? <Progress animated color="danger" value={progress} /> : null}
+                            <Button className={styles.button} onClick={handleUpload}> Upload</Button>
+                        </FormGroup>
+                    </Col>
+
+                    <Col xs="12">
+                        <Button className={styles.button}>Submit</Button>
+                    </Col>
+                </Row>
+            </Form>
+        </div>
+    );
+}
+
+AddProduct.propTypes = {
+    addProduct: PropTypes.func,
+    isAuthenticated: PropTypes.bool,
+    error: PropTypes.object,
+}
+
+export default connect(
+    state => ({ error: state.error, isAuthenticated: state.auth.isAuthenticated }),
+    { addProduct }
+)(AddProduct);

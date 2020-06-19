@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const ProductModel = require('../model/productModel');
 const CategoryModel = require('../model/categoryModel');
-const { auth } = require('../middlewares');
+const { auth, upload } = require('../middlewares');
 
 const validate = require('../hapiValidation');
 
@@ -33,7 +33,7 @@ router.get('/', async (req, res, next) => {
 //ROUTE: /api/product/
 //FUCN: ADD A PRODUCTS
 router.post('/', auth, async (req, res, next) => {
-    const { productID, name, category, stock, price, description } = req.body;
+    const { productID, name, category, stock, price, description, images } = req.body;
     const { error } = validate.addProductValidation(req.body);
     if (error) next(error);
     try {
@@ -50,9 +50,12 @@ router.post('/', auth, async (req, res, next) => {
             },
             stock,
             price,
-            description
+            description,
+            images
         })
         await newProduct.save();
+        cat.products.push(newProduct);
+        await cat.save();
         return res.status(200).json({ msg: "Add product success" });
     } catch (error) {
         next(error)

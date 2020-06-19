@@ -21,7 +21,8 @@ const UserSchema = new Schema({
     confirm: {
         type: Boolean,
         default: false
-    }
+    },
+    avatar: String,
 })
 
 module.exports = model("users", UserSchema);

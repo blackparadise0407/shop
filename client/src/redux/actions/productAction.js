@@ -3,8 +3,11 @@ import {
     ADD_PRODUCT,
     PRODUCTS_LOADING,
     PRODUCTS_FAIL,
-    GET_SINGLE_PRODUCT
+    GET_SINGLE_PRODUCT,
+    ADD_FAIL
 } from './types';
+import { storage } from '../../firebase';
+import { tokenConfig } from './authAction';
 import { returnErr } from './errorAction'
 import axios from 'axios';
 export const getProducts = ({ page = 1, limit = 6 }) => async dispatch => {
@@ -50,5 +53,25 @@ export const getProductById = ({ productID }) => async dispatch => {
     } catch (err) {
         dispatch(returnErr(err.response.data, err.response.status));
         dispatch({ type: PRODUCTS_FAIL });
+    }
+}
+
+const handleFailSubmit = ({ name }) => {
+    var storageRef = storage.ref();
+    var imageRef = storageRef.child('/uploads' + name)
+    imageRef.delete().then(() => console.log("Deleted"))
+}
+
+export const addProduct = ({ name, category, stock, price, description, images }) => async (dispatch, getState) => {
+    const body = JSON.stringify({ name, category, stock, price, description, images });
+    const config = tokenConfig(getState);
+    dispatch({ type: PRODUCTS_LOADING });
+    try {
+        const res = await axios.post('/api/products/', body, config);
+        dispatch({ type: ADD_PRODUCT })
+    } catch (err) {
+        handleFailSubmit({ name });
+        dispatch(returnErr(err.response.data, err.response.status));
+        dispatch({ type: ADD_FAIL });
     }
 }

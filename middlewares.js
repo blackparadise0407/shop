@@ -1,7 +1,9 @@
 const nodemailer = require('nodemailer');
-
+const multer = require('multer');
 const jwt = require('jsonwebtoken');
 
+
+//AUTH MIDDLEWARE
 const auth = async (req, res, next) => {
     const token = req.header('auth-token');
     if (!token) return res.status(401).json({ msg: "Unauthorized, you are not logged in" });
@@ -15,17 +17,23 @@ const auth = async (req, res, next) => {
     }
 }
 
+
+//NOT FOUND MIDDLEWARE
 const notFound = (req, res, next) => {
     const error = new Error(`Not found: ${req.originalURL}`);
     res.status(404).json({ msg: "Not found", status: res.statusCode });
     next(error);
 }
 
+
+//ERROR HANDLER MIDDLEWARE
 const errorHandler = (err, req, res, next) => {
     const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
     res.status(statusCode).json({ msg: err.message, status: res.statusCode });
 }
 
+
+//EMAIL SENDER MIDDLEWARE
 const mailer = async ({ email, value }, type) => {
     let transporter = nodemailer.createTransport({
         host: "smtp.gmail.com",
@@ -92,9 +100,36 @@ const mailer = async ({ email, value }, type) => {
 
 }
 
+//MULTER IMAGE UPLOADER MIDDLEWARE
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, './uploads/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + file.originalname);
+    }
+});
+
+const fileFilter = (req, file, cb) => {
+    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/ong') {
+        cb(null, true);
+    } else {
+        cb(null, false);
+    }
+}
+
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 1024 * 1024 * 5
+    },
+    fileFilter: fileFilter
+})
+
 module.exports = {
     notFound,
     errorHandler,
     auth,
-    mailer
+    mailer,
+    upload
 }

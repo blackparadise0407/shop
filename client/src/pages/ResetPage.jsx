@@ -1,13 +1,13 @@
 import React from 'react';
-import { Login } from '../components'
+import { ForgotPassword } from '../components'
 import styles from '../components/LoginForm/Login.module.css';
 
-const LoginPage = () => {
+const ResetPage = () => {
     return (
         <section className={styles.section}>
-            <Login />
+            <ForgotPassword />
         </section>
     );
 }
 
-export default LoginPage;
+export default ResetPage;

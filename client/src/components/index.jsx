@@ -7,3 +7,4 @@ export { default as Filter } from './Store/Filter';
 export { default as SearchBox } from './Header/Searchbox';
 export { default as DetailCard } from './Store/DetailCard';
 export { default as ForgotPassword } from './LoginForm/ForgotPassword';
+export { default as AddProduct } from './Store/AddProduct';

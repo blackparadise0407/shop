@@ -3,7 +3,8 @@ import {
     ADD_PRODUCT,
     PRODUCTS_LOADING,
     PRODUCTS_FAIL,
-    GET_SINGLE_PRODUCT
+    GET_SINGLE_PRODUCT,
+    ADD_FAIL
 } from '../actions/types';
 const initialState = {
     isLoading: false,
@@ -40,6 +41,16 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 payload: null,
+                isLoading: false
+            }
+        case ADD_PRODUCT:
+            return {
+                ...state,
+                isLoading: false
+            }
+        case ADD_FAIL:
+            return {
+                ...state,
                 isLoading: false
             }
         default:

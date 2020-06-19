@@ -1,7 +1,17 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import store from './redux/store.js';
-import { HomePage, LoginPage, ErrorPage, RegisterPage, StorePage, DetailProductPage, ConfirmPage } from './pages';
+import {
+  HomePage,
+  LoginPage,
+  ErrorPage,
+  RegisterPage,
+  StorePage,
+  DetailProductPage,
+  ConfirmPage,
+  ResetPage,
+  ProductPage
+} from './pages';
 import { Header } from './components';
 import { loadUser } from './redux/actions/authAction';
 import { clearErr } from './redux/actions/errorAction';
@@ -22,9 +32,11 @@ const App = () => {
         <Route path="/" exact component={HomePage} />
         <Route path="/login" exact component={LoginPage} />
         <Route path="/register" exact component={RegisterPage} />
+        <Route path="/reset" exact component={ResetPage} />
         <Route path="/store" exact component={StorePage} />
-        <Route path="/products/:productID" exact component={DetailProductPage} />
-        <Route path="/confirm/:id" exact component={ConfirmPage} />
+        <Route path="/products/:productID" component={DetailProductPage} />
+        <Route path="/confirm/:id" component={ConfirmPage} />
+        <Route path="/product" component={ProductPage} />
         <Route path="*" component={ErrorPage} />
       </Switch>
     </Router>

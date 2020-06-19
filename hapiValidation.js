@@ -25,7 +25,8 @@ const addProductValidation = data => {
         category: Joi.string().required(),
         stock: Joi.number().integer().min(0),
         price: Joi.number().integer().min(0),
-        description: Joi.string()
+        description: Joi.string(),
+        images: Joi.string()
 
     })
     return schema.validate(data);

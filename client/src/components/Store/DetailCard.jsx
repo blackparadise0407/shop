@@ -2,10 +2,10 @@ import React from 'react';
 import styles from './Detail.module.css';
 import { Button } from 'reactstrap';
 
-const DetailCard = ({ name, price, description, stock, catName }) => {
+const DetailCard = ({ name, price, description, stock, catName, img }) => {
     return (
         <div className={styles.cardContainer}>
-            <img className={styles.img} src="/images/ip.jpg" alt="" />
+            <img className={styles.img} src={img} alt="" />
             <div className={styles.card}>
                 <h1 className={styles.title}>{name}</h1>
                 <h3>Price: {price}$</h3>

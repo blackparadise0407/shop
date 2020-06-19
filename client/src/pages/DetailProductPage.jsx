@@ -20,7 +20,7 @@ const DetailProductPage = ({
     return (
         <section className={styles.detailSection}>
             <div className={styles.container}>
-                {product ? <DetailCard name={product.name} price={product.price} stock={product.stock} description={product.description} catName={product.category.name} /> : null}
+                {product ? <DetailCard name={product.name} price={product.price} stock={product.stock} description={product.description} catName={product.category.name} img={product.images} /> : null}
             </div>
         </section>
     );

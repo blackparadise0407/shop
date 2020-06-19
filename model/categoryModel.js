@@ -15,4 +15,4 @@ const CategorySchema = new mongoose.Schema({
     }]
 })
 CategorySchema.plugin(autoIncrement, { id: 'cat_secq', inc_field: 'catID' });
-module.exports = mongoose.model("Categories", CategorySchema);
+module.exports = mongoose.model("categories", CategorySchema);
