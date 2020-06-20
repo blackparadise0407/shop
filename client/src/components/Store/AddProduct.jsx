@@ -47,13 +47,13 @@ const AddProduct = ({
             if (img.type !== "image/jpeg" && img.type !== "image/png") {
                 alert("Invalid file");
             } else
-                setImage(e.target.files[0]);
+                setImage(img);
         }
     }
-    const handleUpload = ({ name }) => {
+    const handleUpload = (e, name) => {
         if (image) {
             const storageRef = storage.ref();
-            const uploadTask = storageRef.child(name + '/uploads').put(image);
+            const uploadTask = storageRef.child('uploads/' + name).put(image);
             uploadTask.on('state_changed',
                 (snapshot) => {
                     // Observe state change events such as progress, pause, and resume
@@ -65,7 +65,7 @@ const AddProduct = ({
                     console.log(err);
                 },
                 () => {
-                    storageRef.child(name + '/uploads').getDownloadURL()
+                    storageRef.child('uploads/' + name).getDownloadURL()
                         .then(url => {
                             console.log(name);
                             setUrl(url)
@@ -178,7 +178,7 @@ const AddProduct = ({
                                 onChange={handleFileChange}
                             />
                             {progress ? <Progress animated color="danger" value={progress} /> : null}
-                            <Button className={styles.button} onClick={handleUpload}> Upload</Button>
+                            <Button className={styles.button} onClick={e => handleUpload(e, name)}> Upload</Button>
                         </FormGroup>
                     </Col>
 

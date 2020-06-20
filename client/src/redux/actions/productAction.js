@@ -56,10 +56,9 @@ export const getProductById = ({ productID }) => async dispatch => {
     }
 }
 
-const handleFailSubmit = ({ name }) => {
+const handleFailSubmit = (name) => {
     var storageRef = storage.ref();
-    var imageRef = storageRef.child('/uploads' + name)
-    imageRef.delete().then(() => console.log("Deleted"))
+    storageRef.child('uploads/' + name).delete().then(() => console.log("Deleted")).catch(err => console.log(err))
 }
 
 export const addProduct = ({ name, category, stock, price, description, images }) => async (dispatch, getState) => {
@@ -70,7 +69,7 @@ export const addProduct = ({ name, category, stock, price, description, images }
         const res = await axios.post('/api/products/', body, config);
         dispatch({ type: ADD_PRODUCT })
     } catch (err) {
-        handleFailSubmit({ name });
+        handleFailSubmit(name);
         dispatch(returnErr(err.response.data, err.response.status));
         dispatch({ type: ADD_FAIL });
     }
