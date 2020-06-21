@@ -28,7 +28,7 @@ const ProductSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    images: String,
+    images: [String],
 })
 
 ProductSchema.plugin(autoIncrement, { id: 'product_secq', inc_field: 'productID' });

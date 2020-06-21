@@ -2,8 +2,9 @@
   display: flex;
   justify-content: center;
   position: relative;
-  background: url(/images/background5.jpg) center no-repeat;
-  background-size: cover;
+  /* background: url(/images/background5.jpg) center no-repeat;
+  background-size: cover; */
+  background: linear-gradient(90deg, transparent, #888888d3, transparent);
   width: 100%;
   height: 100vh;
 }
@@ -11,19 +12,18 @@
 .container {
   width: 100%;
   height: auto;
-  max-width: 39rem;
-  font-size: 1.4rem;
-  font-family: var(--main-font);
-  position: absolute;
-  padding: 2.4rem 2.8rem;
-  border: 2px solid #121212;
-  border-radius: 1px;
-  letter-spacing: 0.6px;
-  box-shadow: -5px 5px 3px rgba(19, 19, 19, 0.5);
-  background-color: #fff;
-  /* margin: 3rem 0; */
+  font-size: 1.2rem;
+  position: relative;
+  max-width: 40rem;
+  margin: 7rem 0;
+  font-family: var(--secondary-font);
 }
 
+.containerHead {
+  font-weight: 600;
+  color: #121212;
+  font-size: 3.6rem;
+}
 .alert {
   margin-top: 0.8rem;
   font-size: 1.2rem;
@@ -36,7 +36,7 @@
 }
 
 .input {
-  border-radius: 0;
+  border-radius: 2px;
   font-size: 1.4rem;
   font-family: var(--secondary-font);
   letter-spacing: 0.7px;
@@ -86,7 +86,7 @@
 }
 
 .button {
-  margin-top: 0.2rem;
+  margin-top: 0.9rem;
   color: #fff;
   font-size: 1.4rem;
   font-family: var(--secondary-font);
@@ -97,6 +97,10 @@
   transition: color 0.5s;
   position: relative;
   overflow: hidden;
+}
+
+.button:nth-child(1) {
+  margin: 0 auto;
 }
 
 .button:visited {
@@ -125,4 +129,20 @@
 
 .button:hover::before {
   left: 100%;
+}
+
+@media screen and (min-width: 900px) {
+  .section {
+    height: 100vh;
+  }
+  .container {
+    font-size: 1.9rem;
+    max-width: 96rem;
+    margin: 8rem 0;
+  }
+
+  .input {
+    font-size: 2rem;
+    border-radius: 4px;
+  }
 }

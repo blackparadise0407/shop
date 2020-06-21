@@ -82,8 +82,8 @@ const Register = ({
             <div className={styles.containerHead}>Register</div>
             {errMsg ? <Alert className={styles.alert}>{errMsg}</Alert> : null}
             <Form onSubmit={handleSubmit}>
-                <Row form className={styles.row}>
-                    <Col xs="12" sm="6">
+                <Row form>
+                    <Col xs={12} md={6}>
                         <FormGroup>
                             <Label htmlFor="firstName">First name</Label>
                             <Input
@@ -97,7 +97,7 @@ const Register = ({
                             ></Input>
                         </FormGroup>
                     </Col>
-                    <Col xs="12" sm="6">
+                    <Col xs={12} md={6}>
                         <FormGroup>
                             <Label htmlFor="lastName">Last name</Label>
                             <Input
@@ -111,7 +111,9 @@ const Register = ({
                             ></Input>
                         </FormGroup>
                     </Col>
-                    <Col xs="12">
+                </Row>
+                <Row form>
+                    <Col xs={12}>
                         <FormGroup>
                             <Label htmlFor="email">Email</Label>
                             <Input
@@ -125,7 +127,9 @@ const Register = ({
                             ></Input>
                         </FormGroup>
                     </Col>
-                    <Col xs="12">
+                </Row>
+                <Row form>
+                    <Col xs={12}>
                         <FormGroup>
                             <Label htmlFor="password">Password</Label>
                             <Input
@@ -139,7 +143,9 @@ const Register = ({
                             ></Input>
                         </FormGroup>
                     </Col>
-                    <Col xs="12">
+                </Row>
+                <Row form>
+                    <Col xs={12}>
                         <FormGroup>
                             <Label htmlFor="confirmPassword">Confirm password</Label>
                             <Input
@@ -153,15 +159,17 @@ const Register = ({
                             ></Input>
                         </FormGroup>
                     </Col>
-                    <Col xs="12"><FormGroup check>
+                </Row>
+                <Col xs={12}>
+                    <FormGroup check>
                         <Label check>
                             <Input onChange={handleCheckBoxChange} type="checkbox" />{' '}
                             I agree to the Jorlux terms and conditions
                          </Label>
-                    </FormGroup></Col>
-                    <Col xs="12" className="mx-auto">{checkbox ? <Button className={styles.button}>Register</Button> : <Button disabled className={styles.button}>Register</Button>}</Col>
-                    <Col xs="12"><div className="registerDes">Already have an account? <Link to="/login" className={styles.link}>Login here</Link></div></Col>
-                </Row>
+                    </FormGroup>
+                </Col>
+                <Col xs={12} className="mx-auto">{checkbox ? <Button className={styles.button}>Register</Button> : <Button disabled className={styles.button}>Register</Button>}</Col>
+                <Col xs={12}><div className="registerDes">Already have an account? <Link to="/login" className={styles.link}>Login here</Link></div></Col>
             </Form>
         </div>
     );

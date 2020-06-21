@@ -50,15 +50,39 @@ const AddProduct = ({
             } else setImage(img);
         }
     }
+    const handleUpload = (e, name) => {
+        if (image) {
+            const storageRef = storage.ref();
+            const uploadTask = storageRef.child('uploads/' + name).put(image);
+            uploadTask.on('state_changed',
+                (snapshot) => {
+                    // Observe state change events such as progress, pause, and resume
+                    // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                    var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    setProgress(progress);
+                },
+                (err) => {
+                    console.log(err);
+                },
+                () => {
+                    storageRef.child('uploads/' + name).getDownloadURL()
+                        .then(url => {
+                            setUrl(url)
+                            setErrMsg("Upload image success");
+                        })
+                        .catch(err => console.log(err))
+                }
+            )
+        } else setErrMsg("No image chosen");
+    }
 
     const handleOnSubmit = e => {
         e.preventDefault();
-        const newProduct = { name, category, price, stock, description };
+        const newProduct = { name, category, price, stock, description, images: url };
         addProduct(newProduct);
     }
 
     useEffect(() => {
-        const abortController = new AbortController();
         configCat();
         if (isAuthenticated != null) {
             if (!isAuthenticated) {
@@ -66,20 +90,16 @@ const AddProduct = ({
             }
         }
         if (productMsg) {
-            if (productMsg.msg === "Add product success") {
-                setErrMsg(productMsg.msg);
-            }
+            setErrMsg(productMsg.msg)
         }
         if (error.msg) {
             setErrMsg(error.msg);
         } else {
             setErrMsg(null);
         }
-        return function cleanup() { abortController.abort(); }
     }, [isAuthenticated, error, history, productMsg])
     return (
         <div className={styles.container}>
-            <h2 className={styles.containerHead}>Add a product</h2>
             {errMsg ? <Alert className={styles.alert}>{errMsg}</Alert> : null}
             <Form onSubmit={handleOnSubmit}>
                 <Row>
@@ -151,6 +171,20 @@ const AddProduct = ({
                         </FormGroup>
                     </Col>
                     <Col xs="12">
+                        <FormGroup>
+                            <Label>Image</Label>
+                            <Input
+                                className={styles.inputUpload}
+                                type="file"
+                                onChange={handleFileChange}
+                                multiple
+                            />
+                            {progress ? <Progress animated color="danger" value={progress} /> : null}
+                            <Button className={styles.button} onClick={e => handleUpload(e, name)}> Upload</Button>
+                        </FormGroup>
+                    </Col>
+
+                    <Col xs="12">
                         <Button className={styles.button}>Submit</Button>
                     </Col>
                 </Row>
@@ -176,3 +210,6 @@ export default connect(
     mapStateToProps,
     { addProduct }
 )(AddProduct);
+
+
+//BACKUP CODE

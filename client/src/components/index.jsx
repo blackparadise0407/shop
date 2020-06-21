@@ -8,3 +8,4 @@ export { default as SearchBox } from './Header/Searchbox';
 export { default as DetailCard } from './Store/DetailCard';
 export { default as ForgotPassword } from './LoginForm/ForgotPassword';
 export { default as AddProduct } from './Store/AddProduct';
+export { default as EditProduct } from './Store/EditProduct';

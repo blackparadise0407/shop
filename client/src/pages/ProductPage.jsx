@@ -1,14 +1,16 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import styles from '../components/Store/Product.module.css';
-import { AddProduct } from '../components';
+import { AddProduct, EditProduct } from '../components';
 
 const ProductPage = () => {
     return (
         <Router>
             <section className={styles.section}>
                 <Switch>
-                    <Route path="/product/add" component={AddProduct} />
+                    {/* <Route path="/product/:id" /> */}
+                    <Route path="/product/add" render={() => <AddProduct />} />
+                    <Route exact path="/product/:productID/edit" render={() => <EditProduct />} />
                 </Switch>
             </section>
         </Router>

@@ -4,7 +4,9 @@ import {
     PRODUCTS_LOADING,
     PRODUCTS_FAIL,
     GET_SINGLE_PRODUCT,
-    ADD_FAIL
+    ADD_FAIL,
+    UPDATE_SUCCESS,
+    UPDATE_FAIL
 } from '../actions/types';
 const initialState = {
     isLoading: false,
@@ -40,18 +42,38 @@ export default (state = initialState, action) => {
         case PRODUCTS_FAIL:
             return {
                 ...state,
-                payload: null,
+                payload: {
+                    products: null,
+                    product: null
+                },
                 isLoading: false
             }
         case ADD_PRODUCT:
             return {
                 ...state,
-                isLoading: false
+                isLoading: false,
+                status: action.payload,
             }
         case ADD_FAIL:
             return {
                 ...state,
                 isLoading: false
+            }
+        case UPDATE_SUCCESS:
+            return {
+
+                ...state,
+                status: action.payload,
+                isLoading: false,
+            }
+        case UPDATE_FAIL:
+            return {
+                ...state,
+                payload: {
+                    products: null,
+                    product: null
+                },
+                isLoading: false,
             }
         default:
             return state;

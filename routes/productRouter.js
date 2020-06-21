@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const ProductModel = require('../model/productModel');
 const CategoryModel = require('../model/categoryModel');
-const { auth, upload } = require('../middlewares');
+const { auth, upload, validateUpload } = require('../middlewares');
 
 const validate = require('../hapiValidation');
 
@@ -32,8 +32,8 @@ router.get('/', async (req, res, next) => {
 //METHOD: POST
 //ROUTE: /api/product/
 //FUCN: ADD A PRODUCTS
-router.post('/', auth, async (req, res, next) => {
-    const { productID, name, category, stock, price, description, images } = req.body;
+router.post('/', async (req, res, next) => {
+    const { productID, name, category, stock, price, description } = req.body;
     const { error } = validate.addProductValidation(req.body);
     if (error) next(error);
     try {
@@ -50,15 +50,33 @@ router.post('/', auth, async (req, res, next) => {
             },
             stock,
             price,
-            description,
-            images
+            description
         })
-        await newProduct.save();
+        const resp = await newProduct.save();
         cat.products.push(newProduct);
         await cat.save();
-        return res.status(200).json({ msg: "Add product success" });
+        return res.status(200).json({ msg: "Add product success", resp });
     } catch (error) {
         next(error)
+    }
+});
+
+router.post('/:productID/update', validateUpload, upload.array('images', 3), async (req, res, next) => {
+    const productID = req.params.productID;
+    const { name, price, stock, description } = req.body;
+    const { error } = validate.updateProductValidation(req.body);
+    if (error) return res.status(400).json({ msg: error.details[0].message })
+    const reqFiles = [];
+    const url = req.protocol + "://" + req.get("host");
+    for (let i = 0; i < req.files.length; i++) {
+        reqFiles.push(url + "/api/uploads/" + req.files[i].filename);
+    }
+    try {
+        const product = await ProductModel.findOneAndUpdate({ productID }, { $set: { name, price, stock, description, images: reqFiles } });
+        if (!product) res.status(400).json({ msg: "Product does not exist" });
+        res.status(200).json({ msg: "Upload image success" });
+    } catch (err) {
+        next(err);
     }
 })
 
@@ -167,6 +185,7 @@ router.get("/:productID", async (req, res, next) => {
     const productID = req.params.productID;
     try {
         const product = await ProductModel.findOne({ productID });
+        if (!product) return res.status("400").json({ msg: "Product does not exist" })
         return res.status(200).json({
             results: product,
             status: res.statusCode,

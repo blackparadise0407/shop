@@ -25,13 +25,16 @@ const Header = ({ auth: { isAuthenticated, user } }) => {
 
     const authLink = (
         <Fragment>
-            <Link to="/" className={styles.navItem}>
+            <Link to="/user" className={styles.navItem}>
                 <div className={styles.navLink}>{user ? `Welcome, ${user.firstName}` : null}</div>
             </Link>
 
             <Logout />
 
-
+            <Link to="/cart">
+                <div><img src="/images/cart.svg" width="20px"
+                    height="20px" alt="cart" /> Cart</div>
+            </Link>
 
 
         </Fragment>

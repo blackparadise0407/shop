@@ -1,23 +1,24 @@
 import React from 'react';
-import { Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-const AuthRoute = ({
+import { Route, Redirect } from 'react-router-dom';
+const ProtectedRoute = ({
     isAuthenticated,
     component: Component,
     ...rest
+
 }) => {
+    console.log(isAuthenticated);
     return (
         <Route
             {...rest}
             render={props => {
-                if (isAuthenticated) {
+                if (isAuthenticated === true) {
                     return <Component {...props} />;
                 } else {
                     return (
                         <Redirect
                             to={{
-                                pathname: "/",
+                                pathname: "/login",
                                 state: {
                                     from: props.location
                                 }
@@ -30,15 +31,9 @@ const AuthRoute = ({
     );
 }
 
-AuthRoute.propTypes = {
-    isAuthenticated: PropTypes.bool.isRequired,
-}
 
-const mapStateToProps = state => ({
-    isAuthenticated: state.auth.isAuthenticated,
-})
 
 export default connect(
-    mapStateToProps,
+    state => ({ isAuthenticated: state.auth.isAuthenticated }),
     null
-)(AuthRoute);
+)(ProtectedRoute);

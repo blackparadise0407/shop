@@ -64,7 +64,7 @@ const StorePage = ({
                                 pathname: `/products/${product.productID}`
                             }}>
                                 <Col className={styles.col} xs="6" md="4" lg="3">
-                                    <ProductCard key={product.productID} stock={product.stock} name={product.name} price={product.price} description={product.description} img={product.images} />
+                                    <ProductCard key={product.productID} stock={product.stock} name={product.name} price={product.price} description={product.description} img={product.images[0]} />
                                 </Col>
                             </Link>
                         )) : null}

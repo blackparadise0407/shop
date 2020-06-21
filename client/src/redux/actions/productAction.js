@@ -4,9 +4,12 @@ import {
     PRODUCTS_LOADING,
     PRODUCTS_FAIL,
     GET_SINGLE_PRODUCT,
-    ADD_FAIL
+    ADD_FAIL,
+    UPDATE_SUCCESS,
+    UPDATE_FAIL
 } from './types';
-import { storage } from '../../firebase';
+
+//import { storage } from '../../firebase';
 import { tokenConfig } from './authAction';
 import { returnErr } from './errorAction'
 import axios from 'axios';
@@ -51,26 +54,72 @@ export const getProductById = ({ productID }) => async dispatch => {
         const res = await axios.get(`/api/products/${productID}`)
         dispatch({ type: GET_SINGLE_PRODUCT, payload: res.data.results })
     } catch (err) {
+        console.log(err)
         dispatch(returnErr(err.response.data, err.response.status));
         dispatch({ type: PRODUCTS_FAIL });
     }
 }
+//FIRE BASE
+// const handleFailSubmit = (name) => {
+//     var storageRef = storage.ref();
+//     storageRef.child('uploads/' + name).delete().then(() => console.log("Deleted")).catch(err => console.log(err))
+// }
 
-const handleFailSubmit = (name) => {
-    var storageRef = storage.ref();
-    storageRef.child('uploads/' + name).delete().then(() => console.log("Deleted")).catch(err => console.log(err))
-}
+// export const addProduct = ({ name, category, stock, price, description, images }) => async (dispatch, getState) => {
+//     const body = JSON.stringify({ name, category, stock, price, description, images });
+//     const config = tokenConfig(getState);
+//     dispatch({ type: PRODUCTS_LOADING });
+//     try {
+//         const res = await axios.post('/api/products/', body, config);
+//         dispatch({ type: ADD_PRODUCT, payload: res.data })
+//     } catch (err) {
+//         handleFailSubmit(name);
+//         dispatch(returnErr(err.response.data, err.response.status));
+//         dispatch({ type: ADD_FAIL });
+//     }
+// }
 
-export const addProduct = ({ name, category, stock, price, description, images }) => async (dispatch, getState) => {
-    const body = JSON.stringify({ name, category, stock, price, description, images });
+export const addProduct = ({ name, category, stock, price, description }) => async (dispatch, getState) => {
+    const body = JSON.stringify({ name, category, stock, price, description });
     const config = tokenConfig(getState);
     dispatch({ type: PRODUCTS_LOADING });
     try {
         const res = await axios.post('/api/products/', body, config);
-        dispatch({ type: ADD_PRODUCT })
+        dispatch({ type: ADD_PRODUCT, payload: res.data })
     } catch (err) {
-        handleFailSubmit(name);
         dispatch(returnErr(err.response.data, err.response.status));
         dispatch({ type: ADD_FAIL });
+    }
+}
+
+export const updateProduct = ({ name, stock, price, description, images }, productID) => async (dispatch, getState) => {
+    const token = getState().auth.token || localStorage.getItem('token');
+    const formData = new FormData();
+    images.forEach(image => {
+        formData.append('images', image);
+    })
+    formData.append('name', name);
+    formData.append('stock', stock);
+    formData.append('price', price);
+    formData.append('description', description);
+    const config = {
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        }
+    }
+    if (token) {
+        config.headers['auth-token'] = token;
+    }
+
+    dispatch({ type: PRODUCTS_LOADING });
+    try {
+        const res = await axios.post(`/api/products/${productID}/update`, formData, config);
+        console.log(res);
+        dispatch({ type: UPDATE_SUCCESS, payload: res.data })
+        console.log(res.data);
+    } catch (err) {
+        dispatch(returnErr(err.response.data, err.response.status));
+        dispatch({ type: UPDATE_FAIL });
+        console.log(err.response.data.msg);
     }
 }

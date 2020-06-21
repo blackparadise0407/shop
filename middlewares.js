@@ -2,6 +2,14 @@ const nodemailer = require('nodemailer');
 const multer = require('multer');
 const jwt = require('jsonwebtoken');
 
+const ProductModel = require('./model/productModel');
+
+const validateUpload = async (req, res, next) => {
+    const productID = req.params.productID;
+    const resp = await ProductModel.findOne({ productID });
+    if (!resp) res.status(404).json({ msg: "Product not found, cancel image upload" });
+    else next();
+}
 
 //AUTH MIDDLEWARE
 const auth = async (req, res, next) => {
@@ -103,15 +111,15 @@ const mailer = async ({ email, value }, type) => {
 //MULTER IMAGE UPLOADER MIDDLEWARE
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, './uploads/');
+        cb(null, './public/uploads/');
     },
     filename: (req, file, cb) => {
-        cb(null, Date.now() + file.originalname);
+        cb(null, Date.now() + "-" + file.originalname);
     }
 });
 
 const fileFilter = (req, file, cb) => {
-    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/ong') {
+    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'image/jpg') {
         cb(null, true);
     } else {
         cb(null, false);
@@ -131,5 +139,6 @@ module.exports = {
     errorHandler,
     auth,
     mailer,
-    upload
+    upload,
+    validateUpload
 }

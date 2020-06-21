@@ -26,8 +26,17 @@ const addProductValidation = data => {
         stock: Joi.number().integer().min(0),
         price: Joi.number().integer().min(0),
         description: Joi.string(),
-        images: Joi.string()
+    })
+    return schema.validate(data);
+}
 
+const updateProductValidation = data => {
+    const schema = Joi.object({
+        name: Joi.string().min(3).max(255).required(),
+        stock: Joi.number().integer().min(0),
+        price: Joi.number().integer().min(0),
+        description: Joi.string(),
+        images: Joi.string()
     })
     return schema.validate(data);
 }
@@ -44,5 +53,6 @@ module.exports = {
     regValidation,
     logValidation,
     addProductValidation,
-    addCatValidation
+    addCatValidation,
+    updateProductValidation
 };

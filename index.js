@@ -6,7 +6,7 @@ const morgan = require('morgan');
 const app = express();
 require('dotenv').config();
 
-const { notFound, errorHandler } = require('./middlewares');
+const { notFound, errorHandler, upload } = require('./middlewares');
 
 mongoose.connect(process.env.DB_URL, {
     useUnifiedTopology: true,
@@ -22,9 +22,8 @@ app.use(cors({
     origin: process.env.CORS_ORIGIN,
 }))
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/uploads', express.static('uploads'));
 app.use(express.urlencoded({ extended: false }));
+app.use('/api/uploads', express.static(path.join(__dirname, 'public/uploads')));
 app.get("/", (req, res) => {
     res.json({ msg: "Hello" })
 })
