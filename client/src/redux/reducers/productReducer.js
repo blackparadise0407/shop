@@ -13,7 +13,8 @@ const initialState = {
     payload: {
         products: null,
         product: null
-    }
+    },
+    status: null
 }
 
 export default (state = initialState, action) => {
@@ -73,6 +74,7 @@ export default (state = initialState, action) => {
                     products: null,
                     product: null
                 },
+                status: null,
                 isLoading: false,
             }
         default:

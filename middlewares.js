@@ -63,7 +63,7 @@ const mailer = async ({ email, value }, type) => {
             html: `<div class="container" style="font-family:Arial, Helvetica, sans-serif">
                         <p style="font-size: 1rem;">React Shop Email confirmation</p>
                         <p>Click the following link to confirm your account:
-                        <a style="text-decoration: none; color: rgb(255, 0, 0)" href="http://localhost:5000/api/users/confirm/${id}"
+                        <a style="text-decoration: none; color: rgb(255, 0, 0)" href="http://localhost:5000/api/users/confirm/${value}"
                             >http://localhost:5000/api/users/confirm/${value}</a>
                         </p>
                         <strong>Please do not reply to this email.</strong>

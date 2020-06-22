@@ -6,7 +6,7 @@ const Searchbox = ({ productID, name }) => {
     return (
 
         <li className={styles.li}>
-            <Link className={styles.link} to={{ pathname: `/products/${productID}` }}>{name}</Link>
+            <Link className={styles.link} to={{ pathname: `/product/get/${productID}` }}>{name}</Link>
         </li>
 
     );

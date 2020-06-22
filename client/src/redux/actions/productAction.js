@@ -54,7 +54,6 @@ export const getProductById = ({ productID }) => async dispatch => {
         const res = await axios.get(`/api/products/${productID}`)
         dispatch({ type: GET_SINGLE_PRODUCT, payload: res.data.results })
     } catch (err) {
-        console.log(err)
         dispatch(returnErr(err.response.data, err.response.status));
         dispatch({ type: PRODUCTS_FAIL });
     }
@@ -114,12 +113,9 @@ export const updateProduct = ({ name, stock, price, description, images }, produ
     dispatch({ type: PRODUCTS_LOADING });
     try {
         const res = await axios.post(`/api/products/${productID}/update`, formData, config);
-        console.log(res);
-        dispatch({ type: UPDATE_SUCCESS, payload: res.data })
-        console.log(res.data);
+        dispatch({ type: UPDATE_SUCCESS, payload: res.data.msg })
     } catch (err) {
         dispatch(returnErr(err.response.data, err.response.status));
         dispatch({ type: UPDATE_FAIL });
-        console.log(err.response.data.msg);
     }
 }

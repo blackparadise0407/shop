@@ -60,13 +60,15 @@ const StorePage = ({
                 <div className={styles.productContainer}>
                     <Row className={styles.row}>
                         {products ? products.results.map(product => (
-                            <Link key={product.productID} className={styles.link} to={{
-                                pathname: `/products/${product.productID}`
-                            }}>
-                                <Col className={styles.col} xs="6" md="4" lg="3">
-                                    <ProductCard key={product.productID} stock={product.stock} name={product.name} price={product.price} description={product.description} img={product.images[0]} />
-                                </Col>
-                            </Link>
+
+                            <Col key={product.productID} className={styles.col} xs={12} sm={6} md={4} lg={3}>
+                                <Link className={styles.link} to={{
+                                    pathname: `/product/get/${product.productID}`
+                                }}>
+                                    <ProductCard key={product.productID} stock={product.stock} name={product.name} price={product.price} description={product.description} img={product.images[2]} />
+                                </Link>
+                            </Col>
+
                         )) : null}
                     </Row>
                 </div>

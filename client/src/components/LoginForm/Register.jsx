@@ -169,7 +169,7 @@ const Register = ({
                     </FormGroup>
                 </Col>
                 <Col xs={12} className="mx-auto">{checkbox ? <Button className={styles.button}>Register</Button> : <Button disabled className={styles.button}>Register</Button>}</Col>
-                <Col xs={12}><div className="registerDes">Already have an account? <Link to="/login" className={styles.link}>Login here</Link></div></Col>
+                <Col xs={12}><div className={styles.registerDes}>Already have an account? <Link to="/login" className={styles.link}>Login here</Link></div></Col>
             </Form>
         </div>
     );

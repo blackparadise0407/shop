@@ -1,7 +1,7 @@
 import React from 'react';
-import { Card, CardImg, CardBody, CardTitle, CardText } from 'reactstrap';
+import { Card, CardImg, CardBody, CardTitle, CardText, Button, CardFooter } from 'reactstrap';
 import styles from './Store.module.css';
-const ProductCard = ({ name, price, description, stock, img }) => {
+const ProductCard = ({ name, price, description, stock, img, onClick }) => {
     return (
         <Card className={styles.card}>
             <CardImg className={styles.cardImg} top width="100%" src={img} alt="pic" />
@@ -11,6 +11,7 @@ const ProductCard = ({ name, price, description, stock, img }) => {
                 <CardText className={styles.price}>${price}</CardText>
                 <CardText className={styles.description}>{description}</CardText>
             </CardBody>
+            <CardFooter><Button onClick={onClick}>Add to cart</Button></CardFooter>
         </Card>
 
     );

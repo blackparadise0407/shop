@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Form, FormGroup, Input, Label, Col, Row, Button, Alert, Progress } from 'reactstrap';
+import { Form, FormGroup, Input, Label, Col, Row, Button, Alert } from 'reactstrap';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { storage } from '../../firebase';
 import styles from './Product.module.css';
 
 import { addProduct } from '../../redux/actions/productAction';
@@ -14,19 +13,16 @@ const AddProduct = ({
     addProduct,
     error,
     isAuthenticated,
-    productMsg
+    status
 }) => {
     const history = useHistory();
     const [errMsg, setErrMsg] = useState(null);
     const [avaiCat, setAvaiCat] = useState([]);
-    const [image, setImage] = useState(null);
-    const [url, setUrl] = useState("");
     const [name, setName] = useState("");
     const [category, setCategory] = useState("");
     const [stock, setStock] = useState("");
     const [price, setPrice] = useState("");
     const [description, setDescription] = useState("");
-    const [progress, setProgress] = useState(null);
     const handleNameChange = e => { setName(e.target.value); }
     const handleCategoryChange = e => { setCategory(e.target.value); }
     const handleStockChange = e => { setStock(e.target.value); }
@@ -42,15 +38,6 @@ const AddProduct = ({
         }
     }
 
-    const handleFileChange = e => {
-        if (e.target.files[0]) {
-            const img = e.target.files[0];
-            if (img.type !== "image/jpeg" && img.type !== "image/png" && img.size >= 10000) {
-                setErrMsg("Invalid file type");
-            } else setImage(img);
-        }
-    }
-
     const handleOnSubmit = e => {
         e.preventDefault();
         const newProduct = { name, category, price, stock, description };
@@ -58,16 +45,10 @@ const AddProduct = ({
     }
 
     useEffect(() => {
-        const abortController = new AbortController();
         configCat();
         if (isAuthenticated != null) {
             if (!isAuthenticated) {
                 history.push("/");
-            }
-        }
-        if (productMsg) {
-            if (productMsg.msg === "Add product success") {
-                setErrMsg(productMsg.msg);
             }
         }
         if (error.msg) {
@@ -75,8 +56,10 @@ const AddProduct = ({
         } else {
             setErrMsg(null);
         }
-        return function cleanup() { abortController.abort(); }
-    }, [isAuthenticated, error, history, productMsg])
+        if (status) {
+            setErrMsg(status.msg);
+        }
+    }, [isAuthenticated, error, history, status])
     return (
         <div className={styles.container}>
             <h2 className={styles.containerHead}>Add a product</h2>
@@ -100,14 +83,14 @@ const AddProduct = ({
                         <FormGroup>
                             <Label htmlFor="category">Category</Label>
                             <Input
-                                className={styles.input}
+                                className={styles.inputSelect}
                                 id="category"
                                 name="category"
                                 type="select"
                                 onChange={handleCategoryChange}
                             >
                                 <option value="">---Select a category---</option>
-                                {avaiCat ? avaiCat.map(cat => (<option key={cat._id} value={cat.name}>{cat.name}</option>)) : null}
+                                {avaiCat ? avaiCat.map(cat => (<option className={styles.option} key={cat._id} value={cat.name}>{cat.name}</option>)) : null}
                             </Input>
                         </FormGroup>
                     </Col>
@@ -163,13 +146,13 @@ AddProduct.propTypes = {
     addProduct: PropTypes.func,
     isAuthenticated: PropTypes.bool,
     error: PropTypes.object,
-    productMsg: PropTypes.object
+    status: PropTypes.object
 }
 
 const mapStateToProps = state => ({
     error: state.error,
     isAuthenticated: state.auth.isAuthenticated,
-    productMsg: state.products.status,
+    status: state.products.status,
 })
 
 export default connect(

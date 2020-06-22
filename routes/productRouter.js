@@ -74,7 +74,7 @@ router.post('/:productID/update', validateUpload, upload.array('images', 3), asy
     try {
         const product = await ProductModel.findOneAndUpdate({ productID }, { $set: { name, price, stock, description, images: reqFiles } });
         if (!product) res.status(400).json({ msg: "Product does not exist" });
-        res.status(200).json({ msg: "Upload image success" });
+        res.status(200).json({ msg: "Update product success" });
     } catch (err) {
         next(err);
     }

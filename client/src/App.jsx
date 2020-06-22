@@ -10,7 +10,8 @@ import {
   DetailProductPage,
   ConfirmPage,
   ResetPage,
-  ProductPage
+  ProductPage,
+  CheckoutPage
 } from './pages';
 import { Header } from './components';
 import { loadUser } from './redux/actions/authAction';
@@ -33,10 +34,11 @@ const App = () => {
         <Route path="/login" exact component={LoginPage} />
         <Route path="/register" exact component={RegisterPage} />
         <Route path="/reset" exact component={ResetPage} />
-        <Route path="/store" exact component={StorePage} />
-        <Route path="/products/:productID" component={DetailProductPage} />
+        <Route path="/store" component={StorePage} />
+        {/* <Route path="/product/:productID" component={DetailProductPage} /> */}
         <Route path="/confirm/:id" component={ConfirmPage} />
         <Route path="/product" component={ProductPage} />
+        <Route path="/checkout" exact component={CheckoutPage} />
         <Route path="*" component={ErrorPage} />
       </Switch>
     </Router>

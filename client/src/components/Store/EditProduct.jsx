@@ -1,17 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
-import { Form, FormGroup, Label, Input, Col, Row, Button } from 'reactstrap';
+import { Form, FormGroup, Label, Input, Col, Row, Button, Alert } from 'reactstrap';
 import styles from './Product.module.css';
 
 import { updateProduct } from '../../redux/actions/productAction';
 
 
 const EditProduct = ({
-    updateProduct
+    updateProduct,
+    isLoading,
+    status,
+    error
 }) => {
     const { productID } = useParams();
+    const [msg, setMsg] = useState("");
     const [images, setImages] = useState([]);
     const [name, setName] = useState("");
     const [price, setPrice] = useState("");
@@ -49,14 +53,24 @@ const EditProduct = ({
         console.log(body);
         updateProduct(body, productID);
     }
+    useEffect(() => {
+        if (error) {
+            setMsg(error)
+        } else setMsg("");
+        if (status !== null) {
+            setMsg(status);
+        }
+    }, [status, error])
     return (
         <div className={styles.container}>
+            {msg ? <Alert className={styles.alert}>{msg}</Alert> : null}
             <Form onSubmit={handleOnSubmit}>
                 <Row form>
                     <Col xs={12}>
                         <FormGroup>
                             <Label htmlFor="name">Product name</Label>
                             <Input
+                                className={styles.input}
                                 id="name"
                                 name="name"
                                 type="text"
@@ -71,6 +85,7 @@ const EditProduct = ({
                         <FormGroup>
                             <Label htmlFor="stock">Stock</Label>
                             <Input
+                                className={styles.input}
                                 id="stock"
                                 name="stock"
                                 type="number"
@@ -83,6 +98,7 @@ const EditProduct = ({
                         <FormGroup>
                             <Label htmlFor="price">Price</Label>
                             <Input
+                                className={styles.input}
                                 id="price"
                                 name="price"
                                 type="number"
@@ -97,6 +113,7 @@ const EditProduct = ({
                         <FormGroup>
                             <Label htmlFor="description">Description</Label>
                             <Input
+                                className={styles.input}
                                 id="description"
                                 name="description"
                                 type="textarea"
@@ -111,6 +128,7 @@ const EditProduct = ({
                         <FormGroup>
                             <Label htmlFor="description">Image</Label>
                             <Input
+                                className={styles.inputUpload}
                                 multiple
                                 type="file"
                                 onChange={handleImageChange}
@@ -118,7 +136,7 @@ const EditProduct = ({
                         </FormGroup>
                     </Col>
                 </Row>
-                <Button>Submit</Button>
+                <Button className={styles.button}>Submit</Button> {isLoading ? <div>Loading...</div> : null}
             </Form>
         </div>
     );
@@ -126,9 +144,18 @@ const EditProduct = ({
 
 EditProduct.propTypes = {
     updateProduct: PropTypes.func,
+    isLoading: PropTypes.bool.isRequired,
+    status: PropTypes.string,
+    error: PropTypes.string
 }
 
+const mapStateToProps = state => ({
+    isLoading: state.products.isLoading,
+    status: state.products.status,
+    error: state.error.msg,
+})
+
 export default connect(
-    null,
+    mapStateToProps,
     { updateProduct }
 )(EditProduct);

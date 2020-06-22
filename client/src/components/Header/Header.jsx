@@ -8,7 +8,7 @@ import AuthRoute from '../../utils/AuthRoute'
 
 import Logout from '../LoginForm/Logout';
 
-const Header = ({ auth: { isAuthenticated, user } }) => {
+const Header = ({ auth: { isAuthenticated, user }, cart }) => {
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => { setIsOpen(!isOpen) }
 
@@ -31,12 +31,6 @@ const Header = ({ auth: { isAuthenticated, user } }) => {
 
             <Logout />
 
-            <Link to="/cart">
-                <div><img src="/images/cart.svg" width="20px"
-                    height="20px" alt="cart" /> Cart</div>
-            </Link>
-
-
         </Fragment>
     )
 
@@ -58,6 +52,10 @@ const Header = ({ auth: { isAuthenticated, user } }) => {
                             <div className={styles.navLink}>Store</div>
                         </Link>
                         {isAuthenticated ? authLink : guessLink}
+                        <Link to="/checkout" className={styles.navItem}>
+                            <div className={styles.navLink}><img src="/images/supermarket.svg" width="25px"
+                                height="25px" alt="cart" /> ({cart.totalItem}) Cart</div>
+                        </Link>
                     </ul>
                 </div>
             </div>
@@ -67,10 +65,12 @@ const Header = ({ auth: { isAuthenticated, user } }) => {
 
 Header.propTypes = {
     auth: PropTypes.object,
+    cart: PropTypes.object
 }
 
 const mapStateToProps = state => ({
-    auth: state.auth
+    auth: state.auth,
+    cart: state.cart
 })
 
 export default connect(
