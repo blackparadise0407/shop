@@ -7,6 +7,8 @@ import { getProductById } from '../../redux/actions/productAction';
 import { addToCart } from '../../redux/actions/cartAction';
 import DetailCard from './DetailCard';
 
+import { PropagateSpinner } from '../../utils/Loader';
+
 
 const DetailProduct = ({
     isLoading,
@@ -30,7 +32,7 @@ const DetailProduct = ({
     //     pathname: "/notfound",
     //     from: location
     // }} />
-    if (isLoading) return (<div>Loading ...</div>)
+    if (isLoading) return (<PropagateSpinner />)
     return (
         <div className={styles.container}>
             {product ? <DetailCard name={product.name} price={product.price} stock={product.stock} description={product.description} catName={product.category.name} images={product.images} onClick={handleAddToCart} /> : null}

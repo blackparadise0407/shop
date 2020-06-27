@@ -7,7 +7,6 @@ import {
   ErrorPage,
   RegisterPage,
   StorePage,
-  DetailProductPage,
   ConfirmPage,
   ResetPage,
   ProductPage,
@@ -35,7 +34,6 @@ const App = () => {
         <Route path="/register" exact component={RegisterPage} />
         <Route path="/reset" exact component={ResetPage} />
         <Route path="/store" component={StorePage} />
-        {/* <Route path="/product/:productID" component={DetailProductPage} /> */}
         <Route path="/confirm/:id" component={ConfirmPage} />
         <Route path="/product" component={ProductPage} />
         <Route path="/checkout" exact component={CheckoutPage} />

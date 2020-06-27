@@ -1,6 +1,6 @@
 .store {
   width: 100%;
-  height: auto;
+  min-height: 100vh;
   background: url(/images/background.jpg) center no-repeat;
   background-size: cover;
   display: flex;
@@ -37,9 +37,14 @@
   margin: 0 auto;
   text-align: left;
   max-width: 22rem;
+  height: 100%;
   border: none;
   transform: scale(1);
   transition: all 0.4s;
+}
+
+.imageWrapper {
+  overflow: hidden;
 }
 
 .cardImg {
@@ -77,6 +82,7 @@
   justify-content: center;
   position: relative;
   width: 100%;
+  margin-top: 4rem;
 }
 
 .pagination > ul {
@@ -94,10 +100,11 @@
 }
 
 .paginationLink {
+  color: rgb(0, 0, 0);
   padding: 0.4rem 1rem;
-  background-color: rgba(199, 199, 199, 0.637);
   border: none;
   transition: all 0.5s;
+  background-color: rgba(119, 119, 119, 0);
 }
 
 .active {
@@ -108,8 +115,14 @@
 .paginationLink:hover,
 .paginationLink:active,
 .paginationLink:focus {
-  background-color: rgba(255, 255, 255, 0.884);
+  background: linear-gradient(
+    280deg,
+    transparent,
+    rgba(255, 255, 255, 0.9),
+    transparent
+  );
   border: none;
+  color: #777;
 }
 
 .link {
@@ -121,14 +134,18 @@
   color: #777;
 }
 
-.link:hover .card {
-  transform: scale(1.1);
+.link:hover .cardImg {
+  animation: zoomIn forwards 2s;
 }
 
 /*PAGINATION ENDS*/
 @media screen and (min-width: 900px) {
   .card {
     max-width: 24rem;
+  }
+
+  .pagination {
+    margin-top: 8rem;
   }
 
   .paginationItem {
@@ -138,5 +155,14 @@
 
   .paginationLink {
     padding: 0.4rem 1.1rem;
+  }
+}
+
+@keyframes zoomIn {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.2);
   }
 }

@@ -2,7 +2,8 @@ import {
     ADDCART_FAIL,
     ADDCART_SUCCESS,
     CART_LOADED,
-    CART_LOADING
+    CART_LOADING,
+    REMOVECART_SUCCESS
 } from '../actions/types';
 
 const initialState = {
@@ -38,6 +39,14 @@ export default (state = initialState, action) => {
                 ...state,
                 payload: [],
                 isLoading: false
+            }
+        case REMOVECART_SUCCESS:
+            return {
+                ...state,
+                payload: action.payload,
+                totalPrice: action.totalPrice,
+                totalItem: action.totalItem,
+                isLoading: false,
             }
         default:
             return state;

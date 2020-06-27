@@ -4,16 +4,18 @@ import PropTypes from 'prop-types';
 import { Row, Col, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { ProductCard } from '../components';
 import { getFilterProducts } from '../redux/actions/productAction';
+import { addToCart } from '../redux/actions/cartAction';
 import styles from '../components/Store/Store.module.css';
 import { Filter } from '../components';
 
 import { PropagateSpinner } from '../utils/Loader';
-import { Link } from 'react-router-dom';
 
 const StorePage = ({
     isLoading,
     products,
-    getFilterProducts
+    getFilterProducts,
+    cart,
+    addToCart
 }) => {
     const [page, setPage] = useState(1);
     //eslint-disable-next-line no-unused-vars
@@ -33,7 +35,9 @@ const StorePage = ({
         e.preventDefault();
         setPage(nextPage);
     }
-
+    const handleAddToCart = (e, product) => {
+        addToCart(product);
+    }
     const handleOnSubmit = e => {
         e.preventDefault();
         //Attemp to apply filter
@@ -53,7 +57,7 @@ const StorePage = ({
                         Our store
                     </div>
                     <div className={styles.headlineDescription}>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia pariatur libero natus voluptatibus, sapiente modi ipsam nesciunt unde in numquam.
+                        It's a pleasure to serve you.
                     </div>
                 </div>
                 <Filter onChange={handleOnChange} onSubmit={e => handleOnSubmit(e)} />
@@ -62,11 +66,8 @@ const StorePage = ({
                         {products ? products.results.map(product => (
 
                             <Col key={product.productID} className={styles.col} xs={12} sm={6} md={4} lg={3}>
-                                <Link className={styles.link} to={{
-                                    pathname: `/product/get/${product.productID}`
-                                }}>
-                                    <ProductCard key={product.productID} stock={product.stock} name={product.name} price={product.price} description={product.description} img={product.images[2]} />
-                                </Link>
+
+                                <ProductCard key={product.productID} productID={product.productID} stock={product.stock} name={product.name} price={product.price} description={product.description} img={product.images[2]} onClick={e => handleAddToCart(e, product)} />
                             </Col>
 
                         )) : null}
@@ -95,15 +96,18 @@ const StorePage = ({
 StorePage.propTypes = {
     isLoading: PropTypes.bool.isRequired,
     products: PropTypes.object,
-    getFilterProducts: PropTypes.func
+    getFilterProducts: PropTypes.func,
+    cart: PropTypes.array,
+    addToCart: PropTypes.func
 }
 
 const mapStateToProps = state => ({
     isLoading: state.products.isLoading,
     products: state.products.payload.products,
+    cart: state.cart.payload,
 })
 
 export default connect(
     mapStateToProps,
-    { getFilterProducts }
+    { getFilterProducts, addToCart }
 )(StorePage);

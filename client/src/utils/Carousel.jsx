@@ -44,6 +44,7 @@ const ImageCarousel = ({ images }) => {
 
     return (
         <Carousel
+            className={styles.carousel}
             activeIndex={activeIndex}
             next={next}
             previous={previous}

@@ -7,7 +7,7 @@ import styles from './Login.module.css'
 
 import { registerUser, clearRegMsg } from '../../redux/actions/authAction';
 import { clearErr } from '../../redux/actions/errorAction';
-
+import { RegisterValidate } from '../../helpers/Validate';
 //import { ClipSpinner } from '../../utils/Loader'
 
 const Register = ({
@@ -58,6 +58,7 @@ const Register = ({
     const handleSubmit = e => {
         e.preventDefault();
         const user = { firstName, lastName, email, password, repPassword: confirmPassword };
+        RegisterValidate(user);
         //attemp to register user
         registerUser(user);
 
@@ -163,13 +164,13 @@ const Register = ({
                 <Col xs={12}>
                     <FormGroup check>
                         <Label check>
-                            <Input onChange={handleCheckBoxChange} type="checkbox" />{' '}
+                            <Input onChange={handleCheckBoxChange} type="checkbox" />
                             I agree to the Jorlux terms and conditions
-                         </Label>
+                        </Label>
                     </FormGroup>
                 </Col>
-                <Col xs={12} className="mx-auto">{checkbox ? <Button className={styles.button}>Register</Button> : <Button disabled className={styles.button}>Register</Button>}</Col>
-                <Col xs={12}><div className={styles.registerDes}>Already have an account? <Link to="/login" className={styles.link}>Login here</Link></div></Col>
+                {checkbox ? <Button className={styles.button}>Register</Button> : <Button disabled className={styles.button}>Register</Button>}
+                <div className={styles.registerDes}>Already have an account? <Link to="/login" className={styles.link}>Login here</Link></div>
             </Form>
         </div>
     );
