@@ -55,7 +55,7 @@
 .checkoutFooter {
   border-top: 1px solid black;
   padding: 1rem 4rem;
-  background-color: rgb(188, 194, 196);
+  background-color: rgb(147, 150, 151);
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
 }
@@ -102,7 +102,7 @@
 }
 
 .times:hover {
-  background-color: rgba(255, 70, 70, 0.822);
+  background-color: rgba(134, 134, 134, 0.822);
   cursor: pointer;
   color: rgb(255, 255, 255);
 }
@@ -140,11 +140,11 @@
   transition: ease 0.5s;
 }
 
-.control {
+/* .control {
 }
 
 .button {
-}
+} */
 
 .footer {
   position: absolute;
@@ -163,6 +163,28 @@
 .checkout {
   width: 100%;
 }
+
+/*TOAST STARTS*/
+/* .toast {
+  font-size: 2.2rem;
+  color: #fff;
+  font-family: var(--secondary-font);
+  background-color: rgb(49, 49, 49);
+}
+.Toastify__toast-container {
+  font-size: 2.2rem;
+  color: #fff;
+  font-family: var(--secondary-font);
+  background-color: rgb(49, 49, 49);
+}
+
+.Toastify__toast--warning {
+  font-size: 2.2rem;
+  color: #fff;
+  font-family: var(--secondary-font);
+  background-color: rgb(49, 49, 49);
+} */
+/*TOAST ENDS*/
 
 @media screen and (min-width: 900px) {
   .container {

@@ -11,3 +11,4 @@ export { default as AddProduct } from './Store/AddProduct';
 export { default as EditProduct } from './Store/EditProduct';
 export { default as DetailProduct } from './Store/DetailProduct';
 export { default as Checkout } from './Cart/Checkout';
+export { default as CustomModal } from './Store/CustomModal'; 

@@ -1,20 +1,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'reactstrap';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import styles from './Checkout.module.css';
 import { Link } from 'react-router-dom';
 
-import { add, subtract, removeFromCart } from '../../redux/actions/cartAction';
+import { quantityControl, removeFromCart } from '../../redux/actions/cartAction';
 
 const Checkout = ({
     cart: { payload, totalPrice, totalItem },
-    add,
-    subtract,
+    quantityControl,
     removeFromCart
 }) => {
-    const handleAdd = (e, productID) => { add(productID); }
-    const handleSubtract = () => { subtract(); }
-    const handleRemoveFromCart = (e, productID) => { removeFromCart(productID); }
+    const handleAdd = (e, product) => { quantityControl(product, 'inc'); }
+    const handleSubtract = (e, product) => { quantityControl(product, 'dec'); }
+    const handleRemoveFromCart = (e, product) => { removeFromCart(product); }
     return (
         <div className={styles.container}>
             <div className={styles.headline}>Checkout</div>
@@ -27,7 +28,7 @@ const Checkout = ({
                                 <img className={styles.img} src={item.image} alt={item.name} />
                                 <div className={styles.info}>
                                     <div className={styles.name}>{item.name}</div>
-                                    <span className={styles.control}><Button onClick={handleSubtract} className={styles.button}>-</Button> {` ${item.quantity} `} <Button onClick={e => handleAdd(e, item.productID)} className={styles.button}>+</Button></span>
+                                    <span className={styles.control}><Button onClick={e => handleSubtract(e, item)} className={styles.button}>-</Button> {` ${item.quantity} `} <Button onClick={e => handleAdd(e, item)} className={styles.button}>+</Button></span>
                                 </div>
 
                             </div>
@@ -40,6 +41,7 @@ const Checkout = ({
                     <div className={styles.checkoutBody}>
                         <ul style={{ listStyle: "none" }}>
                             <li>Subtotal: {totalPrice}$</li>
+                            <li>Total item: {totalItem}</li>
                             <li>Shipping: FREE</li>
                         </ul>
 
@@ -49,6 +51,7 @@ const Checkout = ({
                 </div>
             </div>
             {payload.length === 0 && <Link className={styles.footer} to="/store">You don't have anything in your cart yet. Go to shopping</Link>}
+            <ToastContainer style={{ fontFamily: "var(--main-font)", fontSize: "1.4rem" }} autoClose={3000} />
         </div>
     );
 }
@@ -59,5 +62,5 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { add, subtract, removeFromCart }
+    { quantityControl, removeFromCart }
 )(Checkout);

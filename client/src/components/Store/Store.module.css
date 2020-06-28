@@ -50,6 +50,7 @@
 .cardImg {
   max-width: 100%;
   width: 100%;
+  max-height: 280px;
 }
 
 .title {
@@ -68,6 +69,20 @@
   font-size: 1.2rem;
   color: #777;
   line-height: 1.6;
+}
+
+.button {
+  padding: 0.6rem 1.4rem;
+  font-size: 1.6rem;
+  background-color: black;
+  border-radius: 2px;
+  border: none;
+  transition: all 0.4s;
+}
+
+.button:hover {
+  color: rgb(190, 255, 115);
+  background-color: rgb(71, 71, 71);
 }
 
 /*CARD ENDS*/
@@ -139,6 +154,7 @@
 }
 
 /*PAGINATION ENDS*/
+
 @media screen and (min-width: 900px) {
   .card {
     max-width: 24rem;

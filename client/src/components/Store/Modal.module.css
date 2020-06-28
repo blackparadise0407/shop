@@ -1,0 +1,23 @@
+.modal {
+  font-size: 1.6rem;
+  font-family: var(--secondary-font);
+}
+
+.header {
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.button {
+  text-transform: uppercase;
+  padding: 0.6rem 1.2rem;
+  background-color: #121212;
+  border: none;
+  border-radius: 0;
+  margin: 0.6rem;
+}

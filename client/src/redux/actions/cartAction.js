@@ -3,10 +3,14 @@ import {
     // CART_LOADED,
     // CART_LOADING,
     ADDCART_SUCCESS,
-    REMOVECART_SUCCESS
+    REMOVECART_SUCCESS,
+    QTYCONTROL_SUCCESS,
+    QTYCONTROL_FAIL
 } from '../actions/types';
+import { toast } from 'react-toastify';
 
 import { returnErr } from './errorAction';
+import { Switch } from 'react-router-dom';
 
 export const addToCart = (product) => (dispatch, getState) => {
     // const existCart = getState().cart.payload;
@@ -19,13 +23,15 @@ export const addToCart = (product) => (dispatch, getState) => {
     let newTotalItem = 0;
     let existed_item = newCart.find(item => item.productID === product.productID)
     if (existed_item) {
-        existed_item.quantity += 1;
-        let newTotalPrice = product.price + totalPrice;
-        newTotalItem = totalItem + 1;
-        dispatch({ type: ADDCART_SUCCESS, payload: newCart, totalPrice: newTotalPrice, totalItem: newTotalItem });
+        if (existed_item.quantity <= product.stock) {
+            existed_item.quantity += 1;
+            let newTotalPrice = product.price + totalPrice;
+            newTotalItem = totalItem + 1;
+            dispatch({ type: ADDCART_SUCCESS, payload: newCart, totalPrice: newTotalPrice, totalItem: newTotalItem });
+        } else dispatch({ type: QTYCONTROL_FAIL, status: "Troi oi" })
     } else {
         let newTotalPrice = totalPrice + product.price;
-        const newProduct = { productID: product.productID, name: product.name, quantity: quantity, price: product.price, image: product.images[0] }
+        const newProduct = { productID: product.productID, name: product.name, quantity: quantity, price: product.price, image: product.images[0], stock: product.stock }
         newCart.push(newProduct);
         newTotalItem = totalItem + 1;
         dispatch({ type: ADDCART_SUCCESS, payload: newCart, totalPrice: newTotalPrice, totalItem: newTotalItem });
@@ -47,17 +53,38 @@ export const removeFromCart = (product) => (dispatch, getState) => {
     }
 }
 
-export const add = (productID) => (dispatch, getState) => {
-    const { payload } = getState().cart;
-    const existCart = payload;
-    const existedItem = existCart.find(item => item.productID === productID);
-    existedItem.quantity += 1;
-    console.log(existedItem.quantity);
-    dispatch({ type: ADDCART_SUCCESS, quantity: existedItem.quantity });
-}
-
-export const subtract = () => (dispatch, getState) => {
-    const { payload } = getState().cart;
-    const existCart = payload;
-    console.log(existCart);
+export const quantityControl = (product, type) => (dispatch, getState) => {
+    const { payload, totalPrice, totalItem } = getState().cart;
+    const newCart = [...payload];
+    let existedItem = newCart.find(item => item.productID === product.productID);
+    if (existedItem) {
+        let newTotalPrice = totalPrice;
+        let newTotalItem = totalItem;
+        switch (type) {
+            case "inc":
+                if (existedItem.quantity < product.stock) {
+                    existedItem.quantity += 1;
+                    newTotalPrice = totalPrice + product.price;
+                    newTotalItem = totalItem + 1;
+                    dispatch({ type: QTYCONTROL_SUCCESS, payload: newCart, totalPrice: newTotalPrice, totalItem: newTotalItem });
+                } else {
+                    toast.warn("Quantity exceeds product stock :( Sorry");
+                    dispatch({ type: QTYCONTROL_FAIL, status: "Quantity exceeds product stock :( Sorry" })
+                }
+                break;
+            case "dec":
+                if (existedItem.quantity > 0) {
+                    existedItem.quantity -= 1;
+                    newTotalPrice = totalPrice - product.price;
+                    newTotalItem = totalItem - 1;
+                    dispatch({ type: QTYCONTROL_SUCCESS, payload: newCart, totalPrice: newTotalPrice, totalItem: newTotalItem });
+                } else {
+                    toast.warn("Quantity must be greater than 0");
+                    dispatch({ type: QTYCONTROL_FAIL, status: "Quantity must be greater than 0" });
+                };
+                break;
+            default:
+                break;
+        }
+    }
 }

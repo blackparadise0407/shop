@@ -10,16 +10,18 @@ const ProductCard = ({ name, price, description, stock, img, onClick, productID 
                 pathname: `/product/get/${productID}`
             }}>
                 <div className={styles.imageWrapper}>
-                    <CardImg className={styles.cardImg} top width="100%" max-height="320px" src={img} alt="pic" />
+                    {img.length !== 0 ? <CardImg className={styles.cardImg} top width="100%" src={img[0]} alt="pic" />
+                        : <CardImg className={styles.cardImg} top width="100%" src="/images/dummy.png" alt="pic" />
+                    }
                 </div>
                 <CardBody>
-                    {stock !== 0 ? <CardText className={styles.description}>Available: {stock}</CardText> : <CardText className={styles.description}>Not available</CardText>}
+                    {stock ? <CardText className={styles.description}>Available: {stock}</CardText> : <CardText className={styles.description}>Not available</CardText>}
                     <CardTitle className={styles.title}>{name}</CardTitle>
                     <CardText className={styles.price}>${price}</CardText>
                     <CardText className={styles.description}>{description}</CardText>
                 </CardBody>
             </Link>
-            <CardFooter><Button onClick={onClick}>Add to cart</Button></CardFooter>
+            <CardFooter>{stock && <Button className={styles.button} onClick={onClick}>Add to cart</Button>}</CardFooter>
         </Card>
 
     );

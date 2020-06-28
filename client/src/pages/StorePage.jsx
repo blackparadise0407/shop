@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Row, Col, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
-import { ProductCard } from '../components';
+import {
+    Row, Col,
+    Pagination,
+    PaginationItem,
+    PaginationLink,
+} from 'reactstrap';
+import { ProductCard, CustomModal } from '../components';
 import { getFilterProducts } from '../redux/actions/productAction';
 import { addToCart } from '../redux/actions/cartAction';
 import styles from '../components/Store/Store.module.css';
@@ -17,10 +22,13 @@ const StorePage = ({
     cart,
     addToCart
 }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [currentProduct, setCurrentProduct] = useState(null);
     const [page, setPage] = useState(1);
     //eslint-disable-next-line no-unused-vars
     const [limit, setLimit] = useState(8);
     const [filter, setFilter] = useState("default");
+    const toggle = () => { setIsOpen(!isOpen); }
     const handleOnChange = e => {
         setFilter(e.target.value);
     }
@@ -36,7 +44,11 @@ const StorePage = ({
         setPage(nextPage);
     }
     const handleAddToCart = (e, product) => {
+        toggle();
         addToCart(product);
+        const { name, images, price, stock } = product;
+        const newProduct = { name, images, price, stock };
+        setCurrentProduct(newProduct);
     }
     const handleOnSubmit = e => {
         e.preventDefault();
@@ -51,6 +63,7 @@ const StorePage = ({
     if (isLoading) return (<PropagateSpinner />)
     return (
         <section className={styles.store}>
+            {currentProduct && <CustomModal product={currentProduct} header="Successfully added to bag!" isOpen={isOpen} toggle={toggle} />}
             <div className={styles.container}>
                 <div className={styles.banner}>
                     <div className={styles.headline}>
@@ -67,7 +80,7 @@ const StorePage = ({
 
                             <Col key={product.productID} className={styles.col} xs={12} sm={6} md={4} lg={3}>
 
-                                <ProductCard key={product.productID} productID={product.productID} stock={product.stock} name={product.name} price={product.price} description={product.description} img={product.images[2]} onClick={e => handleAddToCart(e, product)} />
+                                <ProductCard key={product.productID} productID={product.productID} stock={product.stock} name={product.name} price={product.price} description={product.description} img={product.images} onClick={e => handleAddToCart(e, product)} />
                             </Col>
 
                         )) : null}

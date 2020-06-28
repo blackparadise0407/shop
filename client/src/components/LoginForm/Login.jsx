@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Form, FormGroup, Label, Row, Col, Input, Button, Alert } from 'reactstrap';
 import { Link, useHistory } from 'react-router-dom';
 import ReCAPTCHA from "react-google-recaptcha";
+import { toast, ToastContainer } from 'react-toastify';
 
 import styles from './Login.module.css'
 
@@ -36,7 +37,17 @@ const Login = ({
         e.preventDefault();
         const user = { email, password };
         //Attemp to login
-        if (!verify) alert("Please verify that you are a human");
+        if (!verify) {
+            toast.error('Please verify you are a human', {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+            });
+        }
         else {
             loginUser(user);
             setVerify(false);
@@ -108,6 +119,18 @@ const Login = ({
                 <Col xs="12"><div className="loginDes">Doesn't have an account? <Link to="/register" className={styles.link}>Register here</Link></div></Col>
 
             </Form>
+            <ToastContainer
+                style={{ fontFamily: "var(--secondary-font)", fontSize: "1.4rem" }}
+                position="top-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover={false}
+            />
         </div>
     );
 }
