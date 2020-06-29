@@ -14,6 +14,7 @@ import styles from '../components/Store/Store.module.css';
 import { Filter } from '../components';
 
 import { PropagateSpinner } from '../utils/Loader';
+import { useHistory } from 'react-router-dom';
 
 const StorePage = ({
     isLoading,
@@ -22,6 +23,7 @@ const StorePage = ({
     cart,
     addToCart
 }) => {
+    const history = useHistory();
     const [isOpen, setIsOpen] = useState(false);
     const [currentProduct, setCurrentProduct] = useState(null);
     const [page, setPage] = useState(1);
@@ -38,6 +40,7 @@ const StorePage = ({
         for (let i = 0; i < products.totalPage; i++)
             range.push(i);
     }
+    const handleOnClick = () => { history.push('/checkout'); }
 
     const paginate = (e, nextPage) => {
         e.preventDefault();
@@ -63,7 +66,7 @@ const StorePage = ({
     if (isLoading) return (<PropagateSpinner />)
     return (
         <section className={styles.store}>
-            {currentProduct && <CustomModal product={currentProduct} header="Successfully added to bag!" isOpen={isOpen} toggle={toggle} />}
+            {currentProduct && <CustomModal onClick={handleOnClick} product={currentProduct} header="Successfully added to bag!" isOpen={isOpen} toggle={toggle} />}
             <div className={styles.container}>
                 <div className={styles.banner}>
                     <div className={styles.headline}>

@@ -18,7 +18,6 @@ const Register = ({
     authMsg,
     clearRegMsg,
     id,
-    clearErr
 }) => {
     const history = useHistory();
     const [firstName, setFirstName] = useState("");
@@ -58,7 +57,6 @@ const Register = ({
     const handleSubmit = e => {
         e.preventDefault();
         const user = { firstName, lastName, email, password, repPassword: confirmPassword };
-        RegisterValidate(user);
         //attemp to register user
         registerUser(user);
 

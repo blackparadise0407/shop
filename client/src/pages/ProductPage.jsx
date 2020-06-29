@@ -8,9 +8,9 @@ const ProductPage = () => {
         <Router>
             <section className={styles.section}>
                 <Switch>
-                    <Route path="/product/get/:productID" exact render={() => <DetailProduct />} />
-                    <Route path="/product/add" exact render={() => <AddProduct />} />
-                    <Route path="/product/update/:productID" exact render={() => <EditProduct />} />
+                    <Route path={`/product/:productID/get`} render={() => <DetailProduct />} />
+                    <Route path="/product/add" render={() => <AddProduct />} />
+                    <Route path="/product/:productID/update" render={() => <EditProduct />} />
                 </Switch>
             </section>
         </Router>

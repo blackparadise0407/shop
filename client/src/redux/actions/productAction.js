@@ -12,6 +12,7 @@ import {
 //import { storage } from '../../firebase';
 import { tokenConfig } from './authAction';
 import { returnErr } from './errorAction'
+import { toast } from 'react-toastify';
 import axios from 'axios';
 export const getProducts = ({ page = 1, limit = 6 }) => async dispatch => {
     dispatch({ type: PRODUCTS_LOADING });
@@ -84,10 +85,12 @@ export const addProduct = ({ name, category, stock, price, description }) => asy
     dispatch({ type: PRODUCTS_LOADING });
     try {
         const res = await axios.post('/api/products/', body, config);
-        dispatch({ type: ADD_PRODUCT, payload: res.data })
+        dispatch({ type: ADD_PRODUCT, payload: res.data });
+        toast.success(res.data.msg);
     } catch (err) {
         dispatch(returnErr(err.response.data, err.response.status));
         dispatch({ type: ADD_FAIL });
+        toast.warn(err.response.data.msg);
     }
 }
 
@@ -114,8 +117,10 @@ export const updateProduct = ({ name, stock, price, description, images }, produ
     try {
         const res = await axios.post(`/api/products/${productID}/update`, formData, config);
         dispatch({ type: UPDATE_SUCCESS, payload: res.data.msg })
+        toast.success(res.data.msg);
     } catch (err) {
         dispatch(returnErr(err.response.data, err.response.status));
         dispatch({ type: UPDATE_FAIL });
+        toast.warn(err.response.data.msg);
     }
 }

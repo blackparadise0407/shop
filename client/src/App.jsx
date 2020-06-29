@@ -36,7 +36,7 @@ const App = () => {
         <Route path="/store" component={StorePage} />
         <Route path="/confirm/:id" component={ConfirmPage} />
         <Route path="/product" component={ProductPage} />
-        <Route path="/checkout" exact component={CheckoutPage} />
+        <Route path="/checkout" render={() => <CheckoutPage />} />
         <Route path="*" component={ErrorPage} />
       </Switch>
     </Router>

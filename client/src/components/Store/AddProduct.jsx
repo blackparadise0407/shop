@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Form, FormGroup, Input, Label, Col, Row, Button, Alert } from 'reactstrap';
 import { connect } from 'react-redux';
+import { ToastContainer } from 'react-toastify'
 import PropTypes from 'prop-types';
 import styles from './Product.module.css';
 
@@ -11,12 +12,9 @@ import { useHistory } from 'react-router-dom';
 
 const AddProduct = ({
     addProduct,
-    error,
     isAuthenticated,
-    status
 }) => {
     const history = useHistory();
-    const [errMsg, setErrMsg] = useState(null);
     const [avaiCat, setAvaiCat] = useState([]);
     const [name, setName] = useState("");
     const [category, setCategory] = useState("");
@@ -46,24 +44,15 @@ const AddProduct = ({
 
     useEffect(() => {
         configCat();
-        if (isAuthenticated != null) {
+        if (isAuthenticated !== null) {
             if (!isAuthenticated) {
                 history.push("/");
             }
         }
-        if (error.msg) {
-            setErrMsg(error.msg);
-        } else {
-            setErrMsg(null);
-        }
-        if (status) {
-            setErrMsg(status.msg);
-        }
-    }, [isAuthenticated, error, history, status])
+    }, [isAuthenticated, history])
     return (
         <div className={styles.container}>
             <h2 className={styles.containerHead}>Add a product</h2>
-            {errMsg ? <Alert className={styles.alert}>{errMsg}</Alert> : null}
             <Form onSubmit={handleOnSubmit}>
                 <Row>
                     <Col xs="12">
@@ -138,6 +127,7 @@ const AddProduct = ({
                     </Col>
                 </Row>
             </Form>
+            <ToastContainer style={{ fontFamily: "var(--main-font)", fontSize: "1.4rem" }} autoClose={3000} />
         </div>
     );
 }
@@ -145,14 +135,10 @@ const AddProduct = ({
 AddProduct.propTypes = {
     addProduct: PropTypes.func,
     isAuthenticated: PropTypes.bool,
-    error: PropTypes.object,
-    status: PropTypes.object
 }
 
 const mapStateToProps = state => ({
-    error: state.error,
     isAuthenticated: state.auth.isAuthenticated,
-    status: state.products.status,
 })
 
 export default connect(

@@ -1,20 +1,24 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const _ = require('lodash');
 const router = express.Router();
+
+
 const UserModel = require('../model/userModel');
 const validate = require('../hapiValidation');
 const { auth, mailer } = require('../middlewares');
 const userModel = require('../model/userModel');
+const productModel = require('../model/productModel');
 
 
 //METHOD: GET
 //PATH: API/USERS/
 //FUCN: GET USER BY ID
-router.get('/:id', auth, async (req, res, next) => {
-    const user = await UserModel.findById(req.params.id).select("-password")
-    return res.status(200).send(user)
-})
+// router.get('/:id', auth, async (req, res, next) => {
+//     const user = await UserModel.findById(req.params.id).select("-password")
+//     return res.status(200).send(user)
+// })
 
 //METHOD: GET
 //PATH: API/USERS/
@@ -179,6 +183,39 @@ router.get('/reset/:token', async (req, res, next) => {
         return res.status(200).redirect("http://localhost:3000");
     } catch (error) {
         next(error)
+    }
+})
+
+//METHOD: POST
+//ROUTE: /api/users/cart
+//FUNC: add product to each user cart
+
+router.post('/cart', auth, async (req, res, next) => {
+    const { id } = req.user;
+    const { id: proID } = req.body;
+    try {
+        const user = await userModel.findById(id);
+        if (!user) return res.status(400).json({ msg: "Something wrong..." });
+        const product = await productModel.findById(proID);
+        if (!product) return res.status(404).json({ msg: "Product does not exists" });
+        let existed_item = user.cart.find(item => String(item._id) === String(product._id));
+        if (existed_item) {
+            //IF FOUND ITEM
+            let index = user.cart.indexOf(existed_item);
+            user.cart[index].quantity += 1;
+            await user.save();
+            return res.status(200).json({ msg: "Quantity updated" })
+        } else {
+            //NEW ITEM
+            user.cart.push(product.id);
+            await user.save();
+            return res.status(200).json({ msg: "Added to bag!" })
+        }
+        //await user.cart.push(proID);
+        //await user.save();
+        //return res.status(200).json({ msg: "Added to bag!" });
+    } catch (error) {
+        next(error);
     }
 })
 

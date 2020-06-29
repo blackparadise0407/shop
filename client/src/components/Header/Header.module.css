@@ -180,8 +180,8 @@
 
   .navItem:hover::before,
   .navItem:hover::after {
-    width: calc(100% + 1.4rem);
-    height: calc(100% + 1.4rem);
+    width: calc(100% + 1rem);
+    height: calc(100% + 1rem);
   }
 
   .navItem:hover {

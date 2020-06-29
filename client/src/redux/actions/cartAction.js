@@ -9,8 +9,6 @@ import {
 } from '../actions/types';
 import { toast } from 'react-toastify';
 
-import { returnErr } from './errorAction';
-import { Switch } from 'react-router-dom';
 
 export const addToCart = (product) => (dispatch, getState) => {
     // const existCart = getState().cart.payload;

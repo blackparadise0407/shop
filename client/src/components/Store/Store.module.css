@@ -36,7 +36,7 @@
   letter-spacing: 0.2px;
   margin: 0 auto;
   text-align: left;
-  max-width: 22rem;
+  max-width: 26rem;
   height: 100%;
   border: none;
   transform: scale(1);
@@ -157,7 +157,7 @@
 
 @media screen and (min-width: 900px) {
   .card {
-    max-width: 24rem;
+    max-width: 28rem;
   }
 
   .pagination {

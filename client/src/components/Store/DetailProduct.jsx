@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import styles from './Detail.module.css';
 import { getProductById } from '../../redux/actions/productAction';
 import { addToCart } from '../../redux/actions/cartAction';
@@ -9,6 +9,7 @@ import DetailCard from './DetailCard';
 import { CustomModal } from '../../components'
 
 import { PropagateSpinner } from '../../utils/Loader';
+import { Button } from 'reactstrap';
 
 
 const DetailProduct = ({
@@ -39,7 +40,7 @@ const DetailProduct = ({
     if (isLoading) return (<PropagateSpinner />)
     return (
         <div className={styles.container}>
-            {currProduct && <CustomModal header="Successfully added to bag!" product={currProduct} isOpen={isOpen} toggle={toggle} product={product} />}
+            {currProduct && <CustomModal header="Successfully added to bag!" product={currProduct} isOpen={isOpen} toggle={toggle} />}
             {product ? <DetailCard name={product.name} price={product.price} stock={product.stock} description={product.description} catName={product.category.name} images={product.images} onClick={handleAddToCart} /> : null}
         </div>
     );

@@ -6,6 +6,7 @@ import { Form, FormGroup, Label, Input, Col, Row, Button, Alert } from 'reactstr
 import styles from './Product.module.css';
 
 import { updateProduct } from '../../redux/actions/productAction';
+import { ToastContainer } from 'react-toastify';
 
 
 const EditProduct = ({
@@ -50,7 +51,6 @@ const EditProduct = ({
         e.preventDefault();
         //Attemp to update product;
         const body = { name, stock, price, description, images };
-        console.log(body);
         updateProduct(body, productID);
     }
     useEffect(() => {
@@ -138,6 +138,7 @@ const EditProduct = ({
                 </Row>
                 <Button className={styles.button}>Submit</Button> {isLoading ? <div>Loading...</div> : null}
             </Form>
+            <ToastContainer style={{ fontFamily: "var(--main-font)", fontSize: "1.4rem" }} autoClose={3000} />
         </div>
     );
 }

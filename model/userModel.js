@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model, Mongoose } = require('mongoose');
 
 const requireString = {
     type: String,
@@ -23,6 +23,18 @@ const UserSchema = new Schema({
         default: false
     },
     avatar: String,
+    cart: [
+        {
+            id: {
+                type: Schema.Types.ObjectId,
+                ref: "products",
+            },
+            quantity: {
+                type: Number,
+                default: 1
+            }
+        }
+    ],
 })
 
 module.exports = model("users", UserSchema);
