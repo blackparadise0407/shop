@@ -11,7 +11,7 @@ import { quantityControl, removeFromCart } from '../../redux/actions/cartAction'
 const Checkout = ({
     cart: { payload, totalPrice, totalItem },
     quantityControl,
-    removeFromCart
+    removeFromCart,
 }) => {
     const handleAdd = (e, product) => { quantityControl(product, 'inc'); }
     const handleSubtract = (e, product) => { quantityControl(product, 'dec'); }

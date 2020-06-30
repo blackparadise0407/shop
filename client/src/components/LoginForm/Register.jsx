@@ -7,7 +7,6 @@ import styles from './Login.module.css'
 
 import { registerUser, clearRegMsg } from '../../redux/actions/authAction';
 import { clearErr } from '../../redux/actions/errorAction';
-import { RegisterValidate } from '../../helpers/Validate';
 //import { ClipSpinner } from '../../utils/Loader'
 
 const Register = ({

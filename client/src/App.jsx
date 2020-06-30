@@ -15,6 +15,7 @@ import {
 import { Header } from './components';
 import { loadUser } from './redux/actions/authAction';
 import { clearErr } from './redux/actions/errorAction';
+import { loadCart } from './redux/actions/cartAction.js';
 
 import { ClipSpinner } from './utils/Loader';
 const App = () => {
@@ -22,6 +23,7 @@ const App = () => {
   const isLoading = store.getState().auth.isLoading;
   useEffect(() => {
     store.dispatch(loadUser())
+    store.dispatch(loadCart())
     if (isAuthenticated) clearErr();
   }, [isAuthenticated])
   if (isLoading) return (<ClipSpinner />)

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import styles from './Detail.module.css';
 import { getProductById } from '../../redux/actions/productAction';
 import { addToCart } from '../../redux/actions/cartAction';
@@ -9,7 +9,6 @@ import DetailCard from './DetailCard';
 import { CustomModal } from '../../components'
 
 import { PropagateSpinner } from '../../utils/Loader';
-import { Button } from 'reactstrap';
 
 
 const DetailProduct = ({

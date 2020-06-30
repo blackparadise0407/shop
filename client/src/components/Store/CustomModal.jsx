@@ -1,11 +1,9 @@
 import React from 'react';
 import { Modal, ModalBody, ModalHeader, Button } from 'reactstrap';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styles from './Modal.module.css';
 
 const CustomModal = ({ isOpen, toggle, header, product: { name, images, price, stock } }) => {
-    const history = useHistory();
-    const navigate = () => { history.push("/checkout"); }
     return (
         <Modal centered className={styles.modal} isOpen={isOpen} toggle={toggle}>
             <ModalHeader toggle={toggle} className={styles.header}>{header}</ModalHeader>

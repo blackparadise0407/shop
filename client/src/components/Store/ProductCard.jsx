@@ -1,9 +1,8 @@
 import React from 'react';
 import { Card, CardImg, CardBody, CardTitle, CardText, Button, CardFooter } from 'reactstrap';
-import { Link, useRouteMatch } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styles from './Store.module.css';
 const ProductCard = ({ name, price, description, stock, img, onClick, productID }) => {
-    const { url } = useRouteMatch();
     return (
         <Card className={styles.card}>
             <Link className={styles.link} to={{

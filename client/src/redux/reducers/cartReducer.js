@@ -5,7 +5,8 @@ import {
     CART_LOADING,
     REMOVECART_SUCCESS,
     QTYCONTROL_FAIL,
-    QTYCONTROL_SUCCESS
+    QTYCONTROL_SUCCESS,
+    CART_EMPTY
 } from '../actions/types';
 
 const initialState = {
@@ -26,16 +27,19 @@ export default (state = initialState, action) => {
         case CART_LOADED:
             return {
                 ...state,
-                ...action.payload,
-                isLoading: false,
-            }
-        case ADDCART_SUCCESS:
-            return {
-                ...state,
                 payload: action.payload,
                 isLoading: false,
                 totalPrice: action.totalPrice,
                 totalItem: action.totalItem,
+            }
+        case ADDCART_SUCCESS:
+            //localStorage.setItem('cart', JSON.stringify(action.payload));
+            return {
+                ...state,
+                payload: action.payload,
+                totalPrice: action.totalPrice,
+                totalItem: action.totalItem,
+                isLoading: false,
                 status: null,
             }
         case ADDCART_FAIL:
@@ -45,6 +49,7 @@ export default (state = initialState, action) => {
                 isLoading: false
             }
         case REMOVECART_SUCCESS:
+            //localStorage.setItem('cart', JSON.stringify(action.payload));
             return {
                 ...state,
                 payload: action.payload,
@@ -67,6 +72,12 @@ export default (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 status: action.status,
+            }
+        case CART_EMPTY:
+            localStorage.removeItem('cart');
+            return {
+                ...state,
+                isLoading: false,
             }
         default:
             return state;

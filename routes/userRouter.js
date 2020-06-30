@@ -80,7 +80,7 @@ router.get('/confirm/:id', async (req, res, next) => {
         const confirmUser = await userModel.findById(id);
         if (!confirmUser) return res.status(400).json({ msg: "Invalid token" });
         if (id === confirmUser.id) {
-            if (confirmUser.confirm) return res.status(400).json({ msg: "Email is already confirmed" });
+            if (confirmUser.confirm) return res.status(400).send("<div style=\"width: 100%; height: 100%;display: flex; flex-direction: column;justify-content: center; text-align: center\"><h1 style=\"color: red; \">Email is already confirmed</h1></div>");
             confirmUser.confirm = true;
         }
         await confirmUser.save();
