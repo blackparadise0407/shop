@@ -1,8 +1,9 @@
 import _ from 'lodash';
+import axios from 'axios';
 import {
     // ADDCART_FAIL,
     // CART_LOADED,
-    // CART_LOADING,
+    CART_LOADING,
     ADDCART_SUCCESS,
     REMOVECART_SUCCESS,
     QTYCONTROL_SUCCESS,
@@ -12,25 +13,49 @@ import {
 } from '../actions/types';
 import { toast } from 'react-toastify';
 import { encrypt, decrypt } from '../../utils/cipher';
+import Axios from 'axios';
 
-export const loadCart = () => (dispatch, getState) => {
-    if (getState().cart.payload.length === 0) localStorage.removeItem('cart');
+export const loadCart = () => dispatch => {
+    console.log("loadCart get called");
+    dispatch({ type: CART_LOADING });
     const tempCart = localStorage.getItem('cart');
     if (tempCart) {
-        const cart = localStorage.getItem('cart');
-        let decipher = decrypt(cart);
-        let newTotalItem = 0;
-        let newTotalPrice = 0;
-        const jsonCart = JSON.parse(decipher);
-        _.map(jsonCart, (item) => {
-            newTotalItem += item.quantity;
-            newTotalPrice += item.quantity * item.price;
-        })
-        dispatch({ type: CART_LOADED, payload: jsonCart, totalItem: newTotalItem, totalPrice: newTotalPrice });
-    } else return;
+        let jsonFormattedCart = JSON.parse(decrypt(localStorage.getItem('cart')));
+        if (jsonFormattedCart.length === 0) {
+            localStorage.removeItem('cart');
+            dispatch({ type: CART_EMPTY })
+        } else {
+            const cart = localStorage.getItem('cart');
+            let decipher = decrypt(cart);
+            let newTotalItem = 0;
+            let newTotalPrice = 0;
+            const jsonCart = JSON.parse(decipher);
+            _.map(jsonCart, (item) => {
+                newTotalItem += item.quantity;
+                newTotalPrice += item.quantity * item.price;
+            })
+            dispatch({ type: CART_LOADED, payload: jsonCart, totalItem: newTotalItem, totalPrice: newTotalPrice });
+        }
+    } else dispatch({ type: CART_EMPTY });
+}
+
+export const loadAuthCart = () => async (dispatch, getState) => {
+    // dispatch({ type: CART_LOADING })
+    // const { cart } = getState().auth.user;
+    // if (cart.length !== 0) {
+    //     let newTotalItem = 0;
+    //     let newTotalPrice = 0;
+    //     _.map(cart, item=> {
+    //         const res = await axios.get(`/api/products/${item.id}`)
+    //         newTotalItem += item.quantity*
+    //     })
+    // } else return
+    //TO DO 
+
 }
 
 export const addToCart = product => (dispatch, getState) => {
+    dispatch({ type: CART_LOADING });
     const { payload, totalItem, totalPrice } = getState().cart;
     const temp = payload;
     const newCart = [...temp];
@@ -60,35 +85,8 @@ export const addToCart = product => (dispatch, getState) => {
     }
 }
 
-
-// export const addToCart = (product) => (dispatch, getState) => {
-//     const { payload, totalItem, totalPrice } = getState().cart;
-//     const existCart = payload;
-//     const newCart = [...existCart];
-//     let quantity = 1;
-//     let newTotalItem = 0;
-//     let existed_item = newCart.find(item => item.productID === product.productID)
-//     if (existed_item) {
-//         if (existed_item.quantity <= product.stock) {
-//             existed_item.quantity += 1;
-//             let newTotalPrice = product.price + totalPrice;
-//             newTotalItem = totalItem + 1;
-//             dispatch({ type: ADDCART_SUCCESS, payload: newCart, totalPrice: newTotalPrice, totalItem: newTotalItem });
-//             const encrypted = encrypt(JSON.stringify(newCart));
-//             localStorage.setItem('cart', encrypted);
-//         } else dispatch({ type: QTYCONTROL_FAIL, status: "Troi oi" })
-//     } else {
-//         let newTotalPrice = totalPrice + product.price;
-//         const newProduct = { productID: product.productID, name: product.name, quantity: quantity, price: product.price, image: product.images[0], stock: product.stock }
-//         newCart.push(newProduct);
-//         newTotalItem = totalItem + 1;
-//         dispatch({ type: ADDCART_SUCCESS, payload: newCart, totalPrice: newTotalPrice, totalItem: newTotalItem });
-//         const encrypted = encrypt(JSON.stringify(newCart));
-//         localStorage.setItem('cart', encrypted);
-//     }
-// }
-
 export const removeFromCart = (product) => (dispatch, getState) => {
+    dispatch({ type: CART_LOADING });
     const { payload, totalItem, totalPrice } = getState().cart;
     const newCart = [...payload];
     let existed_item = newCart.find(item => item.productID === product.productID)
@@ -107,6 +105,7 @@ export const removeFromCart = (product) => (dispatch, getState) => {
 }
 
 export const quantityControl = (product, type) => (dispatch, getState) => {
+    dispatch({ type: CART_LOADING });
     const { payload, totalPrice, totalItem } = getState().cart;
     const newCart = [...payload];
     let existedItem = newCart.find(item => item.productID === product.productID);

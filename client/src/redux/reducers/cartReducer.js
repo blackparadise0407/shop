@@ -32,32 +32,14 @@ export default (state = initialState, action) => {
                 totalPrice: action.totalPrice,
                 totalItem: action.totalItem,
             }
-        case ADDCART_SUCCESS:
-            //localStorage.setItem('cart', JSON.stringify(action.payload));
-            return {
-                ...state,
-                payload: action.payload,
-                totalPrice: action.totalPrice,
-                totalItem: action.totalItem,
-                isLoading: false,
-                status: null,
-            }
         case ADDCART_FAIL:
             return {
                 ...state,
                 payload: [],
                 isLoading: false
             }
+        case ADDCART_SUCCESS:
         case REMOVECART_SUCCESS:
-            //localStorage.setItem('cart', JSON.stringify(action.payload));
-            return {
-                ...state,
-                payload: action.payload,
-                totalPrice: action.totalPrice,
-                totalItem: action.totalItem,
-                isLoading: false,
-                status: null,
-            }
         case QTYCONTROL_SUCCESS:
             return {
                 ...state,
@@ -74,7 +56,6 @@ export default (state = initialState, action) => {
                 status: action.status,
             }
         case CART_EMPTY:
-            localStorage.removeItem('cart');
             return {
                 ...state,
                 isLoading: false,

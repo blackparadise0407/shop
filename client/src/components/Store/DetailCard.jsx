@@ -1,7 +1,6 @@
 import React from 'react';
 import styles from './Detail.module.css';
 import { Button } from 'reactstrap';
-import { Link } from 'react-router-dom'
 import ImageCarousel from '../../utils/Carousel';
 
 const DetailCard = ({ name, price, description, stock, catName, images, onClick }) => {
@@ -14,13 +13,12 @@ const DetailCard = ({ name, price, description, stock, catName, images, onClick 
             </div>
 
             <div className={styles.card}>
-                <Link to={{ pathname: "/checkout" }}>Go </Link>
                 <h1 className={styles.title}>{name}</h1>
                 <h3>Price: {price}$</h3>
                 <h4>Quantity: {stock ? stock : "Not available"}</h4>
                 <p>Category: {catName}</p>
                 <p>Description: {description}</p>
-                {stock ? <Button onClick={onClick} className={styles.button}>Add to cart <i className="fas fa-shopping-cart"></i></Button> : <Button disabled onClick={onClick} className={styles.button}>Add to cart <i className="fas fa-shopping-cart"></i></Button>}
+                {stock ? <Button onClick={onClick} className={styles.button}>Add to cart <i className="fas fa-shopping-cart"></i></Button> : <Button style={{ cursor: "not-allowed" }} disabled onClick={onClick} className={styles.button}>Contact <i className="fas fa-shopping-cart"></i></Button>}
             </div>
         </div>
     );

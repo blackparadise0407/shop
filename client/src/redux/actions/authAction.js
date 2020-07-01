@@ -17,18 +17,17 @@ export const clearRegMsg = () => {
 }
 
 
-export const loadUser = () => (dispatch, getState) => {
+export const loadUser = () => async (dispatch, getState) => {
     dispatch({ type: USER_LOADING })
 
-    axios.get("/api/users", tokenConfig(getState))
-        .then(res => dispatch({
-            type: USER_LOADED,
-            payload: res.data
-        }))
-        .catch(err => {
-            dispatch(returnErr(err.response.data, err.response.status));
-            dispatch({ type: AUTH_ERROR })
-        })
+    try {
+        const res = await axios.get("/api/users", tokenConfig(getState));
+        dispatch({ type: USER_LOADED, payload: res.data });
+    } catch (err) {
+        dispatch(returnErr(err.response.data, err.response.status));
+        dispatch({ type: AUTH_ERROR });
+    }
+
 
 }
 

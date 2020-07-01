@@ -6,10 +6,10 @@ const router = express.Router();
 
 
 const UserModel = require('../model/userModel');
+const ProductModel = require('../model/productModel');
 const validate = require('../hapiValidation');
 const { auth, mailer } = require('../middlewares');
-const userModel = require('../model/userModel');
-const productModel = require('../model/productModel');
+
 
 
 //METHOD: GET
@@ -77,7 +77,7 @@ router.post('/register', async (req, res, next) => {
 router.get('/confirm/:id', async (req, res, next) => {
     const { id } = req.params;
     try {
-        const confirmUser = await userModel.findById(id);
+        const confirmUser = await UserModel.findById(id);
         if (!confirmUser) return res.status(400).json({ msg: "Invalid token" });
         if (id === confirmUser.id) {
             if (confirmUser.confirm) return res.status(400).send("<div style=\"width: 100%; height: 100%;display: flex; flex-direction: column;justify-content: center; text-align: center\"><h1 style=\"color: red; \">Email is already confirmed</h1></div>");
@@ -111,13 +111,9 @@ router.post("/login", async (req, res, next) => {
             },
             process.env.JWT_SECRET,
             { expiresIn: 7200 })
+        const returnUser = await UserModel.findOne({ email }).select('-password');
         return res.status(200).json({
-            user: {
-                firstName: user.firstName,
-                lastName: user.lastName,
-                email: user.email,
-                confirm: user.confirm
-            },
+            user: returnUser,
             msg: "Success",
             status: res.statusCode,
             token: token
@@ -178,7 +174,7 @@ router.get('/reset/:token', async (req, res, next) => {
         const newPass = Date.now().toString();
         const salt = await bcrypt.genSalt(10);
         const hashedPass = await bcrypt.hash(newPass, salt);
-        const user = await userModel.findByIdAndUpdate(decode.id, { password: hashedPass });
+        const user = await UserModel.findByIdAndUpdate(decode.id, { password: hashedPass });
         mailer({ email: user.email, value: newPass }, "ResetGet")
         return res.status(200).redirect("http://localhost:3000");
     } catch (error) {
@@ -194,9 +190,9 @@ router.post('/cart', auth, async (req, res, next) => {
     const { id } = req.user;
     const { id: proID } = req.body;
     try {
-        const user = await userModel.findById(id);
+        const user = await UserModel.findById(id);
         if (!user) return res.status(400).json({ msg: "Something wrong..." });
-        const product = await productModel.findById(proID);
+        const product = await ProductModel.findById(proID);
         if (!product) return res.status(404).json({ msg: "Product does not exists" });
         let existed_item = user.cart.find(item => String(item._id) === String(product._id));
         if (existed_item) {
@@ -219,5 +215,23 @@ router.post('/cart', auth, async (req, res, next) => {
     }
 })
 
+router.post('/cart/:productID/delete', auth, async (req, res, next) => {
+    const productID = req.params.productID;
+    const id = req.user.id;
+    try {
+        const user = await UserModel.findById(id);
+        if (!user) return res.status(404).json({ msg: "User does not exist" });
+        const product = await ProductModel.findOne({ productID });
+        if (!product) return res.status(404).json({ msg: "Product does not exist" });
+        try {
+            await UserModel.update({ "_id": id }, { $pull: { "cart": { "_id": product.id } } });
+            return res.status(200).json({ msg: "Remove item success" });
+        } catch (error) {
+            return res.status(400).json({ msg: "Product is already removed" });
+        }
+    } catch (error) {
+        next(error);
+    }
+})
 
 module.exports = router;

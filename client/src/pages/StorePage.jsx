@@ -41,9 +41,23 @@ const StorePage = ({
             range.push(i);
     }
     const handleOnClick = () => { history.push('/checkout'); }
-
+    const nextPage = () => {
+        if (products) {
+            const { page, totalPage } = products;
+            if (page < totalPage) {
+                setPage(page + 1);
+            } else setPage(1);
+        }
+    }
+    const previousPage = () => {
+        if (products) {
+            const { page, totalPage } = products;
+            if (page > 1) {
+                setPage(page - 1);
+            } else setPage(totalPage);
+        }
+    }
     const paginate = (e, nextPage) => {
-        e.preventDefault();
         setPage(nextPage);
     }
     const handleAddToCart = (e, product) => {
@@ -82,8 +96,7 @@ const StorePage = ({
                         {products ? products.results.map(product => (
 
                             <Col key={product.productID} className={styles.col} xs={12} sm={6} md={4} lg={3}>
-
-                                <ProductCard key={product.productID} productID={product.productID} stock={product.stock} name={product.name} price={product.price} description={product.description} img={product.images} onClick={e => handleAddToCart(e, product)} />
+                                <ProductCard key={product.productID} productID={product.productID} stock={product.stock} name={product.name} price={product.price} description={product.description} images={product.images} onClick={e => handleAddToCart(e, product)} />
                             </Col>
 
                         )) : null}
@@ -92,7 +105,7 @@ const StorePage = ({
             </div>
             <Pagination className={styles.pagination} aria-label="Store pagination">
                 <PaginationItem className={styles.paginationItem}>
-                    <PaginationLink className={styles.paginationLink} ><i className="fas fa-chevron-left"></i></PaginationLink>
+                    <PaginationLink onClick={previousPage} className={styles.paginationLink} ><i className="fas fa-chevron-left"></i></PaginationLink>
                 </PaginationItem>
                 {range ? range.map(v => (
                     <PaginationItem key={v + 1} className={styles.paginationItem}>
@@ -102,7 +115,7 @@ const StorePage = ({
                     </PaginationItem>
                 )) : null}
                 <PaginationItem className={styles.paginationItem}>
-                    <PaginationLink className={styles.paginationLink} ><i className="fas fa-chevron-right"></i></PaginationLink>
+                    <PaginationLink onClick={nextPage} className={styles.paginationLink} ><i className="fas fa-chevron-right"></i></PaginationLink>
                 </PaginationItem>
             </Pagination>
         </section>

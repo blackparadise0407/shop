@@ -12,12 +12,14 @@ const Checkout = ({
     cart: { payload, totalPrice, totalItem },
     quantityControl,
     removeFromCart,
+    isLoading
 }) => {
     const handleAdd = (e, product) => { quantityControl(product, 'inc'); }
     const handleSubtract = (e, product) => { quantityControl(product, 'dec'); }
     const handleRemoveFromCart = (e, product) => { removeFromCart(product); }
     return (
         <div className={styles.container}>
+            {isLoading ? <>Is loading...</> : null}
             <div className={styles.headline}>Checkout</div>
             <div className={styles.mainContainer}>
                 <ul className={styles.cartContainer}>
@@ -58,6 +60,7 @@ const Checkout = ({
 
 const mapStateToProps = state => ({
     cart: state.cart,
+    isLoading: state.cart.isLoading,
 })
 
 export default connect(

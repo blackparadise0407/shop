@@ -1,9 +1,16 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { Modal, ModalBody, ModalHeader, Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import styles from './Modal.module.css';
 
-const CustomModal = ({ isOpen, toggle, header, product: { name, images, price, stock } }) => {
+const CustomModal = ({
+    cart,
+    isOpen,
+    toggle,
+    header,
+    product: { name, images, price, stock } }) => {
     return (
         <Modal centered className={styles.modal} isOpen={isOpen} toggle={toggle}>
             <ModalHeader toggle={toggle} className={styles.header}>{header}</ModalHeader>
@@ -19,15 +26,33 @@ const CustomModal = ({ isOpen, toggle, header, product: { name, images, price, s
                     </div>
                 </div>
                 <div className={styles.right}>
-                    <Link to={{
-                        pathname: "/checkout",
-                    }}><Button className={styles.button}>View bag</Button></Link>
-                    <br />
-                    <Button onClick={toggle} className={styles.button}>Continue shopping</Button>
+                    {cart ?
+                        <div className={styles.rightBody}>
+                            <div className={styles.rightBodyHeader}>Order summary</div>
+                            <div className={styles.rightBodyContent}>
+                                <h3>Subtotal: {cart.totalPrice}</h3>
+                                <h3>Total item: {cart.totalItem}</h3>
+                                <h2>Total: {cart.totalPrice}</h2>
+                            </div>
+                        </div> : null}
+                    <div className={styles.rightFooter}>
+                        <Link to={{
+                            pathname: "/checkout",
+                        }}><Button className={styles.button}>View bag</Button></Link>
+                        <br />
+                        <Button onClick={toggle} className={styles.button}>Continue shopping</Button>
+                    </div>
                 </div>
             </ModalBody>
         </Modal>
     )
 }
 
-export default CustomModal;
+CustomModal.propTypes = {
+    cart: PropTypes.object
+}
+
+export default connect(
+    state => ({ cart: state.cart }),
+    null
+)(CustomModal);

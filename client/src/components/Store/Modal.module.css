@@ -40,6 +40,45 @@
   display: flex;
   justify-content: center;
 }
+
+/*RIGHT STARTS*/
+.right {
+  display: grid;
+  grid-template-rows: 3fr 1fr;
+}
+
+.rightBody {
+  display: grid;
+  grid-template-rows: 1fr 4fr;
+}
+
+.rightBodyHeader {
+  background-color: #000000;
+  position: relative;
+  width: 100%;
+  color: #fff;
+  text-align: center;
+  display: flex;
+  text-transform: uppercase;
+  font-size: 1.6rem;
+  flex-direction: column;
+  justify-content: center;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.rightBodyContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 2rem;
+}
+
+.rightFooter {
+  grid-column: 1;
+  grid-row: 2;
+}
+/*RIGHT ENDS*/
 /*MODAL BODY ENDS*/
 
 .button {

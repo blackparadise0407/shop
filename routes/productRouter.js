@@ -197,4 +197,23 @@ router.get("/:productID", async (req, res, next) => {
 
 })
 
+//METHOD: GET
+//ROUTE: /api/products/:id
+//FUNC: GET SINGLE PRODUCT BY ID
+router.get("/:id", async (req, res, next) => {
+    const id = req.params.id;
+    try {
+        const product = await ProductModel.findById(id);
+        if (!product) return res.status("400").json({ msg: "Product does not exist" })
+        return res.status(200).json({
+            results: product,
+            status: res.statusCode,
+            msg: "Success"
+        })
+    } catch (err) {
+        next(err);
+    }
+
+})
+
 module.exports = router;
