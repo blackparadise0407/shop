@@ -13,7 +13,7 @@ const CustomModal = ({
     product: { name, images, price, stock } }) => {
     return (
         <Modal centered className={styles.modal} isOpen={isOpen} toggle={toggle}>
-            <ModalHeader toggle={toggle} className={styles.header}>{header}</ModalHeader>
+            <ModalHeader toggle={toggle} ><div className={styles.header}>{header}</div></ModalHeader>
             <ModalBody className={styles.body}>
                 <div className={styles.left}>
                     <div className={styles.image}>
@@ -21,8 +21,9 @@ const CustomModal = ({
 
                     </div>
                     <div className={styles.content}>
-                        <h3>{name}</h3>
-                        <h4>{price}</h4>
+                        <div className={styles.leftInfo}><span>Name:{" "}</span><span>{name}</span></div>
+                        <div className={styles.leftInfo}><span>Price:{" "}</span><span>${price}</span></div>
+
                     </div>
                 </div>
                 <div className={styles.right}>
@@ -30,9 +31,9 @@ const CustomModal = ({
                         <div className={styles.rightBody}>
                             <div className={styles.rightBodyHeader}>Order summary</div>
                             <div className={styles.rightBodyContent}>
-                                <h3>Subtotal: {cart.totalPrice}</h3>
-                                <h3>Total item: {cart.totalItem}</h3>
-                                <h2>Total: {cart.totalPrice}</h2>
+                                <div className={styles.rightInfo}><span>Subtotal:</span><span>{cart.totalPrice}</span></div>
+                                <div className={styles.rightInfo}><span>Total item:</span><span>{cart.totalItem}</span></div>
+                                <div className={styles.rightInfo}><span>Total:</span><span>{cart.totalPrice}</span></div>
                             </div>
                         </div> : null}
                     <div className={styles.rightFooter}>

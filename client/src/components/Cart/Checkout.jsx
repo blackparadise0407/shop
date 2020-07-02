@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'reactstrap';
 import { ToastContainer } from "react-toastify";
@@ -12,11 +12,18 @@ const Checkout = ({
     cart: { payload, totalPrice, totalItem },
     quantityControl,
     removeFromCart,
-    isLoading
+    isLoading,
 }) => {
+    const [shipping, setShipping] = useState(null);
     const handleAdd = (e, product) => { quantityControl(product, 'inc'); }
     const handleSubtract = (e, product) => { quantityControl(product, 'dec'); }
     const handleRemoveFromCart = (e, product) => { removeFromCart(product); }
+    useEffect(() => {
+        if (payload.length !== 0) {
+            if (totalItem < 10) setShipping(null);
+            else setShipping(Number(totalPrice * 0.02).toFixed(2));
+        }
+    }, [totalItem])
     return (
         <div className={styles.container}>
             {isLoading ? <>Is loading...</> : null}
@@ -42,13 +49,17 @@ const Checkout = ({
                     <div className={styles.checkoutHeader}>Order summary</div>
                     <div className={styles.checkoutBody}>
                         <ul style={{ listStyle: "none" }}>
-                            <li>Subtotal: {totalPrice}$</li>
+                            <li>Subtotal: ${totalPrice}</li>
                             <li>Total item: {totalItem}</li>
-                            <li>Shipping: FREE</li>
+                            {payload.length === 0 ? null
+                                : <li>
+                                    Shipping: {shipping ? `$${shipping}` : "FREE"}
+                                </li>}
+                            {/* <li>Shipping: {totalPrice * 0.02 === 0 ? "FREE" : `$${totalPrice * 0.02}`}</li> */}
                         </ul>
 
                     </div>
-                    <div className={styles.checkoutFooter}>Total: {totalPrice}$</div>
+                    <div className={styles.checkoutFooter}>Total: {Number(Number(totalPrice) + Number(shipping)).toFixed(2)}$</div>
                     <Link to="#" className={styles.checkoutLink}>Check out</Link>
                 </div>
             </div>

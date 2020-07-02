@@ -25,7 +25,7 @@ const { auth, mailer } = require('../middlewares');
 //FUCN: GET USER WITH TOKEN
 router.get('/', auth, async (req, res, next) => {
     try {
-        const user = await UserModel.findById(req.user.id).select('-password');
+        const user = await UserModel.findById(req.user.id).select('-password -cart');
         return res.status(200).send(user)
     } catch (error) {
         next(error)
@@ -111,9 +111,13 @@ router.post("/login", async (req, res, next) => {
             },
             process.env.JWT_SECRET,
             { expiresIn: 7200 })
-        const returnUser = await UserModel.findOne({ email }).select('-password');
         return res.status(200).json({
-            user: returnUser,
+            user: {
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                confirm: user.confirm
+            },
             msg: "Success",
             status: res.statusCode,
             token: token
@@ -182,17 +186,31 @@ router.get('/reset/:token', async (req, res, next) => {
     }
 })
 
+//METHOD: GET
+//ROUTE: /api/users/cart
+//FUNC: get all product from each user cart
+
+router.get('/cart', async (req, res, next) => {
+    //const id = req.user.id;
+    try {
+        //const user = await UserModel.findById(id).populate({ path: "cart", select: "id", model: ProductModel });
+        const user = await UserModel.find().populate('cart.product');
+        res.json({ user });
+    } catch (err) {
+        next(err)
+    }
+})
+
 //METHOD: POST
 //ROUTE: /api/users/cart
 //FUNC: add product to each user cart
 
 router.post('/cart', auth, async (req, res, next) => {
-    const { id } = req.user;
-    const { id: proID } = req.body;
+    const id = req.user.id;
+    const productID = req.body.productID;
     try {
         const user = await UserModel.findById(id);
-        if (!user) return res.status(400).json({ msg: "Something wrong..." });
-        const product = await ProductModel.findById(proID);
+        const product = await ProductModel.findOne({ productID });
         if (!product) return res.status(404).json({ msg: "Product does not exists" });
         let existed_item = user.cart.find(item => String(item._id) === String(product._id));
         if (existed_item) {
@@ -203,7 +221,7 @@ router.post('/cart', auth, async (req, res, next) => {
             return res.status(200).json({ msg: "Quantity updated" })
         } else {
             //NEW ITEM
-            user.cart.push(product.id);
+            user.cart.push(product._id);
             await user.save();
             return res.status(200).json({ msg: "Added to bag!" })
         }
@@ -214,6 +232,11 @@ router.post('/cart', auth, async (req, res, next) => {
         next(error);
     }
 })
+
+
+//METHOD: POST
+//ROUTE: /api/users/cart/:productID/delete
+//FUNC: add product to each user cart
 
 router.post('/cart/:productID/delete', auth, async (req, res, next) => {
     const productID = req.params.productID;

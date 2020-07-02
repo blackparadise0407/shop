@@ -10,7 +10,7 @@ const middleware = require('../middlewares');
 //FUNC: GET ALL CATEGORIES
 router.get("/", async (req, res, next) => {
     try {
-        const cat = await CategoryModel.find()
+        const cat = await CategoryModel.find();
         return res.status(200).json({ results: cat, msg: "Success", status: res.statusCode })
     } catch (error) {
         next(error);
