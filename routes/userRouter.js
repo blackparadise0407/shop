@@ -190,12 +190,11 @@ router.get('/reset/:token', async (req, res, next) => {
 //ROUTE: /api/users/cart
 //FUNC: get all product from each user cart
 
-router.get('/cart', async (req, res, next) => {
-    //const id = req.user.id;
+router.get('/cart', auth, async (req, res, next) => {
+    const id = req.user.id;
     try {
-        //const user = await UserModel.findById(id).populate({ path: "cart", select: "id", model: ProductModel });
-        const user = await UserModel.find().populate('cart.product');
-        res.json({ user });
+        const user = await UserModel.findById(id).populate('cart.product');
+        return res.status(200).json({ user });
     } catch (err) {
         next(err)
     }
@@ -207,38 +206,41 @@ router.get('/cart', async (req, res, next) => {
 
 router.post('/cart', auth, async (req, res, next) => {
     const id = req.user.id;
-    const productID = req.body.productID;
+    const { productID } = req.body;
     try {
         const user = await UserModel.findById(id);
         const product = await ProductModel.findOne({ productID });
         if (!product) return res.status(404).json({ msg: "Product does not exists" });
-        let existed_item = user.cart.find(item => String(item._id) === String(product._id));
-        if (existed_item) {
-            //IF FOUND ITEM
-            let index = user.cart.indexOf(existed_item);
-            user.cart[index].quantity += 1;
+        const existed_product = _.find(user.cart, item => (
+            item.product.toString() === product.id.toString()
+        ))
+        if (existed_product) {
+            existed_product.quantity += 1;
             await user.save();
-            return res.status(200).json({ msg: "Quantity updated" })
+            return res.status(200).json({
+                cart: user.cart,
+                msg: "Quantity updated"
+            });
         } else {
-            //NEW ITEM
-            user.cart.push(product._id);
+            user.cart.push({
+                product: product._id
+            })
             await user.save();
-            return res.status(200).json({ msg: "Added to bag!" })
+            return res.status(200).json({
+                cart: user.cart,
+                msg: "Add product success"
+            });
         }
-        //await user.cart.push(proID);
-        //await user.save();
-        //return res.status(200).json({ msg: "Added to bag!" });
     } catch (error) {
         next(error);
     }
 })
 
-
-//METHOD: POST
-//ROUTE: /api/users/cart/:productID/delete
+//METHOD: DELETE
+//ROUTE: /api/users/cart/:productID
 //FUNC: add product to each user cart
 
-router.post('/cart/:productID/delete', auth, async (req, res, next) => {
+router.delete('/cart/:productID', auth, async (req, res, next) => {
     const productID = req.params.productID;
     const id = req.user.id;
     try {
@@ -247,7 +249,7 @@ router.post('/cart/:productID/delete', auth, async (req, res, next) => {
         const product = await ProductModel.findOne({ productID });
         if (!product) return res.status(404).json({ msg: "Product does not exist" });
         try {
-            await UserModel.update({ "_id": id }, { $pull: { "cart": { "_id": product.id } } });
+            await UserModel.update({ "_id": id }, { $pull: { "cart": { "product": product.id } } });
             return res.status(200).json({ msg: "Remove item success" });
         } catch (error) {
             return res.status(400).json({ msg: "Product is already removed" });

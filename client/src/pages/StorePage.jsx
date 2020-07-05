@@ -9,7 +9,7 @@ import {
 } from 'reactstrap';
 import { ProductCard, CustomModal } from '../components';
 import { getFilterProducts } from '../redux/actions/productAction';
-import { addToCart } from '../redux/actions/cartAction';
+import { addToCart, addAuthCart } from '../redux/actions/cartAction';
 import styles from '../components/Store/Store.module.css';
 import { Filter } from '../components';
 
@@ -21,7 +21,9 @@ const StorePage = ({
     products,
     getFilterProducts,
     cart,
-    addToCart
+    addToCart,
+    addAuthCart,
+    isAuthenticated,
 }) => {
     const history = useHistory();
     const [isOpen, setIsOpen] = useState(false);
@@ -63,6 +65,13 @@ const StorePage = ({
     const handleAddToCart = (e, product) => {
         toggle();
         addToCart(product);
+        const { name, images, price, stock, _id } = product;
+        const newProduct = { name, images, price, stock, _id };
+        setCurrentProduct(newProduct);
+    }
+    const handleAddAuthCart = (e, product) => {
+        toggle();
+        addAuthCart(product);
         const { name, images, price, stock } = product;
         const newProduct = { name, images, price, stock };
         setCurrentProduct(newProduct);
@@ -96,7 +105,12 @@ const StorePage = ({
                         {products ? products.results.map(product => (
 
                             <Col key={product.productID} className={styles.col} xs={12} sm={6} md={4} lg={3}>
-                                <ProductCard key={product.productID} productID={product.productID} stock={product.stock} name={product.name} price={product.price} description={product.description} images={product.images} onClick={e => handleAddToCart(e, product)} />
+                                {isAuthenticated ?
+                                    <ProductCard key={product.productID} productID={product.productID} stock={product.stock} name={product.name} price={product.price} description={product.description} images={product.images} onClick={e => handleAddAuthCart(e, product)} />
+                                    :
+                                    <ProductCard key={product.productID} productID={product.productID} stock={product.stock} name={product.name} price={product.price} description={product.description} images={product.images} onClick={e => handleAddToCart(e, product)} />
+                                }
+                                {/* <ProductCard key={product.productID} productID={product.productID} stock={product.stock} name={product.name} price={product.price} description={product.description} images={product.images} onClick={e => handleAddToCart(e, product)} /> */}
                             </Col>
 
                         )) : null}
@@ -127,16 +141,19 @@ StorePage.propTypes = {
     products: PropTypes.object,
     getFilterProducts: PropTypes.func,
     cart: PropTypes.array,
-    addToCart: PropTypes.func
+    addToCart: PropTypes.func,
+    addAuthCart: PropTypes.func,
+    isAuthenticated: PropTypes.bool
 }
 
 const mapStateToProps = state => ({
     isLoading: state.products.isLoading,
     products: state.products.payload.products,
     cart: state.cart.payload,
+    isAuthenticated: state.auth.isAuthenticated,
 })
 
 export default connect(
     mapStateToProps,
-    { getFilterProducts, addToCart }
+    { getFilterProducts, addToCart, addAuthCart }
 )(StorePage);

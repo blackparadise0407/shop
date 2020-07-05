@@ -54,7 +54,7 @@ const Header = ({ auth: { isAuthenticated, user }, cart }) => {
                         {isAuthenticated ? authLink : guessLink}
                         <Link to="/checkout" className={styles.navItemCart}>
                             <div className={styles.navLinkCart}><img src="/images/supermarket.svg" width="25px"
-                                height="25px" alt="cart" /> ({cart.totalItem}) Cart</div>
+                                height="25px" alt="cart" /> Cart ({cart.totalItem})</div>
                         </Link>
                     </ul>
                 </div>

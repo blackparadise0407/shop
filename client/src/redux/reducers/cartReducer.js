@@ -6,7 +6,8 @@ import {
     REMOVECART_SUCCESS,
     QTYCONTROL_FAIL,
     QTYCONTROL_SUCCESS,
-    CART_EMPTY
+    CART_EMPTY,
+    ADDCART_AUTH_SUCCESS,
 } from '../actions/types';
 
 const initialState = {
@@ -28,15 +29,24 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 payload: action.payload,
-                isLoading: false,
                 totalPrice: action.totalPrice,
                 totalItem: action.totalItem,
+                isLoading: false,
             }
         case ADDCART_FAIL:
             return {
                 ...state,
                 payload: [],
                 isLoading: false
+            }
+        case ADDCART_AUTH_SUCCESS:
+            return {
+                ...state,
+                payload: action.payload,
+                totalPrice: action.totalPrice,
+                totalItem: action.totalItem,
+                status: action.status,
+                isLoading: false,
             }
         case ADDCART_SUCCESS:
         case REMOVECART_SUCCESS:
@@ -58,6 +68,9 @@ export default (state = initialState, action) => {
         case CART_EMPTY:
             return {
                 ...state,
+                payload: [],
+                totalItem: 0,
+                totalPrice: 0,
                 isLoading: false,
             }
         default:

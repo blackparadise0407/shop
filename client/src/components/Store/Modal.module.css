@@ -40,7 +40,8 @@
 .content {
   display: flex;
   flex-direction: column;
-  width: 70%;
+  width: auto;
+  margin-left: 2rem;
 }
 
 .leftInfo {
@@ -106,6 +107,10 @@
   text-transform: uppercase;
 }
 
+.rightInfo:nth-child(4) {
+  font-size: 1.1rem;
+}
+
 .rightFooter {
   grid-column: 1;
   grid-row: 2;
@@ -148,7 +153,7 @@
 @media screen and (min-width: 900px) {
   .modal {
     font-size: 2.2rem;
-    max-width: 60rem;
+    max-width: 76rem !important;
   }
   .button {
     font-size: 1.6rem;

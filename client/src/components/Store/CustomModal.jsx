@@ -21,8 +21,9 @@ const CustomModal = ({
 
                     </div>
                     <div className={styles.content}>
-                        <div className={styles.leftInfo}><span>Name:{" "}</span><span>{name}</span></div>
-                        <div className={styles.leftInfo}><span>Price:{" "}</span><span>${price}</span></div>
+                        <p style={{ fontSize: "1.9rem", textTransform: "uppercase" }}>{name}</p>
+                        <strong><p>${price}</p></strong>
+                        <p>Quantity: 1</p>
 
                     </div>
                 </div>
@@ -31,9 +32,10 @@ const CustomModal = ({
                         <div className={styles.rightBody}>
                             <div className={styles.rightBodyHeader}>Order summary</div>
                             <div className={styles.rightBodyContent}>
-                                <div className={styles.rightInfo}><span>Subtotal:</span><span>{cart.totalPrice}</span></div>
+                                <div className={styles.rightInfo}><span>Subtotal:</span><span>${cart.totalPrice}</span></div>
                                 <div className={styles.rightInfo}><span>Total item:</span><span>{cart.totalItem}</span></div>
-                                <div className={styles.rightInfo}><span>Total:</span><span>{cart.totalPrice}</span></div>
+                                <div className={styles.rightInfo}><span>Total:</span><span>${cart.totalPrice}</span></div>
+                                <div className={styles.rightInfo}>Please proceed to checkout, the current price does not include shipping fee, tax, etc...</div>
                             </div>
                         </div> : null}
                     <div className={styles.rightFooter}>

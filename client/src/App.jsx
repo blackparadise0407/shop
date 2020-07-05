@@ -17,7 +17,6 @@ import { loadUser } from './redux/actions/authAction';
 import { clearErr } from './redux/actions/errorAction';
 import { loadCart, loadAuthCart } from './redux/actions/cartAction.js';
 
-import { ClipSpinner } from './utils/Loader';
 const App = ({
   isLoading,
   isAuthenticated,
@@ -28,15 +27,13 @@ const App = ({
 }) => {
   useEffect(() => {
     loadUser();
-    if (isAuthenticated !== null) {
-      if (isAuthenticated) {
-        loadAuthCart();
-        //clearErr();
-      } else {
-        loadCart();
-      }
+    if (isAuthenticated) {
+      loadAuthCart();
+    } else {
+      loadCart();
     }
-  }, [loadUser, loadAuthCart, loadCart, isAuthenticated])
+
+  }, [isAuthenticated, loadAuthCart, loadCart, loadUser])
   return (
     <Router>
       <Header />

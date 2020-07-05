@@ -1,8 +1,18 @@
 import React from 'react';
 import { Card, CardImg, CardBody, CardTitle, CardText, Button } from 'reactstrap';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styles from './Store.module.css';
-const ProductCard = ({ name, price, description, stock, images, onClick, productID }) => {
+const ProductCard = ({
+    name,
+    price,
+    description,
+    stock,
+    images,
+    onClick,
+    productID,
+    isLoading
+}) => {
     return (
         <Card className={styles.card}>
             <Link className={styles.link} to={{
@@ -17,9 +27,11 @@ const ProductCard = ({ name, price, description, stock, images, onClick, product
             <CardBody className={styles.cardBody}>
                 {stock ? <CardText className={styles.description}>Available: {stock}</CardText> : <CardText className={styles.description}>Not available</CardText>}
                 <CardTitle className={styles.title}>{name}</CardTitle>
-                <CardText className={styles.price}>${price}</CardText>
+                <CardText className={styles.price}><strong>${price}</strong></CardText>
                 <CardText className={styles.description}>{description}</CardText>
-                {stock ? <Button style={{ float: "right" }} className={styles.button} onClick={onClick}>Add to cart</Button>
+                {stock ? <Button style={{ float: "right" }} className={styles.button} onClick={onClick}>{
+                    isLoading ? "Loading..." : "Add to cart"
+                }</Button>
                     : <Button style={{ cursor: "not-allowed", float: "right" }} disabled className={styles.button} onClick={onClick}>Contact</Button>
                 }
             </CardBody>
@@ -30,4 +42,7 @@ const ProductCard = ({ name, price, description, stock, images, onClick, product
     );
 }
 
-export default ProductCard;
+export default connect(
+    state => ({ isLoading: state.cart.isLoading }),
+    null
+)(ProductCard);

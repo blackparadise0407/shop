@@ -9,14 +9,15 @@ import {
     QTYCONTROL_SUCCESS,
     QTYCONTROL_FAIL,
     CART_LOADED,
-    CART_EMPTY
+    CART_EMPTY,
+    ADDCART_AUTH_SUCCESS
 } from '../actions/types';
 import { toast } from 'react-toastify';
 import { encrypt, decrypt } from '../../utils/cipher';
-import Axios from 'axios';
+import { tokenConfig } from './authAction';
+import { returnErr } from './errorAction';
 
 export const loadCart = () => dispatch => {
-    console.log("loadCart get called");
     dispatch({ type: CART_LOADING });
     const tempCart = localStorage.getItem('cart');
     if (tempCart) {
@@ -40,19 +41,44 @@ export const loadCart = () => dispatch => {
 }
 
 export const loadAuthCart = () => async (dispatch, getState) => {
-    // dispatch({ type: CART_LOADING })
-    // const { cart } = getState().auth.user;
-    // if (cart.length !== 0) {
-    //     let newTotalItem = 0;
-    //     let newTotalPrice = 0;
-    //     _.map(cart, item=> {
-    //         const res = await axios.get(`/api/products/${item.id}`)
-    //         newTotalItem += item.quantity*
-    //     })
-    // } else return
-    //TO DO 
+    dispatch({ type: CART_LOADING });
+    const config = tokenConfig(getState);
+    let newTotalItem = 0;
+    let newTotalPrice = 0;
+    try {
+        const resp = await axios.get('/api/users/cart', config);
+        const cart = resp.data.user.cart;
+        _.map(cart, item => {
+            newTotalItem += item.quantity;
+            newTotalPrice += item.quantity * item.product.price;
+        })
+        dispatch({ type: CART_LOADED, payload: cart, totalItem: newTotalItem, totalPrice: newTotalPrice });
+    } catch (err) {
+        dispatch(returnErr(err.response.data, err.response.status))
+    }
 
 }
+
+export const addAuthCart = (product) => async (dispatch, getState) => {
+    dispatch({ type: CART_LOADING });
+    const config = tokenConfig(getState);
+    const body = JSON.stringify({ productID: product.productID })
+    let newTotalPrice = 0;
+    let newTotalItem = 0;
+    try {
+        const resp = await axios.post("/api/users/cart", body, config);
+        const cart = resp.data.cart;
+        _.map(cart, item => {
+            newTotalItem += item.quantity;
+            newTotalPrice += product.price * item.quantity;
+        })
+        dispatch({ type: ADDCART_AUTH_SUCCESS, payload: cart, totalItem: newTotalItem, totalPrice: newTotalPrice, status: resp.data.msg })
+    } catch (err) {
+        dispatch(returnErr(err.response.data, err.response.status))
+    }
+}
+
+
 
 export const addToCart = product => (dispatch, getState) => {
     dispatch({ type: CART_LOADING });
@@ -75,8 +101,8 @@ export const addToCart = product => (dispatch, getState) => {
         } dispatch({ type: QTYCONTROL_FAIL, status: "Troi oi" })
     } else {
         let newTotalPrice = totalPrice + product.price;
-        const { productID, name, price, images, stock } = product;
-        const newProduct = { productID, name, quantity, price, image: images[0], stock }
+        const { productID, name, price, images, stock, _id } = product;
+        const newProduct = { _id, productID, name, quantity, price, image: images[0], stock }
         newCart.push(newProduct);
         newTotalItem = totalItem + 1;
         const encrypted = encrypt(JSON.stringify(newCart));
@@ -101,6 +127,30 @@ export const removeFromCart = (product) => (dispatch, getState) => {
         const encrypted = encrypt(JSON.stringify(newCart));
         localStorage.setItem('cart', encrypted);
         dispatch({ type: REMOVECART_SUCCESS, payload: newCart, totalPrice: newTotalPrice, totalItem: newTotalItem })
+    } else console.log("What a go");
+}
+
+export const removeAuthCart = (product) => async (dispatch, getState) => {
+    dispatch({ type: CART_LOADING });
+    const config = tokenConfig(getState);
+    try {
+        await axios.delete(`/api/users/cart/${product.product.productID}`, config);
+        const { payload, totalItem, totalPrice } = getState().cart;
+        const newCart = [...payload];
+        let existed_item = _.find(newCart, item => (
+            item.product.productID === product.product.productID
+        ))
+        if (existed_item) {
+            let newTotalPrice = totalPrice;
+            let newTotalItem = totalItem;
+            let index = _.indexOf(newCart, existed_item);
+            newCart.splice(index, 1);
+            newTotalPrice -= existed_item.quantity * product.price;
+            newTotalItem -= existed_item.quantity;
+            dispatch({ type: REMOVECART_SUCCESS, payload: newCart, totalPrice: newTotalPrice, totalItem: newTotalItem })
+        }
+    } catch (e) {
+        console.log(e);
     }
 }
 

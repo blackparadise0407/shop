@@ -24,14 +24,8 @@ const UserSchema = new Schema({
     },
     avatar: String,
     // cart: [{
-    //     product: {
-    //         type: Schema.Types.ObjectId,
-    //         ref: 'products'
-    //     },
-    //     quantity: {
-    //         type: Number,
-    //         default: 1
-    //     }
+    //     type: Schema.Types.ObjectId,
+    //     ref: 'products'
     // }]
     cart: [{
         product: {
