@@ -42,6 +42,7 @@ export const loadCart = () => dispatch => {
 
 export const loadAuthCart = () => async (dispatch, getState) => {
     dispatch({ type: CART_LOADING });
+    let isAuth = getState().auth.isAuthenticated;
     const config = tokenConfig(getState);
     let newTotalItem = 0;
     let newTotalPrice = 0;
@@ -56,6 +57,7 @@ export const loadAuthCart = () => async (dispatch, getState) => {
     } catch (err) {
         dispatch(returnErr(err.response.data, err.response.status))
     }
+    if (!isAuth) dispatch({ type: CART_EMPTY })
 
 }
 
@@ -66,11 +68,13 @@ export const addAuthCart = (product) => async (dispatch, getState) => {
     let newTotalPrice = 0;
     let newTotalItem = 0;
     try {
-        const resp = await axios.post("/api/users/cart", body, config);
-        const cart = resp.data.cart;
+        await axios.post("/api/users/cart", body, config);
+        const resp = await axios.get('/api/users/cart', config);
+        const cart = resp.data.user.cart;
         _.map(cart, item => {
             newTotalItem += item.quantity;
-            newTotalPrice += product.price * item.quantity;
+            let price = item.product.price * item.quantity;
+            newTotalPrice += price;
         })
         dispatch({ type: ADDCART_AUTH_SUCCESS, payload: cart, totalItem: newTotalItem, totalPrice: newTotalPrice, status: resp.data.msg })
     } catch (err) {
@@ -145,7 +149,7 @@ export const removeAuthCart = (product) => async (dispatch, getState) => {
             let newTotalItem = totalItem;
             let index = _.indexOf(newCart, existed_item);
             newCart.splice(index, 1);
-            newTotalPrice -= existed_item.quantity * product.price;
+            newTotalPrice -= existed_item.quantity * product.product.price;
             newTotalItem -= existed_item.quantity;
             dispatch({ type: REMOVECART_SUCCESS, payload: newCart, totalPrice: newTotalPrice, totalItem: newTotalItem })
         }
@@ -186,6 +190,7 @@ export const quantityControl = (product, type) => (dispatch, getState) => {
                     dispatch({ type: QTYCONTROL_SUCCESS, payload: newCart, totalPrice: newTotalPrice, totalItem: newTotalItem });
                 } else {
                     toast.warn("Quantity must be greater than 0");
+                    removeFromCart(product);
                     dispatch({ type: QTYCONTROL_FAIL, status: "Quantity must be greater than 0" });
                 };
                 break;
@@ -194,3 +199,42 @@ export const quantityControl = (product, type) => (dispatch, getState) => {
         }
     }
 }
+
+export const quantityControlAuth = (product, type) => async (dispatch, getState) => {
+    dispatch({ type: CART_LOADING });
+    const { payload, totalPrice, totalItem } = getState().cart;
+    const newCart = [...payload];
+    const existed_item = _.find(newCart, item => (
+        item.product.productID === product.product.productID
+    ))
+    if (existed_item) {
+        let newTotalPrice = totalPrice;
+        let newTotalItem = totalItem;
+        switch (type) {
+            case "inc":
+                if (existed_item.quantity < product.product.stock) {
+                    existed_item.quantity += 1;
+                    newTotalPrice = totalPrice + product.product.price;
+                    newTotalItem = totalItem + 1;
+                    dispatch({ type: QTYCONTROL_SUCCESS, payload: newCart, totalPrice: newTotalPrice, totalItem: newTotalItem });
+                } else {
+                    toast.warn("Quantity exceeds product stock :( Sorry");
+                    dispatch({ type: QTYCONTROL_FAIL, status: "Quantity exceeds product stock :( Sorry" })
+                }
+                break;
+            case "dec":
+                if (existed_item.quantity > 0) {
+                    existed_item.quantity -= 1;
+                    newTotalPrice = totalPrice - product.product.price;
+                    newTotalItem = totalItem - 1;
+                    dispatch({ type: QTYCONTROL_SUCCESS, payload: newCart, totalPrice: newTotalPrice, totalItem: newTotalItem });
+                } else {
+                    toast.warn("Quantity must be greater than 0");
+                    dispatch({ type: QTYCONTROL_FAIL, status: "Quantity must be greater than 0" });
+                };
+                break;
+            default:
+                break;
+        }
+    }
+}   

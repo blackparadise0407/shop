@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
 const ProtectedRoute = ({
     isAuthenticated,
@@ -7,7 +6,6 @@ const ProtectedRoute = ({
     ...rest
 
 }) => {
-    console.log(isAuthenticated);
     return (
         <Route
             {...rest}
@@ -32,8 +30,4 @@ const ProtectedRoute = ({
 }
 
 
-
-export default connect(
-    state => ({ isAuthenticated: state.auth.isAuthenticated }),
-    null
-)(ProtectedRoute);
+export default ProtectedRoute;

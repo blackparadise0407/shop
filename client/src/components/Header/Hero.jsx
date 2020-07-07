@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { Form, Input, FormGroup } from 'reactstrap';
-import styles from './Hero.module.css';
+import { Form, Input, FormGroup } from "reactstrap";
+import styles from "./Hero.module.css";
 
-import { search } from '../../utils/search';
-import { ClipSpinner } from '../../utils/Loader';
+import { search } from "../../utils/search";
+import { ClipSpinner } from "../../utils/Loader";
 
-import Searchbox from './Searchbox';
+import Searchbox from "./Searchbox";
 
 const Hero = () => {
-    const [value, setValue] = useState('');
+    const [value, setValue] = useState("");
     const [data, setData] = useState([]);
     const [isErr, setIsErr] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -30,36 +30,42 @@ const Hero = () => {
     const handleOnChange = (e) => {
         fetchData(e.target.value);
         setValue(e.target.value);
-    }
+    };
     const handleSubmit = (e) => {
         e.preventDefault();
-    }
+    };
 
     const clearQuery = () => {
         if (value) {
             setValue("");
             setIsLoading(false);
         }
-    }
+    };
 
     const RenderSearch = () => {
         if (!value) {
-            return <div></div>
-        }
-        else return (
-            <ul className={styles.ul}>
-                {data ? data.map(datum => <Searchbox key={datum._id} productID={datum.productID} name={datum.name} />) : null}
-            </ul>
-        )
-    }
+            return <div></div>;
+        } else
+            return (
+                <ul className={styles.ul}>
+                    {data
+                        ? data.map((datum) => (
+                            <Searchbox
+                                key={datum._id}
+                                productID={datum.productID}
+                                name={datum.name}
+                            />
+                        ))
+                        : null}
+                </ul>
+            );
+    };
 
-    if (isErr) return (<div>An loz</div>);
+    if (isErr) return <div>An loz</div>;
     return (
         <section className={styles.hero}>
             <div className="container">
-                <h2 className={styles.subHeadline}>
-                    Jorlux
-                </h2>
+                <h2 className={styles.subHeadline}>Jorlux</h2>
                 <h1 className={styles.headline}>Living your dream</h1>
                 <div className={styles.headlineDescription}>
                     <h5>Stylish, modern, trendy</h5>
@@ -71,11 +77,18 @@ const Hero = () => {
                                 type="text"
                                 className={styles.input}
                                 value={value}
-                                onChange={e => handleOnChange(e)}
+                                onChange={(e) => handleOnChange(e)}
                                 placeholder="Search everything"
                             ></Input>
-                            {value ? <i className={`${styles.faTimes} fas fa-times`} onClick={clearQuery}></i> : <i className={`${styles.faSearch} fas fa-search`}></i>}
-                            {isLoading ? <ClipSpinner /> : null}
+                            {value ? (
+                                <i
+                                    className={`${styles.faTimes} fas fa-times`}
+                                    onClick={clearQuery}
+                                ></i>
+                            ) : (
+                                    <i className={`${styles.faSearch} fas fa-search`}></i>
+                                )}
+                            {isLoading ? <ClipSpinner className={styles.ClipSpinner} /> : null}
                         </FormGroup>
                     </Form>
                     <RenderSearch />

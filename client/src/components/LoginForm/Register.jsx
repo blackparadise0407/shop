@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Form, FormGroup, Label, Row, Col, Input, Button, Alert } from 'reactstrap';
+import { Form, FormGroup, Label, Row, Col, Input, Button, Alert, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap';
 import { Link, useHistory } from 'react-router-dom'
 import styles from './Login.module.css'
 
 import { registerUser, clearRegMsg } from '../../redux/actions/authAction';
 import { clearErr } from '../../redux/actions/errorAction';
-//import { ClipSpinner } from '../../utils/Loader'
+import { ClipSpinner } from '../../utils/Loader'
 
 const Register = ({
     isAuthenticated,
@@ -113,48 +113,60 @@ const Register = ({
                 <Row form>
                     <Col xs={12}>
                         <FormGroup>
-                            <Label htmlFor="email">Email</Label>
-                            <Input
-                                className={styles.input}
-                                id="email"
-                                name="email"
-                                type="email"
-                                value={email}
-                                onChange={handleEmailChange}
-                                placeholder="example@abc.xyz"
-                            ></Input>
+                            <InputGroup>
+                                <InputGroupAddon addonType="prepend">
+                                    <InputGroupText className={styles.inputAddon}><img src="/images/mail.svg" width="25px" height="25px" alt="email" /></InputGroupText>
+                                </InputGroupAddon>
+                                <Input
+                                    className={styles.input}
+                                    id="email"
+                                    name="email"
+                                    type="email"
+                                    value={email}
+                                    onChange={handleEmailChange}
+                                    placeholder="example@abc.xyz"
+                                ></Input>
+                            </InputGroup>
                         </FormGroup>
                     </Col>
                 </Row>
                 <Row form>
                     <Col xs={12}>
                         <FormGroup>
-                            <Label htmlFor="password">Password</Label>
-                            <Input
-                                className={styles.input}
-                                id="password"
-                                name="password"
-                                type="password"
-                                value={password}
-                                onChange={handlePasswordChange}
-                                placeholder="******"
-                            ></Input>
+                            <InputGroup>
+                                <InputGroupAddon addonType="prepend">
+                                    <InputGroupText className={styles.inputAddon}><img src="/images/password.svg" width="25px" height="25px" alt="password" /></InputGroupText>
+                                </InputGroupAddon>
+                                <Input
+                                    className={styles.input}
+                                    id="password"
+                                    name="password"
+                                    type="password"
+                                    value={password}
+                                    onChange={handlePasswordChange}
+                                    placeholder="******"
+                                ></Input>
+                            </InputGroup>
                         </FormGroup>
                     </Col>
                 </Row>
                 <Row form>
                     <Col xs={12}>
                         <FormGroup>
-                            <Label htmlFor="confirmPassword">Confirm password</Label>
-                            <Input
-                                className={styles.input}
-                                id="confirmPassword"
-                                name="confirmPassword"
-                                type="password"
-                                value={confirmPassword}
-                                onChange={handleConfirmPasswordChange}
-                                placeholder="******"
-                            ></Input>
+                            <InputGroup>
+                                <InputGroupAddon addonType="prepend">
+                                    <InputGroupText className={styles.inputAddon}><img src="/images/password_rep.svg" width="25px" height="25px" alt="password_rep" /></InputGroupText>
+                                </InputGroupAddon>
+                                <Input
+                                    className={styles.input}
+                                    id="confirmPassword"
+                                    name="confirmPassword"
+                                    type="password"
+                                    value={confirmPassword}
+                                    onChange={handleConfirmPasswordChange}
+                                    placeholder="******"
+                                ></Input>
+                            </InputGroup>
                         </FormGroup>
                     </Col>
                 </Row>
@@ -166,7 +178,7 @@ const Register = ({
                         </Label>
                     </FormGroup>
                 </Col>
-                {checkbox ? <Button className={styles.button}>Register</Button> : <Button disabled className={styles.button}>Register</Button>}
+                {checkbox ? <Button disabled={isLoading} className={styles.button}>{isLoading ? <><span>Register</span><ClipSpinner /> </> : "Register"}</Button> : <Button disabled className={styles.button}>Register</Button>}
                 <div className={styles.registerDes}>Already have an account? <Link to="/login" className={styles.link}>Login here</Link></div>
             </Form>
         </div>

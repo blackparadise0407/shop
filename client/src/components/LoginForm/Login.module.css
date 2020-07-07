@@ -58,6 +58,16 @@
   font-family: var(--secondary-font);
   letter-spacing: 0.7px;
 }
+
+.inputAddon {
+  letter-spacing: 1px;
+  padding: 0.3rem 1.1rem;
+  border-radius: 2px;
+  color: #fff;
+  background-color: #525252;
+  text-align: center;
+  font-family: var(--secondary-font);
+}
 /*CONTAINER ANIMATION*/
 /* .container::before,
 .container::after,
@@ -100,6 +110,8 @@
   color: #ff7575;
 }
 
+/*BUTTON STARTS*/
+
 .button {
   color: #fff;
   font-size: 1.4rem;
@@ -112,6 +124,7 @@
   position: relative;
   overflow: hidden;
   float: right;
+  display: flex;
 }
 
 .button:visited {
@@ -141,6 +154,7 @@
 .button:hover::before {
   left: 100%;
 }
+/*BUTTON ENDS*/
 
 .section {
   display: flex;
@@ -166,7 +180,7 @@
     height: auto;
     font-size: 1.8rem;
     font-family: var(--main-font);
-    margin: auto 0;
+    margin: 8rem 0;
   }
   .containerHead {
     width: 100%;
@@ -185,6 +199,9 @@
   .input {
     font-size: 2rem;
     padding: 0.6rem 1.8rem;
+  }
+  .inputAddon {
+    font-size: 2rem;
   }
 }
 

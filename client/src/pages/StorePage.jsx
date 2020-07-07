@@ -8,7 +8,7 @@ import {
     PaginationLink,
 } from 'reactstrap';
 import { ProductCard, CustomModal } from '../components';
-import { getFilterProducts } from '../redux/actions/productAction';
+import { getFilterProducts, getFilteredProducts } from '../redux/actions/productAction';
 import { addToCart, addAuthCart } from '../redux/actions/cartAction';
 import styles from '../components/Store/Store.module.css';
 import { Filter } from '../components';
@@ -24,6 +24,7 @@ const StorePage = ({
     addToCart,
     addAuthCart,
     isAuthenticated,
+    getFilteredProducts
 }) => {
     const history = useHistory();
     const [isOpen, setIsOpen] = useState(false);
@@ -84,8 +85,9 @@ const StorePage = ({
     }
 
     useEffect(() => {
-        getFilterProducts({ filterBy: filter, page, limit });
-    }, [getFilterProducts, filter, page, limit])
+        //getFilterProducts({ filterBy: filter, page, limit });
+        getFilteredProducts({ filterBy: filter, page, limit });
+    }, [getFilteredProducts, filter, page, limit])
     if (isLoading) return (<PropagateSpinner />)
     return (
         <section className={styles.store}>
@@ -155,5 +157,5 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { getFilterProducts, addToCart, addAuthCart }
+    { getFilterProducts, addToCart, addAuthCart, getFilteredProducts }
 )(StorePage);

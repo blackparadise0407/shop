@@ -81,6 +81,16 @@
 }
 
 /*CHECKOUT END*/
+
+/*LOADER STARTS*/
+.ClipSpinner {
+  position: absolute;
+  right: 5%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+/*LOADER ENDS*/
+
 /*ITEM CONTAINER START*/
 .headline {
   width: 100%;
@@ -141,9 +151,15 @@
 }
 
 /* .control {
+  position: absolute;
+  border: 1px solid black;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
 }
 
 .button {
+  border: none;
+  background-color: rgba(0, 0, 0, 0.445);
 } */
 
 .footer {

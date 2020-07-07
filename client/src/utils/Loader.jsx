@@ -5,9 +5,9 @@ import styles from './Loader.module.css';
 const override = css`
 `;
 
-export const ClipSpinner = () => {
+export const ClipSpinner = ({ className }) => {
     return (
-        <div className={styles.ClipSpinner}>
+        <div className={className}>
             <ClipLoader
                 css={override}
                 size={25}

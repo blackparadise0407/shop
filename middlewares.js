@@ -20,7 +20,6 @@ const auth = async (req, res, next) => {
         req.user = decoded;
         next();
     } catch (error) {
-        // res.status(400).send("Invalid token");
         next(error)
     }
 }

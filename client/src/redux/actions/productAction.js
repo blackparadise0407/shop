@@ -14,6 +14,7 @@ import { tokenConfig } from './authAction';
 import { returnErr } from './errorAction'
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import productApi from '../../api/productApi';
 export const getProducts = ({ page = 1, limit = 6 }) => async dispatch => {
     dispatch({ type: PRODUCTS_LOADING });
     try {
@@ -43,6 +44,22 @@ export const getFilterProducts = ({ filterBy = null, page = 1, limit = 6 }) => a
             }
         });
         dispatch({ type: GET_PRODUCTS, payload: results.data })
+    } catch (err) {
+        dispatch(returnErr(err.response.data, err.response.status));
+        dispatch({ type: PRODUCTS_FAIL });
+    }
+}
+
+export const getFilteredProducts = ({ filterBy = null, page = 1, limit = 6 }) => async dispatch => {
+    dispatch({ type: PRODUCTS_LOADING });
+    try {
+        const params = {
+            filterBy,
+            page,
+            limit
+        }
+        const resp = await productApi.getAll(params);
+        dispatch({ type: GET_PRODUCTS, payload: resp })
     } catch (err) {
         dispatch(returnErr(err.response.data, err.response.status));
         dispatch({ type: PRODUCTS_FAIL });

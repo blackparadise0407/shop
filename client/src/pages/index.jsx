@@ -7,3 +7,4 @@ export { default as ConfirmPage } from './ConfirmPage';
 export { default as ResetPage } from './ResetPage';
 export { default as ProductPage } from './ProductPage';
 export { default as CheckoutPage } from './CheckoutPage';
+export { default as DashboardPage } from './DashboardPage'; 

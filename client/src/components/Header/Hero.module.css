@@ -125,6 +125,16 @@
   color: #949494;
 }
 
+/*LOADER STARTS*/
+.ClipSpinner {
+  position: absolute;
+  top: 0;
+  transform: translateY(25%);
+  left: 5%;
+}
+
+/*LOADER ENDS*/
+
 @media screen and (min-width: 900px) {
   .formContainer {
     width: 60%;
@@ -144,5 +154,8 @@
 
   .headlineDescription h5 {
     font-size: 2.2rem;
+  }
+  .ClipSpinner {
+    left: 5%;
   }
 }

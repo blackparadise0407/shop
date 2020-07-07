@@ -1,15 +1,18 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'reactstrap';
+import { Link } from 'react-router-dom';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from './Checkout.module.css';
-import { Link } from 'react-router-dom';
+
+import { ClipSpinner } from '../../utils/Loader';
 
 import {
     quantityControl,
     removeFromCart,
-    removeAuthCart
+    removeAuthCart,
+    quantityControlAuth
 } from '../../redux/actions/cartAction';
 
 const Checkout = ({
@@ -19,17 +22,20 @@ const Checkout = ({
     isLoading,
     removeAuthCart,
     isAuthenticated,
+    quantityControlAuth
 }) => {
     const [shipping, setShipping] = useState(null);
     const handleAdd = (e, product) => { quantityControl(product, 'inc'); }
     const handleSubtract = (e, product) => { quantityControl(product, 'dec'); }
+    const handleAuthAdd = (e, product) => { quantityControlAuth(product, 'inc'); }
+    const handleAuthSubtract = (e, product) => { quantityControlAuth(product, 'dec'); }
     const handleRemoveFromCart = (e, product) => { removeFromCart(product); }
     const handleRemoveFromAuthCart = (e, product) => { removeAuthCart(product); }
     useEffect(() => {
         if (payload.length !== 0) {
-            if (totalPrice > 1000) setShipping(null);
+            if (totalPrice >= 1000) setShipping(null);
             else setShipping(Number(totalPrice * 0.02).toFixed(2));
-        }
+        } else setShipping(null);
     }, [totalItem, totalPrice, payload.length])
     return (
         <div className={styles.container}>
@@ -40,12 +46,12 @@ const Checkout = ({
                         <Fragment key={item._id}>
                             {isAuthenticated ?
                                 <li key={item.id} className={styles.item}>
-                                    <i onClick={e => handleRemoveFromAuthCart(e, item)} className={`fas fa-times ${styles.times}`}></i>
+                                    {isLoading ? <ClipSpinner className={styles.ClipSpinner} /> : <i onClick={e => handleRemoveFromAuthCart(e, item)} className={`fas fa-times ${styles.times}`}></i>}
                                     <div className={styles.infoContainer}>
                                         <img className={styles.img} src={item.product.images[0]} alt={item.product.name} />
                                         <div className={styles.info}>
                                             <div className={styles.name}>{item.product.name}</div>
-                                            <span className={styles.control}><Button onClick={e => handleSubtract(e, item)} className={styles.button}>-</Button> {` ${item.quantity} `} <Button onClick={e => handleAdd(e, item)} className={styles.button}>+</Button></span>
+                                            <span className={styles.control}><Button onClick={e => handleAuthSubtract(e, item)} className={styles.button}><span>-</span></Button> {` ${item.quantity} `} <Button onClick={e => handleAuthAdd(e, item)} className={styles.button}><span>+</span></Button></span>
                                         </div>
 
                                     </div>
@@ -57,7 +63,7 @@ const Checkout = ({
                                         <img className={styles.img} src={item.image} alt={item.name} />
                                         <div className={styles.info}>
                                             <div className={styles.name}>{item.name}</div>
-                                            <span className={styles.control}><Button onClick={e => handleSubtract(e, item)} className={styles.button}>-</Button> {` ${item.quantity} `} <Button onClick={e => handleAdd(e, item)} className={styles.button}>+</Button></span>
+                                            <span className={styles.control}><Button onClick={e => handleSubtract(e, item)} className={styles.button}><span>-</span></Button> {` ${item.quantity} `} <Button onClick={e => handleAdd(e, item)} className={styles.button}><span>+</span></Button></span>
                                         </div>
 
                                     </div>
@@ -87,7 +93,7 @@ const Checkout = ({
             </div>
             {payload.length === 0 && <Link className={styles.footer} to="/store">You don't have anything in your cart yet. Go to shopping</Link>}
             <ToastContainer style={{ fontFamily: "var(--main-font)", fontSize: "1.4rem" }} autoClose={3000} />
-        </div >
+        </div>
     );
 }
 
@@ -99,5 +105,5 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { quantityControl, removeFromCart, removeAuthCart }
+    { quantityControl, removeFromCart, removeAuthCart, quantityControlAuth }
 )(Checkout);

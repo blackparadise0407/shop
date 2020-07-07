@@ -213,6 +213,8 @@
     background-color: rgb(224, 224, 224);
   }
   .navLinkCart {
+    display: flex;
+    align-items: center;
     z-index: 1500;
     font-size: 1.4rem;
     color: rgb(255, 255, 255);

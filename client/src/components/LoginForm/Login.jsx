@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Form, FormGroup, Label, Row, Col, Input, Button, Alert } from 'reactstrap';
+import { Form, FormGroup, Label, InputGroup, InputGroupText, InputGroupAddon, Row, Col, Input, Button, Alert } from 'reactstrap';
 import { Link, useHistory } from 'react-router-dom';
 import ReCAPTCHA from "react-google-recaptcha";
 import { toast, ToastContainer } from 'react-toastify';
@@ -9,6 +9,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import styles from './Login.module.css'
 
 import { loginUser } from '../../redux/actions/authAction';
+import { ClipSpinner } from '../../utils/Loader';
 
 const Login = ({
     isAuthenticated,
@@ -74,31 +75,39 @@ const Login = ({
                 <Row form className={styles.row}>
                     <Col xs="12">
                         <FormGroup>
-                            <Label htmlFor="email">Email</Label>
-                            <Input
-                                className={styles.input}
-                                id="email"
-                                name="email"
-                                type="email"
-                                value={email}
-                                onChange={handleEmailChange}
-                                placeholder="example@abc.xyz"
-                            ></Input>
+                            <InputGroup>
+                                <InputGroupAddon addonType="prepend">
+                                    <InputGroupText className={styles.inputAddon}><img src="/images/mail.svg" width="25px" height="25px" alt="email" /></InputGroupText>
+                                </InputGroupAddon>
+                                <Input
+                                    className={styles.input}
+                                    id="email"
+                                    name="email"
+                                    type="email"
+                                    value={email}
+                                    onChange={handleEmailChange}
+                                    placeholder="example@abc.xyz"
+                                ></Input>
+                            </InputGroup>
                         </FormGroup>
                     </Col>
                 </Row><Row>
                     <Col xs="12">
                         <FormGroup>
-                            <Label htmlFor="password">Password</Label>
-                            <Input
-                                className={styles.input}
-                                id="password"
-                                name="password"
-                                type="password"
-                                value={password}
-                                onChange={handlePasswordChange}
-                                placeholder="******"
-                            ></Input>
+                            <InputGroup>
+                                <InputGroupAddon addonType="prepend">
+                                    <InputGroupText className={styles.inputAddon}><img src="/images/password.svg" width="25px" height="25px" alt="email" /></InputGroupText>
+                                </InputGroupAddon>
+                                <Input
+                                    className={styles.input}
+                                    id="password"
+                                    name="password"
+                                    type="password"
+                                    value={password}
+                                    onChange={handlePasswordChange}
+                                    placeholder="******"
+                                ></Input>
+                            </InputGroup>
                         </FormGroup>
                     </Col></Row>
                 <Row form>
@@ -109,7 +118,7 @@ const Login = ({
                             onChange={captchaOnChange}
                         />
                     </Col>
-                    <Col xs={12} lg={6}><Button className={styles.button}>Login</Button></Col>
+                    <Col xs={12} lg={6}><Button disabled={isLoading} className={styles.button}>{isLoading ? <><span>Login</span><ClipSpinner /> </> : "Login"}</Button></Col>
                 </Row>
                 {/* {error.msg === "Invalid credentials" ? <Col xs="12" className="mx-auto"><Link to={{
                         pathname: `${location.pathname}/reset`,

@@ -1,9 +1,9 @@
-.ClipSpinner {
+/* .ClipSpinner {
   position: absolute;
   top: 0;
   transform: translateY(25%);
   left: 5%;
-}
+} */
 
 .SyncSpinner {
   position: absolute;
@@ -22,7 +22,7 @@
 /*Middle loader*/
 
 @media screen and (min-width: 900px) {
-  .ClipSpinner {
+  /* .ClipSpinner {
     left: 5%;
-  }
+  } */
 }
