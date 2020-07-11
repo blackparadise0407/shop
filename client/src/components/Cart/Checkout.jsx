@@ -32,11 +32,14 @@ const Checkout = ({
     const handleRemoveFromCart = (e, product) => { removeFromCart(product); }
     const handleRemoveFromAuthCart = (e, product) => { removeAuthCart(product); }
     useEffect(() => {
+        // if (isAuthenticated === true) {
+        //     localStorage.removeItem('cart')
+        // }
         if (payload.length !== 0) {
             if (totalPrice >= 1000) setShipping(null);
             else setShipping(Number(totalPrice * 0.02).toFixed(2));
         } else setShipping(null);
-    }, [totalItem, totalPrice, payload.length])
+    }, [isAuthenticated, totalItem, totalPrice, payload.length])
     return (
         <div className={styles.container}>
             <div className={styles.headline}>Checkout</div>

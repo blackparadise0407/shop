@@ -172,13 +172,15 @@ const Register = ({
                 </Row>
                 <Col xs={12}>
                     <FormGroup check>
-                        <Label check>
-                            <Input onChange={handleCheckBoxChange} type="checkbox" />
+                        <Label check className={styles.checkContainer}>
+                            <Input className={styles.check} onChange={handleCheckBoxChange} type="checkbox" /><span className={styles.checkMark}></span>
                             I agree to the Jorlux terms and conditions
                         </Label>
                     </FormGroup>
                 </Col>
-                {checkbox ? <Button disabled={isLoading} className={styles.button}>{isLoading ? <><span>Register</span><ClipSpinner /> </> : "Register"}</Button> : <Button disabled className={styles.button}>Register</Button>}
+                <Col className={styles.center} xs={12}>
+                    {checkbox ? <Button disabled={isLoading} className={styles.button}>{isLoading ? <><span>Register</span><ClipSpinner /> </> : "Register"}</Button> : <Button disabled className={styles.button}>Register</Button>}
+                </Col>
                 <div className={styles.registerDes}>Already have an account? <Link to="/login" className={styles.link}>Login here</Link></div>
             </Form>
         </div>

@@ -28,7 +28,8 @@ const auth = async (req, res, next) => {
 //NOT FOUND MIDDLEWARE
 const notFound = (req, res, next) => {
     const error = new Error(`Not found: ${req.originalURL}`);
-    res.status(404).json({ msg: "Not found", status: res.statusCode });
+    // res.status(404).json({ msg: "Not found", status: res.statusCode });
+    res.status(404);
     next(error);
 }
 
@@ -36,7 +37,8 @@ const notFound = (req, res, next) => {
 //ERROR HANDLER MIDDLEWARE
 const errorHandler = (err, req, res, next) => {
     const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
-    res.status(statusCode).json({ msg: err.message, status: res.statusCode });
+    res.status(statusCode);
+    res.json({ msg: err.message });
 }
 
 

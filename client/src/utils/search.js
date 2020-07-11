@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const resources = {};
+const resources = [];
 
 const makeRequestCreator = () => {
     let cancel;

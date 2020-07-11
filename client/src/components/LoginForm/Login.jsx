@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Form, FormGroup, Label, InputGroup, InputGroupText, InputGroupAddon, Row, Col, Input, Button, Alert } from 'reactstrap';
+import { Form, FormGroup, InputGroup, InputGroupText, InputGroupAddon, Row, Col, Input, Button, Alert } from 'reactstrap';
 import { Link, useHistory } from 'react-router-dom';
 import ReCAPTCHA from "react-google-recaptcha";
 import { toast, ToastContainer } from 'react-toastify';
@@ -110,21 +110,21 @@ const Login = ({
                             </InputGroup>
                         </FormGroup>
                     </Col></Row>
-                <Row form>
-                    <Col xs={12} lg={6}>
-                        <ReCAPTCHA
-                            ref={reCapEl}
-                            sitekey="6LdBEqoZAAAAAKwCucNAr52p_oz_RiHOZbWC6GnG"
-                            onChange={captchaOnChange}
-                        />
-                    </Col>
-                    <Col xs={12} lg={6}><Button disabled={isLoading} className={styles.button}>{isLoading ? <><span>Login</span><ClipSpinner /> </> : "Login"}</Button></Col>
-                </Row>
+                <Col xs="12" className="mx-auto"><Link className={styles.link} to="/reset">Forgot password?</Link></Col>
+                <Col className={styles.center} xs={12}>
+                    <ReCAPTCHA
+                        ref={reCapEl}
+                        sitekey="6LdBEqoZAAAAAKwCucNAr52p_oz_RiHOZbWC6GnG"
+                        onChange={captchaOnChange}
+                    />
+                </Col>
+                <Col className={styles.center} xs={12}>
+                    <Button disabled={isLoading} className={styles.button}>{!isLoading ? <span>Login</span> : <ClipSpinner />}</Button>
+                </Col>
                 {/* {error.msg === "Invalid credentials" ? <Col xs="12" className="mx-auto"><Link to={{
                         pathname: `${location.pathname}/reset`,
                         state: { from: location }
                     }}>Forgot password?</Link></Col> : null} */}
-                <Col xs="12" className="mx-auto"><Link className={styles.link} to="/reset">Forgot password?</Link></Col>
                 <Col xs="12"><div className="loginDes">Doesn't have an account? <Link to="/register" className={styles.link}>Register here</Link></div></Col>
 
             </Form>
