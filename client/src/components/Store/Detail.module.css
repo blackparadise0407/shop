@@ -45,6 +45,9 @@
   width: 100%;
   display: flex;
   flex-wrap: wrap;
+  background-color: white;
+  padding: 1rem 2.2rem;
+  border-radius: 4px;
 }
 
 .imgContainer {
@@ -90,7 +93,7 @@
 @media screen and (min-width: 900px) {
   .container {
     max-width: 122.5rem;
-    margin-top: 6rem;
+    margin-top: 8rem;
   }
   .cardContainer {
     flex-wrap: initial;

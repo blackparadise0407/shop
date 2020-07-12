@@ -1,8 +1,14 @@
-const { Schema, model, SchemaType } = require('mongoose');
+const { Schema, model } = require('mongoose');
 
 const requireString = {
     type: String,
     required: true
+}
+
+const emptyString = {
+    type: String,
+    default: "",
+    required: false,
 }
 
 const UserSchema = new Schema({
@@ -13,20 +19,23 @@ const UserSchema = new Schema({
         required: true,
         unique: true
     },
-    password: requireString,
-    dateCreated: {
+    phoneNumber: emptyString,
+    dateOfBirth: {
         type: Date,
-        default: Date.now()
+        default: "",
+        required: false,
     },
+    gender: {
+        type: Boolean,
+        default: null,
+        required: false
+    },
+    password: requireString,
     confirm: {
         type: Boolean,
         default: false
     },
-    avatar: String,
-    // cart: [{
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'products'
-    // }]
+    avatar: emptyString,
     cart: [{
         product: {
             type: Schema.Types.ObjectId,
@@ -36,7 +45,11 @@ const UserSchema = new Schema({
             type: Number,
             default: 1
         }
-    }]
+    }],
+    dateCreated: {
+        type: Date,
+        default: Date.now()
+    },
 })
 
 module.exports = model("users", UserSchema);

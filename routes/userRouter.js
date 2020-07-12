@@ -14,7 +14,7 @@ const { auth, mailer } = require('../middlewares');
 
 //METHOD: GET
 //PATH: API/USERS/
-//FUCN: GET USER BY ID
+//FUNC: GET USER BY ID
 // router.get('/:id', auth, async (req, res, next) => {
 //     const user = await UserModel.findById(req.params.id).select("-password")
 //     return res.status(200).send(user)
@@ -22,7 +22,7 @@ const { auth, mailer } = require('../middlewares');
 
 //METHOD: GET
 //PATH: API/USERS/
-//FUCN: GET USER WITH TOKEN
+//FUNC: GET USER WITH TOKEN
 router.get('/', auth, async (req, res, next) => {
     try {
         const user = await UserModel.findById(req.user.id).select('-password -cart');
@@ -31,9 +31,24 @@ router.get('/', auth, async (req, res, next) => {
         next(error)
     }
 })
+
+//METHOD: POST 
+//PATH: api/users/update
+//FUNC: UPDATE USER'S INFORMATION
+router.post('/update', auth, async (req, res, next) => {
+    const { firstName, lastName, avatar, gender, dateOfBirth } = req.body;
+    const id = req.user.id;
+    try {
+        const user = await UserModel.findById(id);
+        res.send(user)
+    } catch (e) {
+        res.send(e)
+    }
+})
+
 //METHOD: POST
 //PATH: api/users/register
-//FUCN: REGISTER USER
+//FUNC: REGISTER USER
 router.post('/register', async (req, res, next) => {
     const { firstName, lastName, email, password, repPassword } = req.body;
 
@@ -65,6 +80,7 @@ router.post('/register', async (req, res, next) => {
             // token: token
         });
     } catch (error) {
+        console.log(error);
         res.status(400).json({ msg: "Register failed" });
         next(error)
     }
@@ -72,7 +88,7 @@ router.post('/register', async (req, res, next) => {
 
 //METHOD: GET
 //PATH: api/users/confirm/:id
-//FUCN: CONFIRM USER EMAIL
+//FUNC: CONFIRM USER EMAIL
 
 router.get('/confirm/:id', async (req, res, next) => {
     const { id } = req.params;
@@ -92,7 +108,7 @@ router.get('/confirm/:id', async (req, res, next) => {
 
 //METHOD: POST
 //PATH: api/users/login
-//FUCN: LOGIN USER
+//FUNC: LOGIN USER
 router.post("/login", async (req, res, next) => {
     const { email, password } = req.body;
     //VALIDATE BEFORE LOGIN

@@ -17,7 +17,7 @@
   justify-content: space-between;
   width: 100%;
   background-color: #fff;
-  border-radius: 20px;
+  border-radius: 4px;
   box-shadow: 0 0 15px #777;
 }
 
@@ -40,7 +40,7 @@
   justify-content: center;
   margin: 0;
   padding: 0.7rem 1.6rem;
-  border-radius: 16px;
+  border-radius: 4px;
   background-color: rgba(255, 255, 255, 0.712);
   box-shadow: 0 0 5px rgba(82, 82, 82, 0.582);
   transform: perspective(1000px) translateY(var(--translate-y, 0));
@@ -61,7 +61,7 @@
   padding: 1rem 2rem;
   background-color: #fff;
   min-height: 42rem;
-  border-radius: 20px;
+  border-radius: 4px;
   box-shadow: 0 0 15px 4px #777;
 }
 /*USER CONTAINER ENDS*/

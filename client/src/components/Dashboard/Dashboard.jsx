@@ -22,7 +22,8 @@ const Dashboard = ({
                         <ul className={styles.navList}>
                             <Link className={styles.navItem} to="/user/dashboard"><div className={styles.navLink}>Profile</div></Link>
                             <Link className={styles.navItem} to="/user/dashboard/edit" ><div className={styles.navLink}>Edit</div></Link>
-                            <Link className={styles.navItem} to="/user/dashboard/example"><div className={styles.navLink}>Example</div></Link>
+                            <Link className={styles.navItem} to="/user/dashboard/changepassword"><div className={styles.navLink}>Change password</div></Link>
+                            <Link className={styles.navItem} to="/user/dashboard/history"><div className={styles.navLink}>History</div></Link>
                         </ul>
                     </div>
                     <div className={styles.userContainer}>

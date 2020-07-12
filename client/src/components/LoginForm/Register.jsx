@@ -179,7 +179,7 @@ const Register = ({
                     </FormGroup>
                 </Col>
                 <Col className={styles.center} xs={12}>
-                    {checkbox ? <Button disabled={isLoading} className={styles.button}>{isLoading ? <><span>Register</span><ClipSpinner /> </> : "Register"}</Button> : <Button disabled className={styles.button}>Register</Button>}
+                    {checkbox ? <Button disabled={isLoading} className={styles.button}>{isLoading ? <ClipSpinner /> : "Register"}</Button> : <Button disabled className={styles.button}>Register</Button>}
                 </Col>
                 <div className={styles.registerDes}>Already have an account? <Link to="/login" className={styles.link}>Login here</Link></div>
             </Form>

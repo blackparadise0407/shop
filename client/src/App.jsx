@@ -18,7 +18,7 @@ import { Header } from './components';
 import { loadUser } from './redux/actions/authAction';
 import { loadCart, loadAuthCart } from './redux/actions/cartAction.js';
 import history from './utils/history';
-// import ProtectedRoute from './utils/AuthRoute';
+import ProtectedRoute from './utils/AuthRoute';
 
 const App = ({
   isLoading,
@@ -46,7 +46,7 @@ const App = ({
         <Route path="/reset" exact component={ResetPage} />
         <Route path="/store" component={StorePage} />
         <Redirect from="/user" exact to="/user/dashboard" />
-        <Route path="/user/dashboard" component={DashboardPage} />
+        <ProtectedRoute path="/user" isAuthenticated={isAuthenticated} component={DashboardPage} />
         <Route path="/confirm/:id" component={ConfirmPage} />
         <Redirect from="/product" exact to="/" />
         <Route path="/product" render={() => <ProductPage />} />
